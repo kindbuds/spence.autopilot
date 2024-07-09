@@ -9,6 +9,9 @@ module.exports = {
     extraResource: [
       path.join(__dirname, "assets", "spence-face.ico"),
     ],
+    ignore: [
+      'node_modules/fs-xattr'
+    ]
   },
   rebuildConfig: {},
   makers: [

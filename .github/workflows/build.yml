@@ -76,11 +76,13 @@ jobs:
       - name: List downloaded files
         run: ls -R ./dist
 
-       - name: Create Release
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             ./dist/macos/*.dmg
             ./dist/windows/squirrel.windows/x64/*.exe
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

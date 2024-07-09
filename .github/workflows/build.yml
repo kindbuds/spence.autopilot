@@ -24,10 +24,11 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install Python distutils (macOS only)
+      - name: Set up Python virtual environment (macOS only)
         if: matrix.os == 'macos-latest'
         run: |
-          python3 -m ensurepip
+          python3 -m venv venv
+          source venv/bin/activate
           python3 -m pip install --upgrade pip
           python3 -m pip install distutils
 

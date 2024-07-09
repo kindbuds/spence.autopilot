@@ -1,68 +1,74 @@
-   name: Build and Release
+name: Build and Release
 
-   on:
-     push:
-       tags:
-         - 'v*.*.*'
+on:
+  push:
+    tags:
+      - 'v*.*.*'
 
-   jobs:
-     build:
-       runs-on: macos-latest
+jobs:
+  build:
+    runs-on: macos-latest
 
-       env:
-         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+    env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-         - name: List directory contents
-           run: ls -R
+      - name: List directory contents
+        run: ls -R
 
-         - name: Set up Node.js
-           uses: actions/setup-node@v4
-           with:
-             node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
 
-         - name: Install dependencies
-           run: |
-             cd electron
-             npm install
+      - name: Install Python distutils
+        run: |
+          python3 -m ensurepip
+          python3 -m pip install --upgrade pip
+          python3 -m pip install setuptools
 
-         - name: Debug Node.js version and npm
-           run: |
-             cd electron
-             node -v
-             npm -v
+      - name: Install dependencies
+        run: |
+          cd electron
+          npm install
 
-         - name: Build Electron app
-           run: |
-             cd electron
-             npm run make
+      - name: Debug Node.js version and npm
+        run: |
+          cd electron
+          node -v
+          npm -v
 
-         - name: Upload artifact
-           uses: actions/upload-artifact@v3
-           with:
-             name: macos-build
-             path: electron/out/make/zip/darwin/x64/*.zip
+      - name: Build Electron app
+        run: |
+          cd electron
+          npm run make
 
-     release:
-       needs: build
-       runs-on: macos-latest
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-build
+          path: electron/out/make/zip/darwin/x64/*.zip
 
-       env:
-         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+  release:
+    needs: build
+    runs-on: macos-latest
 
-       steps:
-         - name: Download artifact
-           uses: actions/download-artifact@v3
-           with:
-             name: macos-build
-             path: ./dist
+    env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
-         - name: Create Release
-           uses: softprops/action-gh-release@v1
-           with:
-             files: ./dist/*.zip
-           env:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: macos-build
+          path: ./dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

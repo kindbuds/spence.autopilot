@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.53",
+  "version": "0.0.54",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -28,9 +28,7 @@
     "concurrently": "^8.2.2",
     "electron": "^29.3.0",
     "html-webpack-plugin": "^5.6.0",
-    "wait-on": "^7.2.0"
-  },
-  "optionalDependencies": {
+    "wait-on": "^7.2.0",
     "appdmg": "^0.6.0"
   },
   "dependencies": {
@@ -62,27 +60,5 @@
       "**/*",
       "vue-app/dist/**/*"
     ]
-  },
-  "config": {
-    "forge": {
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "Spence",
-            "authors": "Spence",
-            "description": "AI Career Copilot"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "mimeType": [
-              "x-scheme-handler/spence"
-            ]
-          }
-        }
-      ]
-    }
   }
 }

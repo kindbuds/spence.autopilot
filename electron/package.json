@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -27,7 +27,8 @@
     "concurrently": "^8.2.2",
     "electron": "^29.3.0",
     "html-webpack-plugin": "^5.6.0",
-    "wait-on": "^7.2.0"
+    "wait-on": "^7.2.0",
+    "appdmg": "^0.6.0"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",

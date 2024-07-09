@@ -7,7 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -16,65 +19,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: List directory contents before build
-        run: ls -R
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '16'
 
-      - name: Set up Python virtual environment
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          python3 -m pip install --upgrade pip
-          python3 -m pip install setuptools
-
       - name: Install dependencies
         run: |
-          source venv/bin/activate
-          cd electron
           npm install
-
-      - name: Debug Node.js version and npm
-        run: |
-          source venv/bin/activate
-          cd electron
-          node -v
-          npm -v
 
       - name: Build Electron app
         run: |
-          source venv/bin/activate
-          cd electron
           npm run make
-
-      - name: List directory contents after build
-        run: ls -R electron/out/make
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-build
-          path: electron/out/make/zip/darwin/arm64/*.zip
-          if-no-files-found: warn
-          compression-level: 6
-          overwrite: false
+          name: ${{ matrix.os }}-build
+          path: out/make/*
 
   release:
     needs: build
-    runs-on: macos-latest
-
-    env:
-      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Download artifact
+      - name: Download macOS artifacts
         uses: actions/download-artifact@v4
         with:
-          name: macos-build
-          path: ./dist
+          name: macos-latest-build
+          path: ./dist/macos
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-latest-build
+          path: ./dist/linux
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-latest-build
+          path: ./dist/windows
 
       - name: List downloaded files
         run: ls -R ./dist
@@ -82,6 +67,9 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ./dist/*.zip
+          files: |
+            ./dist/macos/*
+            ./dist/linux/*
+            ./dist/windows/*
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

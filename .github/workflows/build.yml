@@ -26,17 +26,19 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd electron
           npm install
 
       - name: Build Electron app
         run: |
+          cd electron
           npm run make
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-build
-          path: out/make/*
+          path: electron/out/make/*
 
   release:
     needs: build

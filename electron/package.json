@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "description": "",
   "main": "main.js",
   "scripts": {

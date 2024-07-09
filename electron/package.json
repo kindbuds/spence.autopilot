@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "@electron-forge/maker-zip": "^7.4.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron/asar": "^3.2.0",
     "@electron/fuses": "^1.8.0",
     "concurrently": "^8.2.2",
     "electron": "^29.3.0",
@@ -45,6 +46,7 @@
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",
     "path-browserify": "^1.0.1",
+    "superagent": "^9.0.0",
     "vue-chartkick": "^1.1.0",
     "vuex": "^4.1.0"
   },
@@ -71,11 +73,23 @@
           }
         },
         {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "mimeType": [
+              "x-scheme-handler/spence"
+            ]
+          }
+        },
+        {
           "name": "@electron-forge/maker-dmg",
           "config": {}
         },
         {
           "name": "@electron-forge/maker-zip",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
           "config": {}
         }
       ]

@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -49,6 +49,9 @@
     "superagent": "^9.0.0",
     "vue-chartkick": "^1.1.0",
     "vuex": "^4.1.0"
+  },
+  "optionalDependencies": {
+    "appdmg": "^0.6.0"
   },
   "build": {
     "appId": "your.app.id",

@@ -51,7 +51,7 @@ jobs:
           npm run make
 
       - name: List directory contents after build
-        run: ls -R electron/out/make/zip/darwin/x64
+        run: ls -R electron/out
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

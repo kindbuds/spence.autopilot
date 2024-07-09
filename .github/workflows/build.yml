@@ -12,7 +12,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
 
-    timeout-minutes: 120
+    timeout-minutes: 120  # Increase the timeout to 2 hours
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -81,6 +81,9 @@ jobs:
         with:
           files: |
             ./dist/macos/*
-            ./dist/windows/*
+            ./dist/macos/zip/darwin/arm64/*
+            ./dist/windows/squirrel.windows/x64/*
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

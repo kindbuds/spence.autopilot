@@ -12,6 +12,8 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
 
+    timeout-minutes: 120
+
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 

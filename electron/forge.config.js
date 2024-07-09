@@ -19,6 +19,7 @@ module.exports = {
       name: '@electron-forge/maker-squirrel',
       config: {
         name: "Spence",
+        description: 'Spence AI Career Autopilot',
         authors: "Jeff Borden",
         exe: "Spence AI Career Autopilot.exe",
         setupExe: "Spence-Setup.exe",

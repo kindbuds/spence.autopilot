@@ -1,0 +1,174 @@
+html,
+body {
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.webview {
+    min-height: 88vh;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.card-div {
+    padding: 13px;
+    margin: 10px 10px 0px 10px;
+    border: 1px solid rgb(173 173 173);
+    border-radius: 5px;
+    color: #ffffff;
+    background-color: #2b2b2b;
+    padding-bottom: 10px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-div.skipped {
+    background-color: #4e4e4e;
+    border: 1px solid rgb(193 193 193);
+    color: #e6e6e6;
+}
+
+.card-div.high {
+    background-color: #29403a;
+    color: #d1ffd1;
+    border: 1px solid rgb(148 251 214);
+}
+
+.card-div.low {
+    background-color: #453232;
+    border-color: #ff9797;
+    color: #ffb0b0;
+}
+
+.card-div.mid {
+    background-color: #5a5746;
+    color: #ffdec2;
+}
+
+
+.top-match .high {
+    color: #53ffd3;
+}
+
+.top-match .mid {
+    color: rgb(255 185 119);
+}
+
+.top-match .low {
+    color: #ff8c8c;
+}
+
+
+.search-display {
+    opacity: 0.6;
+    padding-top: 12px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.job-card.low .search-display {
+    color: #ffb0b0;
+}
+
+.job-card.mid .search-display {
+    color: #ffdec2;
+}
+
+.job-card.high .search-display {
+    color: #d1ffd1;
+}
+
+.job-card.nopercent {
+    background-color: rgb(118 117 134 / 35%);
+}
+
+.match-percent {
+    font-weight: bold;
+    font-size: 15px;
+    padding-top: 7px;
+}
+
+.title-div,
+.title-link {
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.title-link:visited {
+    text-decoration: underline
+}
+
+/* Since maxWidth depends on the card's width, consider a general class for responsiveness or specific widths */
+.title-div {
+    max-width: 100%;
+    padding-bottom: 4px;
+}
+
+.title-link:hover {
+    text-decoration: underline;
+}
+
+.title-link {
+    text-decoration: none;
+}
+
+.employer-div {
+    font-size: 15px;
+    padding-bottom: 4px;
+    padding-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-div {
+    font-size: 15px;
+    padding-top: 7px;
+}
+
+.linkedin-icon {
+    position: relative;
+    display: inline-block;
+    /* Necessary for positioning the pseudo-element */
+    margin: 5px;
+    margin-right: 8px;
+    margin-left: 0px;
+    width: 14px;
+    opacity: .6;
+    /* Your existing styles for linkedin-icon */
+}
+
+.linkedin-icon::after {
+    content: "";
+    background-color: rgba(210, 180, 140, 0.7);
+    /* Tan color with 70% opacity */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    /* In case your image is rounded */
+    pointer-events: none;
+    /* Allows click events to pass through */
+}
+
+/* Set the image transparency */
+.linkedin-icon img {
+    opacity: 0.7;
+}
+
+.employer-container {
+    display: flex;
+    align-items: center;
+    /* This will vertically align the text and the image if they have different heights */
+    justify-content: flex-start;
+    /* Aligns children to the start (left) of the container */
+}

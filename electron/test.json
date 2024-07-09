@@ -1,0 +1,68 @@
+{
+    "roles": [
+        {
+            "job_title": "Senior Full Stack Software Engineer",
+            "job_categories": [
+                "Engineering",
+                "Software Development"
+            ],
+            "job_description": "We are looking for a Senior Full Stack Software Engineer to have a direct impact on our product and help us drive the transition to a greener future.",
+            "required_skills": null,
+            "experience_level": "Mid-Senior",
+            "salary_range": null,
+            "industry": "Technology",
+            "employment_type": "Full-time",
+            "location": [
+                "Remote",
+                null
+            ],
+            "job_url": "https://twaice.jobs.personio.com/job/1574905",
+            "job_poster": null
+        },
+        {
+            "job_title": "Senior Customer Success Engineer – Energy Solutions – US",
+            "job_categories": [
+                "Engineering",
+                "Customer Support"
+            ],
+            "job_description": "We are looking for a Senior Customer Success Engineer to have a direct impact on our product and help us drive the transition to a greener future.",
+            "required_skills": null,
+            "experience_level": "Mid-Senior",
+            "salary_range": null,
+            "industry": "Technology",
+            "employment_type": "Full-time",
+            "location": [
+                "Remote",
+                null
+            ],
+            "job_url": "https://twaice.jobs.personio.com/job/1406012",
+            "job_poster": null
+        },
+        {
+            "job_title": "Technical Solution Engineer",
+            "job_categories": [
+                "Engineering",
+                "Customer Support"
+            ],
+            "job_description": "We are looking for a Technical Solution Engineer to have a direct impact on our product and help us drive the transition to a greener future.",
+            "required_skills": null,
+            "experience_level": "Mid-Senior",
+            "salary_range": null,
+            "industry": "Technology",
+            "employment_type": "Full-time",
+            "location": [
+                "Remote",
+                null
+            ],
+            "job_url": "https://twaice.jobs.personio.com/job/1573371",
+            "job_poster": null
+        }
+    ],
+    "company_info": {
+        "company_name": "Twaice",
+        "description": "At Twaice we’re building technology to drive the global transformation to a cleaner & greener battery-powered world. Batteries are both the key and the achilles heel of this transition. Our mission is to enable efficient development and longer lifetime of stationary energy storage systems and electric vehicles. For this we’re building a platform to deliver predictive battery analytics at scale across multiple industries. We are a fast growing venture-capital-financed start-up of about 130 employees bringing together engineering disciplines from battery engineers over machine-learning engineers to cloud & front-end developers.",
+        "benefits": null,
+        "contact_information": null,
+        "careers_page": "https://twaice.jobs.personio.com"
+    }
+}

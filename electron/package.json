@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -71,23 +71,11 @@
           }
         },
         {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "mimeType": [
-              "x-scheme-handler/spence"
-            ]
-          }
-        },
-        {
           "name": "@electron-forge/maker-dmg",
           "config": {}
         },
         {
           "name": "@electron-forge/maker-zip",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
           "config": {}
         }
       ]

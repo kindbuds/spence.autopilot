@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, windows-latest]
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -49,12 +49,6 @@ jobs:
           name: macos-latest-build
           path: ./dist/macos
 
-      - name: Download Linux artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: ubuntu-latest-build
-          path: ./dist/linux
-
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
         with:
@@ -69,7 +63,6 @@ jobs:
         with:
           files: |
             ./dist/macos/*
-            ./dist/linux/*
             ./dist/windows/*
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

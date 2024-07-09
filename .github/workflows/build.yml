@@ -51,7 +51,7 @@ jobs:
           npm run make
 
       - name: List directory contents after build
-        run: ls -R electron/out
+        run: ls -R electron/out/make
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

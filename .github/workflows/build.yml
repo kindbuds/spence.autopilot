@@ -21,6 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug Node.js version and npm
+        run: |
+          node -v
+          npm -v
+
       - name: Build Electron app
         run: npm run make
 

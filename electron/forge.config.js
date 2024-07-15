@@ -11,7 +11,20 @@ module.exports = {
     ],
     ignore: [
       'node_modules/fs-xattr'
-    ]
+    ],
+    osxSign: {
+      identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
+      hardenedRuntime: true,
+      entitlements: path.join(__dirname, "entitlements.plist"), // Path to your entitlements file
+      entitlementsInherit: path.join(__dirname, "entitlements.plist"), // Path to your entitlements file
+      gatekeeperAssess: false,
+      'keychain': 'login.keychain-db',
+      'keychain-profile': path.join(__dirname, 'developerID_application.p12') // Path to your p12 file
+    },
+    osxNotarize: {
+      appleId: "jeff.borden@kindbuds.us", // Replace with your Apple ID
+      appleIdPassword: "giec-qpnu-ncrl-gynv" // Replace with your app-specific password
+    }
   },
   rebuildConfig: {},
   makers: [
@@ -60,7 +73,11 @@ module.exports = {
           owner: 'kindbuds',
           name: 'spence.autopilot'
         },
-        draft: true,
+        prerelease: false, // Set to true if this is a pre-release
+        draft: false, // Set to true if you want the release to be a draft
+        tag: `v${require('./package.json').version}`, // Tag with the current version from package.json
+        tokenRef: 'GITHUB_TOKEN' // The environment variable where your GitHub token is stored
+
       }
     }
   ],

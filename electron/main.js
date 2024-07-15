@@ -336,12 +336,17 @@ async function createWindow(loggedin = null) {
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
         try {
+<<<<<<< HEAD
             //  if (isDev)
             setTimeout(() => {
                 console.log('openDevTools');
                 mainWindow.webContents.openDevTools();
 
             }, 1000);
+=======
+            // if (isDev)
+            mainWindow.webContents.openDevTools();
+>>>>>>> 9425d5fa8573de5e2775db7328caeecc026abdd3
         } catch {
             console.log('openDevTools failed')
         }

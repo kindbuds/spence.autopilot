@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.58",
+  "version": "0.0.59",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,10 @@
     "start:prod": "electron .",
     "build": "electron-forge make",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "standard-version": "standard-version",
+    "publish": "electron-forge publish",
+    "release": "npm run standard-version && npm run make && npm run publish"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +34,7 @@
     "wait-on": "^7.2.0"
   },
   "dependencies": {
+    "@electron-forge/publisher-github": "^7.4.0",
     "@mdi/font": "^7.4.47",
     "@mdi/js": "^7.4.47",
     "auth0": "^4.3.1",
@@ -45,6 +49,7 @@
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",
     "path-browserify": "^1.0.1",
+    "standard-version": "^9.5.0",
     "superagent": "^9.0.0",
     "vue-chartkick": "^1.1.0",
     "vuex": "^4.1.0"

@@ -20,7 +20,7 @@ const isDev = process.env.NODE_ENV === 'development';
 // const redirectUri = 'http://localhost:3000/?autopilot=true'
 // const loginUri = 'https://app.getspence.ai/?autopilot=true'
 const amplifyUri = !isDev
-    ? 'https://master.d367asx6ojlrhc.amplifyapp.com/'
+    ? 'https://main.d1u7axsxvin7f4.amplifyapp.com/'
     : 'http://localhost:8080/'
 
 

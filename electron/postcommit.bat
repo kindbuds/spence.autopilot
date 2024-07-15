@@ -2,7 +2,9 @@
 setlocal
 
 rem Get the version from package.json
-for /f "tokens=2 delims=:," %%i in ('type package.json ^| findstr /i /c:"\"version\" "') do set "VERSION=%%~i"
+for /f "tokens=3 delims=:, " %%i in ('findstr /ri "\"version\"" package.json') do (
+    set "VERSION=%%i"
+)
 set "VERSION=%VERSION:~1,-1%"
 
 rem Commit, tag, and push

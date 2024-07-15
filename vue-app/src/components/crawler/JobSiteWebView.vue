@@ -665,7 +665,7 @@ export default {
 
       const webview = this.$refs.linkedinWebView;
       // console.log(webview, "webview");
-      if (webview) {
+      if (webview && this.lastSearchCycleCompleted) {
         const lastSearchCycleCompleted =
           this.lastSearchCycleCompleted.toISOString();
         webview.executeJavaScript(`

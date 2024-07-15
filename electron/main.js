@@ -340,7 +340,6 @@ async function createWindow(loggedin = null) {
             setTimeout(() => {
                 console.log('openDevTools');
                 mainWindow.webContents.openDevTools();
-
             }, 1000);
         } catch {
             console.log('openDevTools failed')

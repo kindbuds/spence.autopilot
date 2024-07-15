@@ -336,8 +336,8 @@ async function createWindow(loggedin = null) {
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
         try {
-            if (isDev)
-                mainWindow.webContents.openDevTools();
+            // if (isDev)
+            mainWindow.webContents.openDevTools();
         } catch {
             console.log('openDevTools failed')
         }

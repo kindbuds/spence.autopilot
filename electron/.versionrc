@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "postbump": "git add .",
+    "postchangelog": "git add CHANGELOG.md",
+    "postcommit": "postcommit.bat"
+  }
+}

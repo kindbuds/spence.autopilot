@@ -28,33 +28,21 @@ module.exports = {
   },
   rebuildConfig: {},
   makers: [
-    {
-      name: '@electron-forge/maker-squirrel',
-      config: {
-        name: "Spence",
-        description: 'Spence AI Career Autopilot',
-        authors: "Jeff Borden",
-        exe: "Spence AI Career Autopilot.exe",
-        setupExe: "Spence-Setup.exe",
-        setupIcon: path.join(__dirname, 'assets', 'spence-face.ico'), // Path to your icon
-        options: {
-          icon: path.join(__dirname, 'assets', 'spence-face.ico'),
-        }
-      },
-    },
-    {
-      name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
-    },
-    {
-      name: '@electron-forge/maker-deb',
-      config: {},
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
-    },
-    // Add the DMG maker for macOS
+    // {
+    //   name: '@electron-forge/maker-squirrel',
+    //   config: {
+    //     name: "Spence",
+    //     description: 'Spence AI Career Autopilot',
+    //     authors: "Jeff Borden",
+    //     exe: "Spence AI Career Autopilot.exe",
+    //     setupExe: "Spence-Setup.exe",
+    //     setupIcon: path.join(__dirname, 'assets', 'spence-face.ico'), // Path to your icon
+    //     options: {
+    //       icon: path.join(__dirname, 'assets', 'spence-face.ico'),
+    //     }
+    //   },
+    // },
+
     {
       name: '@electron-forge/maker-dmg',
       config: {

@@ -1,6 +1,26 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const path = require('path');
+const fs = require('fs');
+
+const p12Path = path.join(__dirname, 'developerID_application.p12');
+const entitlementsPath = path.join(__dirname, "entitlements.plist");
+
+fs.access(p12Path, fs.constants.F_OK, (err) => {
+  if (err) {
+    console.error(`.p12 file not found at: ${p12Path}`);
+  } else {
+    console.log(`.p12 file found at: ${p12Path}`);
+  }
+});
+
+fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
+  if (err) {
+    console.error(`Entitlements file not found at: ${entitlementsPath}`);
+  } else {
+    console.log(`Entitlements file found at: ${entitlementsPath}`);
+  }
+});
 
 module.exports = {
   packagerConfig: {

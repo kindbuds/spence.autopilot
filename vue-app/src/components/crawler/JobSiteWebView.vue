@@ -661,11 +661,15 @@ export default {
         this.lastSearchCycleCompleted,
         "this.lastSearchCycleCompleted"
       );
-      if (!this.lastSearchCycleCompleted) return;
+      if (
+        !this.lastSearchCycleCompleted ||
+        !(this.lastSearchCycleCompleted instanceof Date)
+      )
+        return;
 
       const webview = this.$refs.linkedinWebView;
       // console.log(webview, "webview");
-      if (webview && this.lastSearchCycleCompleted) {
+      if (webview) {
         const lastSearchCycleCompleted =
           this.lastSearchCycleCompleted.toISOString();
         webview.executeJavaScript(`

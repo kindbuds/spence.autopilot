@@ -70,7 +70,7 @@ export default {
     // this.urls.search = `https://www.linkedin.com/jobs/search/?f_TPR=r604800&f_WT=2&sortBy=DD&f_SB2=${this.translateSalary()}&f_E=${this.translateExperience()}`;
 
     // production below
-    this.urls.search = `https://www.linkedin.com/jobs/search/?f_TPR=r86400&f_WT=2&sortBy=DD&f_SB2=${this.translateSalary()}&f_E=${this.translateExperience()}`;
+    this.urls.search = `https://www.linkedin.com/jobs/search/?f_WT=2&sortBy=DD&f_SB2=${this.translateSalary()}&f_E=${this.translateExperience()}`;
     console.log(this.urls.search, "this.urls.search");
   },
   beforeUnmount() {

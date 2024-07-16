@@ -383,7 +383,7 @@ export default {
             console.log("openDevTools failed");
           }
 
-          //  alert(`this.user.last_search_cycle: ${this.user.last_search_cycle}`);
+          // alert(`this.user.last_search_cycle: ${this.user.last_search_cycle}`);
 
           if (this.user.last_search_cycle) {
             this.lastSearchCycleCompleted = this.user.last_search_cycle;
@@ -818,47 +818,14 @@ export default {
     },
     createSearchUrl(term) {
       const baseUrl = this.url;
-      return `${baseUrl}&keywords=${term}`;
-      // switch (this.domain) {
-      //   case "linkedin": {
-      //     const salaryMap = {
-      //       20000: null,
-      //       40000: 1,
-      //       60000: 2,
-      //       80000: 3,
-      //       100000: 4,
-      //       120000: 5,
-      //       140000: 6,
-      //       160000: 7,
-      //       180000: 8,
-      //       200000: 9,
-      //     };
-      //     const experienceMap = {
-      //       Internship: 1,
-      //       Entry: 2,
-      //       Associate: 3,
-      //       "Mid-Senior": 4,
-      //       Director: 5,
-      //       Executive: 6,
-      //     };
+      let dateFilter = "f_TPR=r86400"; // past 24 hours
 
-      //     const salaryParam =
-      //       salaryMap[this.user.autopilot.salary] !== null
-      //         ? `f_SB2=${salaryMap[this.user.autopilot.salary]}`
-      //         : "";
-      //     const experienceParams = this.user.autopilot.experience_levels
-      //       .map((level) => `f_E=${experienceMap[level]}`)
-      //       .join("&");
+      if (!this.lastSearchCycleCompleted && !this.user.last_search_cycle) {
+        // users first time thru should pull last month of jobs instead of day
+        dateFilter = "f_TPR=r2592000"; // month
+      }
 
-      //     console.log(
-      //       `${baseUrl}&keywords=${term}&${salaryParam}&${experienceParams}`,
-      //       "built url"
-      //     );
-      //     return `${baseUrl}&keywords=${term}&${salaryParam}&${experienceParams}`;
-      //   }
-      //   default:
-      //     throw new Error("Domain not implemented");
-      // }
+      return `${baseUrl}&${dateFilter}&keywords=${term}`;
     },
     async typeSearchTerm(term) {
       term = term.replace(/'/g, "");

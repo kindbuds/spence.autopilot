@@ -6,6 +6,8 @@ const fs = require('fs');
 const p12Path = path.join(__dirname, 'developerID_application.p12');
 const entitlementsPath = path.join(__dirname, "entitlements.plist");
 
+
+console.log(`Checking .p12 file at: ${p12Path}`);
 fs.access(p12Path, fs.constants.F_OK, (err) => {
   if (err) {
     console.error(`.p12 file not found at: ${p12Path}`);
@@ -14,6 +16,7 @@ fs.access(p12Path, fs.constants.F_OK, (err) => {
   }
 });
 
+console.log(`Checking entitlements file at: ${entitlementsPath}`);
 fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
   if (err) {
     console.error(`Entitlements file not found at: ${entitlementsPath}`);
@@ -21,6 +24,7 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
     console.log(`Entitlements file found at: ${entitlementsPath}`);
   }
 });
+
 
 module.exports = {
   packagerConfig: {

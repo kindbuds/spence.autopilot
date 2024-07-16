@@ -35,11 +35,11 @@ module.exports = {
     osxSign: {
       identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
       hardenedRuntime: true,
-      entitlements: path.join(__dirname, "entitlements.plist"), // Path to your entitlements file
-      entitlementsInherit: path.join(__dirname, "entitlements.plist"), // Path to your entitlements file
+      entitlements: entitlementsPath, // Path to your entitlements file
+      entitlementsInherit: entitlementsPath, // Path to your entitlements file
       gatekeeperAssess: false,
       'keychain': 'login.keychain-db',
-      'keychain-profile': path.join(__dirname, 'developerID_application.p12') // Path to your p12 file
+      'keychain-profile': p12Path // Path to your p12 file
     },
     osxNotarize: {
       appleId: "jeff.borden@kindbuds.us", // Replace with your Apple ID

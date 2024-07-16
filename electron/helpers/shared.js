@@ -53,6 +53,7 @@ module.exports.setLastSearchCycleCompleted = (dte) => {
 }
 
 module.exports.getLastSearchCycleCompleted = () => {
+
     return new Promise((resolve, reject) => {
         storage.get('lastSearchCycleCompleted', (error, data) => {
             if (error) {

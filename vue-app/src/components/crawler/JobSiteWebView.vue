@@ -820,7 +820,10 @@ export default {
       const baseUrl = this.url;
       let dateFilter = "f_TPR=r86400"; // past 24 hours
 
-      if (!this.lastSearchCycleCompleted && !this.user.last_search_cycle) {
+      if (
+        !this.user.last_search_cycle ||
+        !(this.user.last_search_cycle instanceof Date)
+      ) {
         // users first time thru should pull last month of jobs instead of day
         dateFilter = "f_TPR=r2592000"; // month
       }

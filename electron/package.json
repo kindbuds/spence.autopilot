@@ -12,7 +12,7 @@
     "make": "electron-forge make",
     "standard-version": "standard-version",
     "publish": "electron-forge publish",
-    "release": "npm run standard-version && npm run make && npm run publish"
+    "release": "npm run standard-version && npm run make && npm run publish && git push origin main --tags"
   },
   "keywords": [],
   "author": "",

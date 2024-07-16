@@ -42,15 +42,15 @@ module.exports = {
         }
       },
     },
-    // {
-    //   name: '@electron-forge/maker-dmg',
-    //   config: {
-    //     name: "Spence",
-    //     icon: path.join(__dirname, 'assets', 'spence-face.icns'), // Ensure you have an .icns icon for macOS
-    //     overwrite: true,
-    //     debug: false,
-    //   },
-    // },
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        name: "Spence",
+        icon: path.join(__dirname, 'assets', 'spence-face.icns'), // Ensure you have an .icns icon for macOS
+        overwrite: true,
+        debug: false,
+      },
+    },
   ],
   publishers: [
     {

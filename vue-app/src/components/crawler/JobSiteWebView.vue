@@ -663,7 +663,8 @@ export default {
       );
       if (
         !this.lastSearchCycleCompleted ||
-        !(this.lastSearchCycleCompleted instanceof Date)
+        !(this.lastSearchCycleCompleted instanceof Date) ||
+        isNaN(Date.parse(this.lastSearchCycleCompleted))
       )
         return;
 
@@ -820,9 +821,16 @@ export default {
       const baseUrl = this.url;
       let dateFilter = "f_TPR=r86400"; // past 24 hours
 
+      // console.log(
+      //   this.user.last_search_cycle,
+      //   typeof this.user.last_search_cycle,
+      //   Object.keys(this.user.last_search_cycle).length,
+      //   "month test"
+      // );
       if (
         !this.user.last_search_cycle ||
-        !(this.user.last_search_cycle instanceof Date)
+        !(this.user.last_search_cycle instanceof Date) ||
+        isNaN(Date.parse(this.user.last_search_cycle))
       ) {
         // users first time thru should pull last month of jobs instead of day
         dateFilter = "f_TPR=r2592000"; // month
@@ -1226,11 +1234,14 @@ async function clickLinksSequentially(jobCards) {
 // console.log(window.lastSearchCycleCompleted, 'window.lastSearchCycleCompleted');
 const hoursToRefresh = 1;
 const hoursInMillis = hoursToRefresh * 60 * 60 * 1000;
-
-if (!window.lastSearchCycleCompleted) {
-  console.log('No last search cycle completed date found.');
-  autopilotConfig.isPaging = true;
-} else if (window.lastSearchCycleCompleted instanceof Date) {
+if (
+      !window.lastSearchCycleCompleted ||
+      !(window.lastSearchCycleCompleted instanceof Date) ||
+      isNaN(Date.parse(window.lastSearchCycleCompleted))
+    ) {
+      console.log("No last search cycle completed date found.");
+      autopilotConfig.isPaging = true;
+    } else if (window.lastSearchCycleCompleted instanceof Date) {
   const timeDifference = new Date() - window.lastSearchCycleCompleted;
   const minutes = Math.floor(timeDifference / 60000);
   const seconds = ((timeDifference % 60000) / 1000).toFixed(0);

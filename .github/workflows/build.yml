@@ -7,12 +7,12 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
+    runs-on: windows-latest
+    # strategy:
+    #   matrix:
+    #     os: [macos-latest, windows-latest]
 
-    timeout-minutes: 120  # Increase the timeout to 2 hours
+    timeout-minutes: 20 
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -26,38 +26,38 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Set up Python (macOS only)
-        if: matrix.os == 'macos-latest'
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+      # - name: Set up Python (macOS only)
+      #   if: matrix.os == 'macos-latest'
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.10'
 
-      - name: Set up Python virtual environment (macOS only)
-        if: matrix.os == 'macos-latest'
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          python3 -m pip install --upgrade pip
-          python3 -m pip install setuptools wheel
+      # - name: Set up Python virtual environment (macOS only)
+      #   if: matrix.os == 'macos-latest'
+      #   run: |
+      #     python3 -m venv venv
+      #     source venv/bin/activate
+      #     python3 -m pip install --upgrade pip
+      #     python3 -m pip install setuptools wheel
 
       - name: Install dependencies
         run: |
           cd electron
           npm install
 
-      - name: Upload .p12 file (macOS only)
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: p12-file
-          path: path/to/developerID_application.p12
+      # - name: Upload .p12 file (macOS only)
+      #   if: matrix.os == 'macos-latest'
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: p12-file
+      #     path: path/to/developerID_application.p12
 
-      - name: Download .p12 file (macOS only)
-        if: matrix.os == 'macos-latest'
-        uses: actions/download-artifact@v4
-        with:
-          name: p12-file
-          path: path/to/download
+      # - name: Download .p12 file (macOS only)
+      #   if: matrix.os == 'macos-latest'
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: p12-file
+      #     path: path/to/download
 
       - name: Build Electron app
         run: |
@@ -67,7 +67,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-build
+          name: windows-latest-build
           path: electron/out/make/*
 
   release:
@@ -75,11 +75,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download macOS artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: macos-latest-build
-          path: ./dist/macos
+      # - name: Download macOS artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: macos-latest-build
+      #     path: ./dist/macos
 
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
@@ -94,7 +94,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./dist/macos/*.dmg
+            # ./dist/macos/*.dmg
             ./dist/windows/squirrel.windows/x64/*.exe
           draft: false
           prerelease: false

@@ -1,6 +1,6 @@
 const { execSync } = require('child_process');
 const { version } = require('./package.json');
-
+const path = require('path');
 
 try {
     // Check for uncommitted changes
@@ -15,14 +15,21 @@ try {
         if (stagedChanges) {
             // Commit changes with the current version in the message
             execSync(`git commit -m "Releasing v${version}"`);
-            // Push changes to the remote repository
-            execSync('git push origin main --follow-tags');
-            console.log(`Changes committed and pushed with message: "Releasing v${version}"`);
+            console.log(`Changes committed with message: "Releasing v${version}"`);
         } else {
             console.log('No changes to commit.');
         }
     } catch (err) {
-        console.error('Failed to commit and push changes:', err.message);
+        console.error('Failed to commit changes:', err.message);
         process.exit(1);
     }
+}
+
+try {
+    // Run the postcommit.bat script
+    const postCommitScript = path.resolve(__dirname, 'postcommit.bat');
+    execSync(postCommitScript, { stdio: 'inherit' });
+} catch (err) {
+    console.error('Failed to run postcommit.bat:', err.message);
+    process.exit(1);
 }

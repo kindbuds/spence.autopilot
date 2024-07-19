@@ -13,7 +13,8 @@ git tag -d v%VERSION%
 rem Delete the remote tag if it exists
 git push origin :refs/tags/v%VERSION%
 
-rem Commit, tag, and push
-git commit -m "chore(release): v%VERSION%" && git tag v%VERSION% && git push origin main && git push origin main --tags
+rem Tag and push
+git tag v%VERSION%
+git push origin main --tags
 
 endlocal

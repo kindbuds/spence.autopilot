@@ -359,14 +359,38 @@ export default {
         if (!this.isMdAndUp) {
           if (job) {
             // Store the current pause state if a job is selected
-
             this.togglePause(true);
           } else {
             // If no job is selected, use the stored pause state
             this.togglePause(this.isPaused_existing);
           }
         }
-        // alert(`emitJob.isPaused_existing: ${this.isPaused_existing}`);
+
+        // Scroll the job card to the top of its container
+        // if (job) {
+        //   const jobRef = this.$refs["job-" + job.id];
+        //   if (!jobRef[0]) return;
+        //   console.log(jobRef, "jobRef");
+        //   console.log(jobRef[0], "jobRef[0]");
+        //   if (jobRef && jobRef[0]) {
+        //     const jobElement = jobRef[0].$el;
+        //     const container = this.$refs.jobContainer.$el;
+        //     console.log(container, "container");
+        //     console.log(jobElement, "jobElement");
+
+        //     if (jobElement && container) {
+        //       const containerRect = container.getBoundingClientRect();
+        //       const jobElementRect = jobElement.getBoundingClientRect();
+        //       const offset = jobElementRect.top - containerRect.top;
+
+        //       // Adjust the scroll position to scroll near the top with smooth behavior
+        //       container.scrollTo({
+        //         top: container.scrollTop + offset - 10, // Adjust the 20px as needed
+        //         behavior: "smooth",
+        //       });
+        //     }
+        //   }
+        // }
       }, 1000);
     },
     async onDomReady() {
@@ -1002,9 +1026,18 @@ function getApplicantCount() {
           const spans = jobDetailsDiv.querySelectorAll('span');
           spans.forEach(span => {
             // console.log(span.innerText, 'span.innerText');
+            let match;
             if (span.innerText.toLowerCase().includes('applicant')) {
               // eslint-disable-next-line no-useless-escape
-              const match = span.innerText.match(/(\\d+)\\s*applicants?/i);
+               match = span.innerText.match(/(\\d+)\\s*applicants?/i);
+            }
+            if (span.innerText.toLowerCase().includes('people clicked apply')) {
+              // eslint-disable-next-line no-useless-escape
+              let txt = span.innerText.toLowerCase();
+              txt = txt.replace('over', '')
+               match = txt.match(/(\\d+)\\s*people clicked apply?/i);
+            }
+
               if (match) {
                 applicantCount = parseInt(match[1]);
                 // console.log(applicantCount, 'applicantCount');

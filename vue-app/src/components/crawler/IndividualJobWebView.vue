@@ -24,24 +24,55 @@
             color="transparent"
           ></v-btn>
         </v-col>
-        <v-col v-if="false" cols="0" class="text-center">
-          <v-btn
-            color="transparent"
-            class="text-grey mr-2"
-            icon="mdi-card-account-details-star-outline"
-            title="Resume (CV)"
-            size="small"
-          >
-          </v-btn>
-          <v-btn
-            color="transparent"
-            class="text-grey"
-            icon="mdi-email-heart-outline"
-            title="Cover Letter"
-          >
-          </v-btn>
+        <v-col cols="1" class="text-right">
+          <div class="d-flex justify-space-around">
+            <v-btn
+              v-if="!job.nopercent"
+              elevation="0"
+              title="Composer"
+              size="small"
+              append-icon="mdi-chevron-down"
+              class="text-grey-lighten-1 pa-2 mt-1 ml-2"
+              color="transparent"
+              id="composer"
+              style="height: 35px; 2px solid rgb(70 108 95)"
+            >
+              <v-icon style="color: #b3f5e5 !important; font-size: 20px"
+                >mdi-auto-fix</v-icon
+              >
+            </v-btn>
+
+            <v-menu activator="#composer">
+              <v-list class="py-0">
+                <v-list-subheader
+                  class="text-grey font-weight-bold text-caption"
+                >
+                  <v-icon class="mr-1 mb-1" size="x-small">mdi-auto-fix</v-icon
+                  >COMPOSER</v-list-subheader
+                >
+                <v-divider></v-divider>
+                <v-list-item @click="generateContent('coverletter')">
+                  <v-list-item-title
+                    ><v-icon class="mr-2" color="teal-accent-1" size="x-small"
+                      >mdi-mail</v-icon
+                    >Cover Letter
+                  </v-list-item-title>
+                </v-list-item>
+                <!-- <v-list-item :disabled="true">
+                  <v-list-item-title
+                    ><v-icon class="mr-2" color="grey" size="x-small"
+                      >mdi-help</v-icon
+                    >Application Questions
+                    <span class="text-amber text-caption"
+                      >(coming soon)</span
+                    ></v-list-item-title
+                  >
+                </v-list-item> -->
+              </v-list>
+            </v-menu>
+          </div>
         </v-col>
-        <v-col cols="10" class="d-flex align-center">
+        <v-col cols="9" class="d-flex align-center">
           <span
             class="address-bar"
             v-bind:style="{
@@ -56,16 +87,26 @@
           </span>
           <v-btn
             color="transparent"
+            size="x-small"
             class="text-grey"
             @click="copyUrlToClipboard"
             icon="mdi-content-copy"
           >
           </v-btn>
+          <v-btn
+            color="transparent"
+            size="x-small"
+            class="text-grey"
+            @click="openUrlInNewWindow"
+            icon="mdi-open-in-new"
+          >
+          </v-btn>
         </v-col>
-        <v-col cols="1" class="text-center">
+        <v-col cols="2" class="text-left">
           <v-btn
             elevation="0"
             @click="closeIndividualJobDetail"
+            title="Composer"
             icon="mdi-close"
             class="mr-4 mt-1"
             size="small"
@@ -85,6 +126,12 @@
       @did-navigate="handleNavigation"
       :webpreferences="'nodeIntegration=yes,nativeWindowOpen=true'"
     ></webview>
+    <ComposerTray
+      ref="composerTray"
+      :contentType="contentType"
+      :title="composerTitle"
+      :job="job"
+    />
   </div>
 </template>
 
@@ -92,6 +139,8 @@
 import { useDisplay } from "vuetify";
 import { computed } from "vue";
 import * as shared from "@/helpers/shared.js";
+
+import ComposerTray from "@/components/crawler/ComposerTray.vue";
 
 export default {
   name: "IndividualJobWebView",
@@ -101,7 +150,12 @@ export default {
       required: false,
       default: null,
     },
+    job: {
+      type: Object,
+      required: false,
+    },
   },
+  components: { ComposerTray },
   emits: ["jobDetailClosed", "auth-required"],
   setup() {
     const display = useDisplay();
@@ -113,6 +167,8 @@ export default {
   },
   data() {
     return {
+      contentType: null,
+      composerTitle: "",
       applyUrl: null,
       loading: true,
       lastLoadedUrl: null,
@@ -153,6 +209,24 @@ export default {
     }
   },
   methods: {
+    generateContent(content_type) {
+      switch (content_type) {
+        case "coverletter":
+          this.composerTitle = "Cover Letter";
+          break;
+
+        default:
+          break;
+      }
+      this.contentType = content_type;
+      console.log(content_type, "generateContent");
+      this.$nextTick(() => {
+        this.$refs.composerTray.toggleTray();
+      });
+    },
+    openUrlInNewWindow() {
+      window.open(this.currentUrl, "_blank");
+    },
     handleNavigation() {
       // const url = event.url;
       // alert(`url: ${url}`);
@@ -194,18 +268,24 @@ export default {
     // },
     reloadWebView() {
       console.log("Reloading webview...");
-      this.loading = true;
+      //  this.loading = true;
       this.isLoading = true; // Set the flag to true when reloading
       this.$nextTick(() => {
         const webview = this.$refs.jobWebView;
         if (webview) {
-          console.log(`Setting webview src to: ${this.currentUrl}`);
-          webview.src = this.currentUrl;
+          try {
+            console.log(`Setting webview src to: ${this.currentUrl}`);
+            webview.src = this.currentUrl;
+          //  this.isLoading = false;
+          } catch {
+            console.error("error in webview");
+          }
         }
       });
     },
     async onDomReady() {
       console.log("DOM is ready.");
+      this.loading = false;
       const webview = this.$refs.jobWebView;
       if (!webview) {
         console.error("Webview not initialized");
@@ -276,8 +356,13 @@ export default {
       const webview = this.$refs.jobWebView;
       if (webview) {
         console.log("Webview started loading.", webview.src);
-        if (webview.src === "https://www.linkedin.com/feed/") {
-          webview.src = this.url;
+       this.loading = false;
+       try {
+          if (webview.src === "https://www.linkedin.com/feed/") {
+            webview.src = this.url;
+          }
+        } catch (error) {
+          console.error("Error setting webview src:", error);
         }
       }
 

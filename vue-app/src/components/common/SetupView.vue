@@ -286,6 +286,7 @@ export default {
 
       try {
         const trimmedSearchTerms = this.localSearchTerms
+          .filter((term) => term !== null && term !== undefined)
           .map((term) => term.trim())
           .filter((term) => term !== "");
 

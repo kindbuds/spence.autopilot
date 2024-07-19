@@ -21,6 +21,7 @@
           <IndividualJobWebView
             v-if="!auth"
             :url="selectedJob.url"
+            :job="selectedJob"
             @jobDetailClosed="onJobDetailClosed"
             @authRequired="onAuthRequired"
           />

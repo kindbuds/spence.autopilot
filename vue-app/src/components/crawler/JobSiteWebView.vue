@@ -174,6 +174,7 @@
 import JobCard from "@/components/crawler/JobCard.vue";
 import { computed } from "vue";
 import * as shared from "@/helpers/shared.js";
+import { selectors } from "@/helpers/selectors.js";
 import { useDisplay } from "vuetify";
 // const path = require("path");
 
@@ -240,6 +241,7 @@ export default {
       can_generate_percents: true,
       user_loaded: false,
       working_job_count: 0,
+      selectors,
     };
   },
   async mounted() {
@@ -402,7 +404,7 @@ export default {
         if (!webview) return;
         setTimeout(() => {
           try {
-            //  webview.openDevTools();
+            webview.openDevTools();
           } catch {
             console.log("openDevTools failed");
           }
@@ -422,7 +424,10 @@ export default {
           console.error("Webview is not initialized.");
           return;
         }
-        const loggedIn = await shared.checkSignInButton(webview);
+        const loggedIn = await shared.checkSignInButton(
+          webview,
+          this.selectors.signInSignals
+        );
         console.log(loggedIn, "onDomReady.loggedIn");
         if (!loggedIn) {
           // alert("auth-required1");

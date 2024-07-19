@@ -1,0 +1,21 @@
+export const selectors = {
+    bprGuid: 'code[id^="bpr-guid-"]',
+    applyButton: "button.jobs-apply-button",
+    scaffoldToolbar: ".scaffold-layout-toolbar",
+    scaffoldList: ".scaffold-layout__list",
+    scaffoldDetailBackButton: ".scaffold-layout__detail-back-button",
+    msgOverlay: "#msg-overlay",
+    easyApplyButtonAriaLabel: "Easy Apply",
+    initialLoadAnimation: "div.initial-load-animation",
+    signInSignals: [
+        'button[data-id="sign-in-form__submit-btn"]',
+        'button[data-litms-control-urn="login-submit"]',
+        'a[data-tracking-control-name="public_jobs_conversion-modal-signin"]',
+        '#reset-password-submit-button',
+        '#two-step-submit-button',
+        '#captcha-internal',
+        'a[data-tracking-control-name="public_jobs_nav-header-signin"]',
+        'a[data-tracking-control-name="guest_homepage-basic_nav-header-signin"]',
+        '#pin-submit-button',
+    ],
+};

@@ -102,7 +102,7 @@
           >
           </v-btn>
         </v-col>
-        <v-col cols="2" class="text-left">
+        <v-col cols="2" class="text-left" v-if="isMdAndUp">
           <v-btn
             elevation="0"
             @click="closeIndividualJobDetail"
@@ -131,6 +131,7 @@
       :contentType="contentType"
       :title="composerTitle"
       :job="job"
+      :isMdAndUp="isMdAndUp"
     />
   </div>
 </template>
@@ -139,6 +140,7 @@
 import { useDisplay } from "vuetify";
 import { computed } from "vue";
 import * as shared from "@/helpers/shared.js";
+import { selectors } from "@/helpers/selectors.js";
 
 import ComposerTray from "@/components/crawler/ComposerTray.vue";
 
@@ -175,6 +177,7 @@ export default {
       stopLoadingTimeout: null,
       isLoading: false, // New flag to track loading state
       currentUrl: this.url,
+      selectors,
     };
   },
   mounted() {
@@ -259,13 +262,6 @@ export default {
     closeIndividualJobDetail() {
       this.$emit("jobDetailClosed");
     },
-    // onNewWindow(event) {
-    //   const newUrl = event.url;
-    //   console.log(`New window requested for URL: ${newUrl}`);
-    //   // Load the new URL in the same webview
-    //   this.currentUrl = newUrl;
-    //   this.reloadWebView();
-    // },
     reloadWebView() {
       console.log("Reloading webview...");
       //  this.loading = true;
@@ -276,7 +272,7 @@ export default {
           try {
             console.log(`Setting webview src to: ${this.currentUrl}`);
             webview.src = this.currentUrl;
-          //  this.isLoading = false;
+            //  this.isLoading = false;
           } catch {
             console.error("error in webview");
           }
@@ -295,7 +291,7 @@ export default {
           .executeJavaScript(
             `
       (function() {
-        const elements = document.querySelectorAll('code[id^="bpr-guid-"]');
+        const elements = document.querySelectorAll('${this.selectors.bprGuid}');
         const parsedDataArray = [];
 
         elements.forEach(element => {
@@ -334,11 +330,11 @@ export default {
 
     addButtonListeners() {
       const script = `
-      const buttons = document.querySelectorAll("button.jobs-apply-button");
+      const buttons = document.querySelectorAll("${this.selectors.applyButton}");
       console.log(buttons,'buttons')
       buttons.forEach((button) => {
         const ariaLabel = button.getAttribute("aria-label");
-        if (!ariaLabel || !ariaLabel.startsWith("Easy Apply")) {
+        if (!ariaLabel || !ariaLabel.startsWith("${this.selectors.easyApplyButtonAriaLabel}")) {
           button.addEventListener("click", () => {
             // alert('${this.applyUrl}');
             window.location.href = '${this.applyUrl}';
@@ -356,8 +352,8 @@ export default {
       const webview = this.$refs.jobWebView;
       if (webview) {
         console.log("Webview started loading.", webview.src);
-       this.loading = false;
-       try {
+        this.loading = false;
+        try {
           if (webview.src === "https://www.linkedin.com/feed/") {
             webview.src = this.url;
           }
@@ -376,11 +372,11 @@ export default {
         const webview = this.$refs.jobWebView;
         if (!webview) return;
         const removeElementsScript = `
-            document.querySelector('.scaffold-layout-toolbar')?.remove();
-            document.querySelector('.scaffold-layout__list')?.remove();
-            document.querySelector('.scaffold-layout__detail-back-button')?.remove();
-            document.querySelector('#msg-overlay')?.remove();
-            document.querySelector('button.scaffold-layout__detail-back-button')?.remove();
+            document.querySelector('${this.selectors.scaffoldToolbar}')?.remove();
+            document.querySelector('${this.selectors.scaffoldList}')?.remove();
+            document.querySelector('${this.selectors.scaffoldDetailBackButton}')?.remove();
+            document.querySelector('${this.selectors.msgOverlay}')?.remove();
+            document.querySelector('button${this.selectors.scaffoldDetailBackButton}')?.remove();
       `;
         webview.executeJavaScript(removeElementsScript);
       }, 1000);
@@ -408,7 +404,10 @@ export default {
 
             const webview = this.$refs.jobWebView;
             if (webview) {
-              const loggedIn = await shared.checkSignInButton(webview);
+              const loggedIn = await shared.checkSignInButton(
+                webview,
+                this.selectors.signInSignals
+              );
               console.log(loggedIn, "onDomReady.loggedIn");
               if (!loggedIn) {
                 //  alert("auth-required1");
@@ -439,7 +438,7 @@ export default {
       if (!webview) return;
       await this.waitForElementToDisappear(
         webview,
-        "div.initial-load-animation"
+        this.selectors.initialLoadAnimation
       );
     },
   },

@@ -9,7 +9,7 @@
           :style="{
             position: 'absolute',
             top: '50%',
-            right: '33vw',
+            right: closeButtonRightOffset,
             transform: 'translateY(-50%)',
           }"
         ></v-btn>
@@ -103,6 +103,7 @@ export default {
     job: Object,
     title: String,
     contentType: String,
+    isMdAndUp: Boolean,
   },
   data() {
     return {
@@ -110,6 +111,7 @@ export default {
       trayData: null,
       showTray: false,
       trayWidth: "35vw",
+      closeButtonRightOffset: "33vw",
       loading: true,
       coverLetter: null,
       contentModified: false, // Add this data property
@@ -218,6 +220,12 @@ export default {
         }
       }
     },
+  },
+  mounted() {
+    if (!this.isMdAndUp) {
+      this.trayWidth = "85vw";
+      this.closeButtonRightOffset = "81vw";
+    }
   },
 };
 </script>

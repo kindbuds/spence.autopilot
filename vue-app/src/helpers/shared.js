@@ -42,7 +42,7 @@ module.exports.lowMidHigh = (strPercent) => {
     }
 
 
-module.exports.checkSignInButton = async (webview) => {
+module.exports.checkSignInButton = async (webview, selectors) => {
     // const webview = this.$refs.linkedinWebView;
     if (!webview || typeof webview.executeJavaScript !== "function") {
         console.error(
@@ -52,17 +52,7 @@ module.exports.checkSignInButton = async (webview) => {
     }
 
     try {
-        const signInSelectors = [
-            'button[data-id="sign-in-form__submit-btn"]',
-            'button[data-litms-control-urn="login-submit"]',
-            'a[data-tracking-control-name="public_jobs_conversion-modal-signin"]',
-            '#reset-password-submit-button',
-            '#two-step-submit-button',
-            '#captcha-internal',
-            'a[data-tracking-control-name="public_jobs_nav-header-signin"]',
-            'a[data-tracking-control-name="guest_homepage-basic_nav-header-signin"]',
-            '#pin-submit-button',
-        ];
+        const signInSelectors = selectors;
 
         const isSignInButtonPresent = await webview.executeJavaScript(`
             (() => {

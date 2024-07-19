@@ -402,7 +402,7 @@ export default {
         if (!webview) return;
         setTimeout(() => {
           try {
-            // webview.openDevTools();
+            //  webview.openDevTools();
           } catch {
             console.log("openDevTools failed");
           }
@@ -828,6 +828,7 @@ export default {
         await new Promise((resolve) =>
           setTimeout(resolve, Math.floor(Math.random() * 5000) + 1000)
         );
+        console.log("done");
       }
       this.sleeping = true;
       // window.electron.reloadUser(this.user.token);
@@ -875,11 +876,14 @@ export default {
 
       try {
         webview.src = this.createSearchUrl(term);
-      } catch {}
-      // Wait for the dom-ready event
-      await new Promise((resolve) => {
-        webview.addEventListener("dom-ready", resolve, { once: true });
-      });
+
+        // Wait for the dom-ready event
+        await new Promise((resolve) => {
+          webview.addEventListener("dom-ready", resolve, { once: true });
+        });
+      } catch {
+        console.log("type search term failed");
+      }
 
       const isSignedIn = await shared.checkSignInButton(webview);
       console.log(isSignedIn, "typeSearchTerm.isSignedIn");
@@ -980,73 +984,67 @@ export default {
     },
     scrollToBottomAndLogLinks(webview, search) {
       // window.electron.sendJobDetails({});
-
-      return webview.executeJavaScript(`
-    (async () => {
-
+      try {
+        console.log("SCROLLING!");
+        return webview.executeJavaScript(`
+  (async () => {
     window.continueProcessing = () => {};
     const autopilotConfig = {
       isPaging: false,
       searchType: null,
-    }
+    };
 
-   function smoothScrollToBottom(container) {
-    return new Promise(resolve => {
+    function smoothScrollToBottom(container) {
+      // alert('smoothScrollToBottom');
+      return new Promise(resolve => {
         let lastScrollHeight = container.scrollHeight;
         let currentScrollPosition = container.scrollTop;
 
         function smoothScroll() {
-            const totalHeight = container.scrollHeight;
-            const step = totalHeight / 30;
+          const totalHeight = container.scrollHeight;
+          const step = totalHeight / 30;
 
-            if (currentScrollPosition < totalHeight) {
-                currentScrollPosition += step;
-                container.scrollTop = currentScrollPosition;
-                setTimeout(smoothScroll, 40);
-            } else {
-                // Check if new items are loaded
-                setTimeout(() => {
-                    if (container.scrollHeight > lastScrollHeight) {
-                        lastScrollHeight = container.scrollHeight;
-                        smoothScroll();
-                    } else {
-                        resolve();
-                    }
-                }, 500); // Adjust delay as needed to allow lazy loading
-            }
+          if (currentScrollPosition < totalHeight) {
+            currentScrollPosition += step;
+            container.scrollTop = currentScrollPosition;
+            setTimeout(smoothScroll, 40);
+          } else {
+            // Check if new items are loaded
+            setTimeout(() => {
+              if (container.scrollHeight > lastScrollHeight) {
+                lastScrollHeight = container.scrollHeight;
+                smoothScroll();
+              } else {
+                resolve();
+              }
+            }, 500); // Adjust delay as needed to allow lazy loading
+          }
         }
         smoothScroll();
-    });
-}
+      });
+    }
 
-function getApplicantCount() {
+    function getApplicantCount() {
       const jobDetailsDiv = document.querySelectorAll('[class*="job-details-jobs-unified-top-card__primary-description-container"] > div')[0];
-      // console.log(jobDetailsDiv, 'jobDetailsDiv');
       let applicantCount = 0;
       try {
         if (jobDetailsDiv) {
           const spans = jobDetailsDiv.querySelectorAll('span');
           spans.forEach(span => {
-            // console.log(span.innerText, 'span.innerText');
             let match;
             if (span.innerText.toLowerCase().includes('applicant')) {
-              // eslint-disable-next-line no-useless-escape
-               match = span.innerText.match(/(\\d+)\\s*applicants?/i);
+              match = span.innerText.match(/(\\d+)\\s*applicants?/i);
             }
             if (span.innerText.toLowerCase().includes('people clicked apply')) {
-              // eslint-disable-next-line no-useless-escape
               let txt = span.innerText.toLowerCase();
-              txt = txt.replace('over', '')
-               match = txt.match(/(\\d+)\\s*people clicked apply?/i);
+              txt = txt.replace('over', '');
+              match = txt.match(/(\\d+)\\s*people clicked apply?/i);
             }
 
-              if (match) {
-                applicantCount = parseInt(match[1]);
-                // console.log(applicantCount, 'applicantCount');
-              } else if (span.innerText.toLowerCase().includes('0 applicants')) {
-                applicantCount = 0;
-                // console.log(applicantCount, 'applicantCount');
-              }
+            if (match) {
+              applicantCount = parseInt(match[1]);
+            } else if (span.innerText.toLowerCase().includes('0 applicants')) {
+              applicantCount = 0;
             }
           });
         }
@@ -1315,6 +1313,9 @@ console.log(autopilotConfig, 'autopilotConfig');
   }
 })();
       `);
+      } catch (exc) {
+        console.error("scrollToBottomAndLogLinks failed");
+      }
     },
 
     executeJavaScriptInWebview(script) {

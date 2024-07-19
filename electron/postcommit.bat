@@ -1,11 +1,10 @@
 @echo off
 setlocal
 
-rem Get the version from package.json
-for /f "tokens=3 delims=:, " %%i in ('findstr /ri "\"version\"" package.json') do (
+rem Get the version from package.json using PowerShell
+for /f %%i in ('powershell -Command "(Get-Content package.json | ConvertFrom-Json).version"') do (
     set "VERSION=%%i"
 )
-set "VERSION=%VERSION:~1,-1%"
 
 rem Ensure the version is correctly extracted
 if "%VERSION%"=="" (
@@ -19,8 +18,7 @@ git tag -d v%VERSION%
 rem Delete the remote tag if it exists
 git push origin :refs/tags/v%VERSION%
 
-rem Tag and push
-git tag v%VERSION%
+rem Push changes and tags
 git push origin main --tags
 
 endlocal

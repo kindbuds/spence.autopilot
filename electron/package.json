@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.104",
+  "version": "0.0.105",
   "repository": {
     "type": "git",
     "url": "https://github.com/kindbuds/spence.autopilot.git"
@@ -11,13 +11,13 @@
   "scripts": {
     "start": "electron .",
     "start:prod": "electron .",
-    "build": "electron-forge make",
+    "build": "electron-builder",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "standard-version": "standard-version",
     "publish": "electron-forge publish",
     "pre-release": "npm run standard-version && node pre-release.js",
-    "release": "npm run pre-release && npm run make && npm run publish"
+    "release": "npm run pre-release && npm run build && npm run publish"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +35,7 @@
     "@electron/fuses": "^1.8.0",
     "concurrently": "^8.2.2",
     "electron": "^29.3.0",
+    "electron-builder": "^24.13.3",
     "html-webpack-plugin": "^5.6.0",
     "wait-on": "^7.2.0"
   },

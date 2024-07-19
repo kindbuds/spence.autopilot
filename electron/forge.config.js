@@ -109,4 +109,27 @@ module.exports = {
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
   ],
+  build: {
+    appId: "ai.spence.autopilot",
+    publish: [
+      {
+        provider: "github",
+        owner: "kindbuds",
+        repo: "spence.autopilot"
+      }
+    ],
+    win: {
+      target: [
+        "nsis"
+      ]
+    },
+    nsis: {
+      oneClick: false,
+      perMachine: true,
+      allowElevation: true,
+      allowToChangeInstallationDirectory: true,
+      createDesktopShortcut: true,
+      createStartMenuShortcut: true
+    }
+  },
 };

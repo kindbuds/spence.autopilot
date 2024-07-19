@@ -23,7 +23,6 @@ const amplifyUri = !isDev
     ? 'https://main.d1u7axsxvin7f4.amplifyapp.com/'
     : 'http://localhost:8080/'
 
-
 if (require('electron-squirrel-startup')) return;
 
 
@@ -37,22 +36,43 @@ autoUpdater.setFeedURL({
     token: process.env.GITHUB_TOKEN // Ensure you have set this environment variable
 });
 
+// Set up autoUpdater event listeners
+autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for update...');
+    dialog.showMessageBox({ message: 'Checking for update...' });
+});
+
+autoUpdater.on('update-available', (info) => {
+    console.log('Update available:', info);
+    dialog.showMessageBox({ message: 'Update available.' });
+});
+
+autoUpdater.on('update-not-available', (info) => {
+    console.log('Update not available:', info);
+    dialog.showMessageBox({ message: 'Update not available.' });
+});
+
+autoUpdater.on('error', (err) => {
+    console.error('Error in auto-updater:', err);
+    dialog.showMessageBox({ message: `Error in auto-updater: ${err}` });
+});
 
 autoUpdater.on('download-progress', (progressObj) => {
     let log_message = `Download speed: ${progressObj.bytesPerSecond}`;
     log_message = `${log_message} - Downloaded ${progressObj.percent}%`;
     log_message = `${log_message} (${progressObj.transferred}/${progressObj.total})`;
+    console.log(log_message);
     dialog.showMessageBox({ message: log_message });
 });
 
 autoUpdater.on('update-downloaded', (info) => {
+    console.log('Update downloaded:', info);
     dialog.showMessageBox({
         message: 'Update downloaded; will install now'
     }).then(() => {
         autoUpdater.quitAndInstall();
     });
 });
-
 /*
     autoUpdater.on('update-available', () => {
         mainWindow.webContents.send('update-available');
@@ -166,8 +186,34 @@ if (!gotTheLock) {
 
 
     app.whenReady().then(async () => {
-        autoUpdater.checkForUpdatesAndNotify();
         console.log('running app.whenReady()')
+
+        autoUpdater.autoDownload = true;
+        autoUpdater.allowPrerelease = true;
+        autoUpdater.allowDowngrade = false;
+        autoUpdater.autoInstallOnAppQuit = true;
+        autoUpdater.fullChangelog = true;
+        autoUpdater.forceDevUpdateConfig = true;
+
+        if (isDev) {
+            // Force update check in development mode
+            console.log('Running in development mode, forcing update check...');
+            autoUpdater.checkForUpdates().then((downloadPromise) => {
+                if (!downloadPromise) {
+                    console.log('No updates available in development mode.');
+                    dialog.showMessageBox({ message: 'No updates available in development mode.' });
+                } else {
+                    console.log('Update check initiated:', downloadPromise);
+                }
+            }).catch((err) => {
+                console.error('Error checking for updates:', err);
+                dialog.showMessageBox({ message: `Error checking for updates: ${err}` });
+            });
+        } else {
+            console.log('Running in production mode, checking for updates...');
+            autoUpdater.checkForUpdatesAndNotify();
+        }
+
         await createWindow();
         ipcMain.on('search-cycle-completed', async (event, dte) => {
             await eShared.setLastSearchCycleCompleted(dte);

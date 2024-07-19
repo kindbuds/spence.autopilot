@@ -10,5 +10,5 @@ try {
     // Commit changes with the current version in the message
     execSync(`git commit -m "Releasing v${version}"`);
     // Push changes to the remote repository
-    execSync('git push origin main');
+    execSync('git push origin main --follow-tags');
 }

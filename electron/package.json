@@ -41,6 +41,7 @@
     "auth0": "^4.3.1",
     "auth0-js": "^9.24.1",
     "chart.js": "^4.4.3",
+    "child_process": "^1.0.2",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "electron-json-storage": "^4.6.0",

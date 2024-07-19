@@ -119,16 +119,10 @@ if (!gotTheLock) {
 
 
     app.whenReady().then(async () => {
-
-
         autoUpdater.checkForUpdatesAndNotify();
-
         console.log('running app.whenReady()')
-
         await createWindow();
-
         ipcMain.on('search-cycle-completed', async (event, dte) => {
-
             await eShared.setLastSearchCycleCompleted(dte);
         });
 
@@ -283,35 +277,52 @@ async function createWindow(loggedin = null) {
     });
 
 
-    autoUpdater.on('update-available', () => {
-        mainWindow.webContents.send('update-available');
-    });
-
-    autoUpdater.on('error', message => {
-        log.error('There was a problem updating the application');
-        log.error(message);
-    });
-
-    autoUpdater.on('update-downloaded', () => {
-        const dialogOpts = {
-            type: 'info',
-            buttons: ['Restart', 'Later'],
-            title: 'Application Update',
-            message: info.releaseName,
-            detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-        };
-
-        dialog.showMessageBox(dialogOpts).then((returnValue) => {
-            if (returnValue.response === 0) autoUpdater.quitAndInstall();
-        });
-
-        mainWindow.webContents.send('update-downloaded');
-    });
 
     autoUpdater.on('download-progress', (progressObj) => {
-        mainWindow.webContents.send('download-progress', progressObj);
+        let log_message = `Download speed: ${progressObj.bytesPerSecond}`;
+        log_message = `${log_message} - Downloaded ${progressObj.percent}%`;
+        log_message = `${log_message} (${progressObj.transferred}/${progressObj.total})`;
+        dialog.showMessageBox({ message: log_message });
     });
 
+    autoUpdater.on('update-downloaded', (info) => {
+        dialog.showMessageBox({
+            message: 'Update downloaded; will install now'
+        }).then(() => {
+            autoUpdater.quitAndInstall();
+        });
+    });
+
+    /*
+        autoUpdater.on('update-available', () => {
+            mainWindow.webContents.send('update-available');
+        });
+    
+        autoUpdater.on('error', message => {
+            log.error('There was a problem updating the application');
+            log.error(message);
+        });
+    
+        autoUpdater.on('update-downloaded', () => {
+            const dialogOpts = {
+                type: 'info',
+                buttons: ['Restart', 'Later'],
+                title: 'Application Update',
+                message: info.releaseName,
+                detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+            };
+    
+            dialog.showMessageBox(dialogOpts).then((returnValue) => {
+                if (returnValue.response === 0) autoUpdater.quitAndInstall();
+            });
+    
+            mainWindow.webContents.send('update-downloaded');
+        });
+    
+        autoUpdater.on('download-progress', (progressObj) => {
+            mainWindow.webContents.send('download-progress', progressObj);
+        });
+    */
     ipcMain.on('restart-app', () => {
         autoUpdater.quitAndInstall();
     });

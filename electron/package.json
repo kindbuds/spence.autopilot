@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.80",
+  "version": "0.0.81",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "make": "electron-forge make",
     "standard-version": "standard-version",
     "publish": "electron-forge publish",
-    "release": "npm run standard-version && npm run make && npm run publish && git push origin main --tags"
+    "pre-release": "node pre-release.js",
+    "release": "npm run pre-release && npm run standard-version && npm run make && npm run publish"
   },
   "keywords": [],
   "author": "",

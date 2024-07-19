@@ -18,4 +18,14 @@ export const selectors = {
         'a[data-tracking-control-name="guest_homepage-basic_nav-header-signin"]',
         '#pin-submit-button',
     ],
+    primaryDescriptionContainer: '.job-details-jobs-unified-top-card__primary-description-container > div',
+    jobDetails: '#job-details',
+    jobViewLayout: '.job-view-layout.jobs-details',
+    salary: '#SALARY',
+    jobCardListTitle: 'a.job-card-list__title',
+    jobCardPrimaryDescription: '.job-card-container__primary-description',
+    applicationOverlayContainer: '.application-outlet__overlay-container',
+    jobSearchResultsList: '.jobs-search-results-list',
+    noResultsBannerImage: '.jobs-search-no-results-banner__image',
+    nextPageButton: 'button[aria-label="View next page"]'
 };

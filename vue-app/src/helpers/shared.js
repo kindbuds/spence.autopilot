@@ -44,6 +44,7 @@ module.exports.lowMidHigh = (strPercent) => {
 
 module.exports.checkSignInButton = async (webview, selectors) => {
     // const webview = this.$refs.linkedinWebView;
+    console.log(selectors, 'checkSignInButton')
     if (!webview || typeof webview.executeJavaScript !== "function") {
         console.error(
             "Webview is not initialized or executeJavaScript is not available"

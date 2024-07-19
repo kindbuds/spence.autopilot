@@ -872,8 +872,10 @@ export default {
       }
 
       this.user.autopilot;
-      webview.src = this.createSearchUrl(term);
 
+      try {
+        webview.src = this.createSearchUrl(term);
+      } catch {}
       // Wait for the dom-ready event
       await new Promise((resolve) => {
         webview.addEventListener("dom-ready", resolve, { once: true });

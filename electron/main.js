@@ -26,6 +26,19 @@ const amplifyUri = !isDev
 
 if (require('electron-squirrel-startup')) return;
 
+
+const server = 'https://update.electronjs.org';
+const feed = `${server}/kindbuds/spence.autopilot/${process.platform}-${process.arch}/${app.getVersion()}`;
+
+autoUpdater.setFeedURL({
+    provider: 'github',
+    owner: 'kindbuds',
+    repo: 'spence.autopilot',
+    token: process.env.GITHUB_TOKEN // Ensure you have set this environment variable
+});
+
+
+
 const handleSquirrelEvent = function () {
     if (process.argv.length === 1) {
         return false;
@@ -106,6 +119,10 @@ if (!gotTheLock) {
 
 
     app.whenReady().then(async () => {
+
+
+        autoUpdater.checkForUpdatesAndNotify();
+
         console.log('running app.whenReady()')
 
         await createWindow();
@@ -270,14 +287,30 @@ async function createWindow(loggedin = null) {
         mainWindow.webContents.send('update-available');
     });
 
+    autoUpdater.on('error', message => {
+        log.error('There was a problem updating the application');
+        log.error(message);
+    });
+
     autoUpdater.on('update-downloaded', () => {
+        const dialogOpts = {
+            type: 'info',
+            buttons: ['Restart', 'Later'],
+            title: 'Application Update',
+            message: info.releaseName,
+            detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+        };
+
+        dialog.showMessageBox(dialogOpts).then((returnValue) => {
+            if (returnValue.response === 0) autoUpdater.quitAndInstall();
+        });
+
         mainWindow.webContents.send('update-downloaded');
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
         mainWindow.webContents.send('download-progress', progressObj);
     });
-    autoUpdater.checkForUpdatesAndNotify();
 
     ipcMain.on('restart-app', () => {
         autoUpdater.quitAndInstall();
@@ -304,6 +337,40 @@ async function createWindow(loggedin = null) {
                 mainWindow.unmaximize();
             }
             mainWindow.setSize(800, height); // or any default width you prefer
+        }
+    });
+
+    ipcMain.handle('get-job-content', async (event, { content_type, job }) => {
+        const user = await eShared.loadUserData();
+        delete user.token;
+        delete user.existing_jobs;
+        delete user.subscription;
+
+        console.log(content_type, job, user, 'get-job-content')
+        try {
+
+
+            let jobContent = await sendToApi(`${api.api2Url}autopilot/composer/fetch`, { content_type, job, user }, 'json');
+            console.log(jobContent, 'jobContent')
+
+
+            // const response = await fetch('https://api.example.com/getJobContent', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({ content_type, job, user })
+            // });
+
+            // if (!response.ok) {
+            //     throw new Error(`HTTP error! Status: ${response.status}`);
+            // }
+
+            // const data = await response.json();
+            return jobContent;
+        } catch (error) {
+            console.error('Error fetching job content:', error);
+            throw error;
         }
     });
 
@@ -489,6 +556,16 @@ ipcMain.handle('check-job-completion', async (event, args) => {
     }
 });
 
+
+ipcMain.on('save-coverletter', async (event, coverletter) => {
+    // Implement your job saving logic here
+    console.log('Saving coverletter:', coverletter);
+    coverletter.shape = 'coverletter';
+    // For example, write to a file or database
+    let coverLetterSaved = await sendToApi(`${api.api2Url}autopilot/shape_job`, coverletter);
+    console.log(coverLetterSaved, 'coverLetterSaved');
+});
+
 ipcMain.on('user-save-job', async (event, jobData) => {
     // Implement your job saving logic here
     console.log('Saving job:', jobData);
@@ -542,7 +619,7 @@ const api = {
     // spenceUrl: 'http://localhost:3010/spence/',
     spenceUrl: 'https://api.kindbuds.ai/bots/spence/', // import.meta.env.VITE_API_SPENCE_URL,
     api2Url: 'https://api.kindbuds.ai/bots/',
-    // api2Url: 'http://localhost:3009/',
+    //  api2Url: 'http://localhost:3009/',
 };
 
 const sendToApi = async (url, data, response_type = 'text') => {

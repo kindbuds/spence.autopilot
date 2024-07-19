@@ -16,6 +16,11 @@ contextBridge.exposeInMainWorld(
                 ipcRenderer.on(channel, (event, ...args) => func(...args));
             }
         },
+        getJobContent: async (content_type, job) => {
+            console.log(job, 'window.electron.getJobContent');
+            const response = await ipcRenderer.invoke('get-job-content', { content_type, job });
+            return response;
+        },
         getNodeEnv: () => process.env.NODE_ENV,
 
         onNewWindowRequest: (callback) => {
@@ -94,6 +99,10 @@ contextBridge.exposeInMainWorld(
         userSaveJob: (jobData) => {
             // console.log('preload.js.saveJob', jobData)
             ipcRenderer.send('user-save-job', jobData)
+        },
+        saveCoverletter: (coverletter) => {
+            // console.log('preload.js.saveJob', jobData)
+            ipcRenderer.send('save-coverletter', coverletter)
         },
         voteJob: (jobData) => {
             // console.log('preload.js.saveJob', jobData)

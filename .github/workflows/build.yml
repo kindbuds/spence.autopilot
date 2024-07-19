@@ -62,13 +62,13 @@ jobs:
       - name: Build Electron app
         run: |
           cd electron
-          npm run make
+          npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-latest-build
-          path: electron/out/make/*
+          path: electron/dist/*
 
   release:
     needs: build

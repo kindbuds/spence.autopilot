@@ -17,7 +17,7 @@
     "standard-version": "standard-version",
     "publish": "electron-forge publish",
     "pre-release": "npm run standard-version && node pre-release.js",
-    "release": "npm run pre-release && npm run build && npm run publish"
+    "release": "npm run pre-release && npm run publish"
   },
   "keywords": [],
   "author": "",

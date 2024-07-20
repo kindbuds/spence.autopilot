@@ -26,10 +26,15 @@ try {
 }
 
 try {
-    // Run the postcommit.bat script
-    const postCommitScript = path.resolve(__dirname, 'postcommit.bat');
-    execSync(postCommitScript, { stdio: 'inherit' });
+    // Tag the new version
+    execSync(`git tag v${version}`);
+    console.log(`Tag v${version} created.`);
+
+    // Push changes and tags
+    execSync('git push origin main --tags');
+    console.log('Changes and tags pushed to origin.');
+
 } catch (err) {
-    console.error('Failed to run postcommit.bat:', err.message);
+    console.error('Failed to push changes and tags:', err.message);
     process.exit(1);
 }

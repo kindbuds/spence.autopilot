@@ -336,7 +336,7 @@ export default {
         if (!webview) return;
         setTimeout(() => {
           try {
-            //  webview.openDevTools();
+            webview.openDevTools();
           } catch {
             console.log("openDevTools failed");
           }
@@ -1001,7 +1001,9 @@ async function clickLinksSequentially(jobCards) {
         });
       }
 
+      console.log(jobCard, 'jobCard')
       const siteId = jobCard.getAttribute('data-job-id');
+      alert(siteId);
       const linkElement = jobCard.querySelector('${
         this.selectors.jobCardListTitle
       }');

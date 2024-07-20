@@ -12,10 +12,11 @@ jobs:
     #   matrix:
     #     os: [macos-latest, windows-latest]
 
-    timeout-minutes: 20  # Increase the timeout to 2 hours
+    timeout-minutes: 20  # Increase the timeout to 20 minutes
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+      GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -59,10 +60,14 @@ jobs:
       #     name: p12-file
       #     path: path/to/download
 
-      - name: Build Electron app
+      - name: Verify GH_TOKEN is set
         run: |
-          cd electron
-          npm run build
+          if [ -z "$GITHUB_TOKEN" ]; then
+            echo "GITHUB_TOKEN is not set"
+            exit 1
+          else
+            echo "GITHUB_TOKEN is set"
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -74,12 +79,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
     steps:
-      # - name: Download macOS artifacts
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: macos-latest-build
-      #     path: ./dist/macos
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Download Windows artifacts
         uses: actions/download-artifact@v4
@@ -90,13 +96,23 @@ jobs:
       - name: List downloaded files
         run: ls -R ./dist
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish to npm
+        run: npm publish
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             # ./dist/macos/*.dmg
             ./dist/windows/squirrel.windows/x64/*.exe
+            ./dist/windows/squirrel.windows/x64/latest.yml
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

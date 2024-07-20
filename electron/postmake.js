@@ -10,7 +10,7 @@ fs.mkdirSync(destDir, { recursive: true });
 fs.copyFile(src, dest, (err) => {
     if (err) {
         console.error(`Failed to copy latest.yml: ${err}`);
-        process.exit(1);
+        // process.exit(1);
     } else {
         console.log('latest.yml copied successfully.');
     }

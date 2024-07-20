@@ -47,23 +47,19 @@ jobs:
           npm install
           npm run make  # Handles building and 'latest.yml' creation
 
-      - name: Check current directory and list build output
+      - name: List output files after make
         run: |
-          pwd
-          Get-ChildItem -Path ./out/make/squirrel.windows/x64/ -Force | Format-Table
-
+          Get-ChildItem -Path electron/out/make/squirrel.windows/x64/ -Force | Format-Table
 
       - name: Copy latest.yml to dist
         run: |
           cd electron
-          npm run postmake
-            
-      - name: Check dist directory and list its contents
+          node postmake.js
+
+      - name: List files in dist
         run: |
-          pwd
-          Get-ChildItem -Path ./dist/ -Force | Format-Table
-
-
+          Get-ChildItem -Path electron/dist/ -Force | Format-Table
+            
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -84,9 +80,12 @@ jobs:
         with:
           name: windows-latest-build
           path: ./dist/windows
-
-      - name: List downloaded files
-        run: Get-ChildItem -Path ./dist/windows -Recurse | Format-List
+      
+      - name: Set up Node.js (for npm publish)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Publish to npm
         run: |

@@ -12,7 +12,7 @@ jobs:
     #   matrix:
     #     os: [macos-latest, windows-latest]
 
-    timeout-minutes: 20  # Increase the timeout to 20 minutes
+    timeout-minutes: 20  # Adjust the timeout to 20 minutes
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -46,35 +46,22 @@ jobs:
           cd electron
           npm install
 
-      # - name: Upload .p12 file (macOS only)
-      #   if: matrix.os == 'macos-latest'
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: p12-file
-      #     path: path/to/developerID_application.p12
-
-      # - name: Download .p12 file (macOS only)
-      #   if: matrix.os == 'macos-latest'
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: p12-file
-      #     path: path/to/download
-
-      - name: Verify GH_TOKEN is set
+      - name: Build Electron app
         run: |
-          if [ -z "$GITHUB_TOKEN" ]; then
-            echo "GITHUB_TOKEN is not set"
-            exit 1
-          else
-            echo "GITHUB_TOKEN is set"
-          fi
+          cd electron
+          npm run make
+
+      - name: Copy latest.yml to dist
+        run: |
+          cd electron
+          npm run postmake
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-latest-build
           path: electron/dist/*
-
+    
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -111,7 +98,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            # ./dist/macos/*.dmg
             ./dist/windows/squirrel.windows/x64/*.exe
             ./dist/windows/squirrel.windows/x64/latest.yml
           draft: false

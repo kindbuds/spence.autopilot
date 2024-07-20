@@ -16,7 +16,7 @@
     "make": "electron-forge make",
     "standard-version": "standard-version",
     "pre-release": "npm run standard-version && node pre-release.js",
-    "release": "npm run pre-release",
+    "release": "npm run pre-release && echo 'Release process completed. Trigger the CI workflow to publish.'",
     "postmake": "node postmake.js"
   },
   "keywords": [],

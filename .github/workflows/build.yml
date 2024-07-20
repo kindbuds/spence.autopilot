@@ -47,11 +47,19 @@ jobs:
           npm install
           npm run make  # Handles building and 'latest.yml' creation
 
+      - name: List output files after make
+        run: |
+          ls -la electron/out/make/squirrel.windows/x64/
 
       - name: Copy latest.yml to dist
         run: |
           cd electron
           npm run postmake
+            
+      - name: List files in dist
+        run: |
+          cd electron/dist
+          ls -la
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

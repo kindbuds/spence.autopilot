@@ -119,9 +119,8 @@ module.exports = {
       }
     ],
     win: {
-      target: [
-        "nsis"
-      ]
+      "target": "nsis",
+      "publish": ["github"]
     },
     nsis: {
       oneClick: false,

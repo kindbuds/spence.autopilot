@@ -15,9 +15,10 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "standard-version": "standard-version",
-    "publish": "electron-forge publish",
+    "publish": "echo 'Use GitHub Actions for publishing' && exit 1",
     "pre-release": "npm run standard-version && node pre-release.js",
-    "release": "npm run pre-release && npm run publish"
+    "release": "npm run pre-release && npm run publish",
+    "postmake": "node postmake.js"
   },
   "keywords": [],
   "author": "",

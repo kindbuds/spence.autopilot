@@ -26,9 +26,15 @@ try {
 }
 
 try {
-    // Tag the new version
-    execSync(`git tag v${version}`);
-    console.log(`Tag v${version} created.`);
+    // Check if tag already exists
+    const existingTags = execSync('git tag').toString().split('\n');
+    if (existingTags.includes(`v${version}`)) {
+        console.log(`Tag v${version} already exists. Skipping tag creation.`);
+    } else {
+        // Tag the new version
+        execSync(`git tag v${version}`);
+        console.log(`Tag v${version} created.`);
+    }
 
     // Push changes and tags
     execSync('git push origin main --tags');

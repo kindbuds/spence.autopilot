@@ -68,15 +68,15 @@ jobs:
         run: |
           Get-ChildItem -Path electron/dist/windows/squirrel.windows/ -Force | Format-Table
 
-      - name: List files in dist/windows/squirrel.windows/x64/
+      - name: List files in electron/out/make/*
         run: |
-          Get-ChildItem -Path electron/dist/windows/squirrel.windows/x64/ -Force | Format-Table
+          Get-ChildItem -Path electron/out/make/ -Force | Format-Table
             
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-latest-build
-          path: electron/dist/windows/squirrel.windows/x64/*
+          path: electron/out/make/*
     
   release:
     needs: build

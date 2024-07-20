@@ -60,6 +60,14 @@ jobs:
         run: |
           Get-ChildItem -Path electron/dist/ -Force | Format-Table
             
+      - name: List files in dist/windows
+        run: |
+          Get-ChildItem -Path electron/dist/windows/ -Force | Format-Table
+            
+      - name: List files in dist/windows/squirrel.windows/x64/
+        run: |
+          Get-ChildItem -Path electron/dist/windows/squirrel.windows/x64/ -Force | Format-Table
+            
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

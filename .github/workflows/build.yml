@@ -64,6 +64,10 @@ jobs:
         run: |
           Get-ChildItem -Path electron/dist/windows/ -Force | Format-Table
             
+      - name: List files in dist/windows/squirrel.windows/
+        run: |
+          Get-ChildItem -Path electron/dist/windows/squirrel.windows/ -Force | Format-Table
+
       - name: List files in dist/windows/squirrel.windows/x64/
         run: |
           Get-ChildItem -Path electron/dist/windows/squirrel.windows/x64/ -Force | Format-Table

@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.126",
+  "version": "0.0.127",
   "repository": {
     "type": "git",
     "url": "https://github.com/kindbuds/spence.autopilot.git"
@@ -51,6 +51,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "electron-json-storage": "^4.6.0",
+    "electron-log": "^5.1.6",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^6.2.1",
     "fs": "^0.0.1-security",

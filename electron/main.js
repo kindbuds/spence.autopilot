@@ -30,14 +30,20 @@ autoUpdater.setFeedURL({
     owner: 'kindbuds',
     repo: 'spence.autopilot',
 });
+autoUpdater.logger = require("electron-log");
+autoUpdater.logger.transports.file.level = "info";
 
 // Set up autoUpdater event listeners
 autoUpdater.on('checking-for-update', () => {
     console.log('Checking for update...');
+    eShared.logtofile('Checking for update...')
 });
 
 autoUpdater.on('update-available', (info) => {
     console.log('Update available:', info);
+    eShared.logtofile('Update available:')
+    eShared.logtofile(info)
+
     dialog.showMessageBox({
         type: 'info',
         title: 'Update Available',
@@ -52,14 +58,23 @@ autoUpdater.on('update-available', (info) => {
 
 autoUpdater.on('update-not-available', (info) => {
     console.log('Update not available:', info);
+    eShared.logtofile('Update not available:')
+    eShared.logtofile(info)
 });
 
 autoUpdater.on('error', (err) => {
-    console.error('Error in auto-updater:', err);
+    eShared.logtofile('Error in auto-updater:');
+    eShared.logtofile(err)
+
     dialog.showMessageBox({
         type: 'error',
         title: 'Update Error',
-        message: 'There was a problem updating the application.'
+        message: `There was a problem updating the application.
+        
+        ${err.message || err.toString()}
+
+        ${JSON.stringify(err)}
+        `
     });
 });
 

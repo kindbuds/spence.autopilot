@@ -119,16 +119,7 @@ module.exports = {
       }
     ],
     win: {
-      "target": "nsis",
-      "publish": ["github"]
-    },
-    nsis: {
-      oneClick: false,
-      perMachine: true,
-      allowElevation: true,
-      allowToChangeInstallationDirectory: true,
-      createDesktopShortcut: true,
-      createStartMenuShortcut: true
+      target: ["squirrel"],
     }
-  },
+  }
 };

@@ -25,50 +25,54 @@ const amplifyUri = !isDev
 
 if (require('electron-squirrel-startup')) return;
 
-
-const server = 'https://update.electronjs.org';
-const feed = `${server}/kindbuds/spence.autopilot/${process.platform}-${process.arch}/${app.getVersion()}`;
-
 autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'kindbuds',
     repo: 'spence.autopilot',
-    token: process.env.GITHUB_TOKEN // Ensure you have set this environment variable
 });
 
 // Set up autoUpdater event listeners
 autoUpdater.on('checking-for-update', () => {
     console.log('Checking for update...');
-    dialog.showMessageBox({ message: 'Checking for update...' });
 });
 
 autoUpdater.on('update-available', (info) => {
     console.log('Update available:', info);
-    dialog.showMessageBox({ message: 'Update available.' });
+    dialog.showMessageBox({
+        type: 'info',
+        title: 'Update Available',
+        message: 'A new version is available. It will be installed after restart.',
+        buttons: ['Restart', 'Later']
+    }).then((result) => {
+        if (result.response === 0) { // The user chose to restart now
+            autoUpdater.quitAndInstall();
+        }
+    });
 });
 
 autoUpdater.on('update-not-available', (info) => {
     console.log('Update not available:', info);
-    dialog.showMessageBox({ message: 'Update not available.' });
 });
 
 autoUpdater.on('error', (err) => {
     console.error('Error in auto-updater:', err);
-    dialog.showMessageBox({ message: `Error in auto-updater: ${err}` });
+    dialog.showMessageBox({
+        type: 'error',
+        title: 'Update Error',
+        message: 'There was a problem updating the application.'
+    });
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
-    let log_message = `Download speed: ${progressObj.bytesPerSecond}`;
-    log_message = `${log_message} - Downloaded ${progressObj.percent}%`;
-    log_message = `${log_message} (${progressObj.transferred}/${progressObj.total})`;
+    let log_message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
     console.log(log_message);
-    dialog.showMessageBox({ message: log_message });
 });
 
 autoUpdater.on('update-downloaded', (info) => {
-    console.log('Update downloaded:', info);
+    console.log('Update downloaded; will install now:', info);
     dialog.showMessageBox({
-        message: 'Update downloaded; will install now'
+        title: 'Installation Ready',
+        message: 'The update has downloaded and will be installed now.'
     }).then(() => {
         autoUpdater.quitAndInstall();
     });
@@ -189,30 +193,13 @@ if (!gotTheLock) {
         console.log('running app.whenReady()')
 
         autoUpdater.autoDownload = true;
-        autoUpdater.allowPrerelease = true;
-        autoUpdater.allowDowngrade = false;
+        autoUpdater.allowPrerelease = true; // Include this only if you want pre-releases to be considered.
         autoUpdater.autoInstallOnAppQuit = true;
-        autoUpdater.fullChangelog = true;
-        autoUpdater.forceDevUpdateConfig = true;
 
-        if (isDev) {
-            // Force update check in development mode
-            console.log('Running in development mode, forcing update check...');
-            autoUpdater.checkForUpdates().then((downloadPromise) => {
-                if (!downloadPromise) {
-                    console.log('No updates available in development mode.');
-                    dialog.showMessageBox({ message: 'No updates available in development mode.' });
-                } else {
-                    console.log('Update check initiated:', downloadPromise);
-                }
-            }).catch((err) => {
-                console.error('Error checking for updates:', err);
-                dialog.showMessageBox({ message: `Error checking for updates: ${err}` });
-            });
-        } else {
-            console.log('Running in production mode, checking for updates...');
-            autoUpdater.checkForUpdatesAndNotify();
-        }
+        // Check for updates
+        autoUpdater.checkForUpdatesAndNotify().catch(err => {
+            console.error('Failed to check for updates:', err);
+        });
 
         await createWindow();
         ipcMain.on('search-cycle-completed', async (event, dte) => {

@@ -45,37 +45,8 @@ jobs:
         run: |
           cd electron
           npm install
-          npm run make  # Handles building and 'latest.yml' creation
+          npm run make  
 
-      - name: List output files after make
-        run: |
-          Get-ChildItem -Path electron/out/make/squirrel.windows/x64/ -Force | Format-Table
-
-      - name: Copy latest.yml to dist
-        run: |
-          cd electron
-          node postmake.js
-
-      - name: List files in dist
-        run: |
-          Get-ChildItem -Path electron/dist/ -Force | Format-Table
-            
-      - name: List files in dist/windows
-        run: |
-          Get-ChildItem -Path electron/dist/windows/ -Force | Format-Table
-            
-      - name: List files in dist/windows/squirrel.windows/
-        run: |
-          Get-ChildItem -Path electron/dist/windows/squirrel.windows/ -Force | Format-Table
-
-      - name: List files in electron/out/make/*
-        run: |
-          Get-ChildItem -Path electron/out/make/ -Force | Format-Table
-       
-      - name: List files in electron/out/make/squirrel.windows/x64/*
-        run: |
-          Get-ChildItem -Path electron/out/make/squirrel.windows/x64/ -Force | Format-Table
-                   
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -102,6 +73,5 @@ jobs:
         with:
           files: |
             ./dist/windows/squirrel.windows/x64/*.exe
-            ./dist/windows/squirrel.windows/x64/latest.yml
           draft: false
           prerelease: false

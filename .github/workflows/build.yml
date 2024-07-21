@@ -71,7 +71,11 @@ jobs:
       - name: List files in electron/out/make/*
         run: |
           Get-ChildItem -Path electron/out/make/ -Force | Format-Table
-            
+       
+      - name: List files in electron/out/make/squirrel.windows/x64/*
+        run: |
+          Get-ChildItem -Path electron/out/make/squirrel.windows/x64/ -Force | Format-Table
+                   
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

@@ -92,18 +92,7 @@ jobs:
         with:
           name: windows-latest-build
           path: ./dist/windows
-      
-      - name: Set up Node.js (for npm publish)
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16'
-          registry-url: 'https://registry.npmjs.org/'
-
-      - name: Publish to npm
-        run: |
-          cd dist/electron
-          npm publish  # Uses the built files, does not trigger a new build
-
+     
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:

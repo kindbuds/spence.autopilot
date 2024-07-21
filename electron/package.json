@@ -17,7 +17,6 @@
     "standard-version": "standard-version",
     "pre-release": "npm run standard-version && node pre-release.js",
     "release": "npm run pre-release && echo 'Release process completed.'",
-    "postmake": "node postmake.js",
     "prepublishOnly": "echo 'Skipping build during npm publish'"
   },
   "keywords": [],

@@ -3,9 +3,8 @@ const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog, auto
 const { build } = require('./package.json');
 const path = require('path');
 const { spawn } = require('child_process');
-
-const storage = require('electron-json-storage');
 const fs = require('fs');
+const storage = require('electron-json-storage');
 const appData = app.getPath('appData');
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')
@@ -25,7 +24,6 @@ const amplifyUri = !isDev
 
 
 if (require('electron-squirrel-startup')) return;
-
 const { updateElectronApp } = require('update-electron-app')
 updateElectronApp({
     logger: require('electron-log')

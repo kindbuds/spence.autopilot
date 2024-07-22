@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence AI Career Autopilot",
-  "version": "0.0.129",
+  "version": "0.0.130",
   "repository": {
     "type": "git",
     "url": "https://github.com/kindbuds/spence.autopilot.git"
@@ -9,7 +9,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron-forge start",
     "start:prod": "electron .",
     "build": "electron-builder",
     "package": "electron-forge package",
@@ -35,8 +35,6 @@
     "@electron/fuses": "^1.8.0",
     "concurrently": "^8.2.2",
     "electron": "^29.3.0",
-    "electron-builder": "^24.13.3",
-    "electron-winstaller": "^5.3.1",
     "html-webpack-plugin": "^5.6.0",
     "wait-on": "^7.2.0"
   },
@@ -52,8 +50,7 @@
     "dotenv": "^16.4.5",
     "electron-json-storage": "^4.6.0",
     "electron-log": "^5.1.6",
-    "electron-squirrel-startup": "^1.0.0",
-    "electron-updater": "^6.2.1",
+    "electron-squirrel-startup": "^1.0.1",
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",

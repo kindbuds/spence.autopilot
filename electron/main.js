@@ -25,11 +25,6 @@ const amplifyUri = !isDev
 
 if (require('electron-squirrel-startup')) return;
 
-const setupEvents = require('./squirrel-events');
-if (setupEvents.handleSquirrelEvent(app)) {
-    // Squirrel event handled and app will exit in 1000ms, so don't do anything else
-    return;
-}
 
 // autoUpdater.setFeedURL({
 //     provider: 'github',
@@ -169,6 +164,25 @@ if (!gotTheLock) {
 
     app.whenReady().then(async () => {
         console.log('running app.whenReady()')
+
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Squirrel Event',
+            message: `App is ready`
+        });
+
+        const setupEvents = require('./squirrel-events');
+        if (setupEvents.handleSquirrelEvent(app)) {
+
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Squirrel Event',
+                message: `Squirrel event was handled. Exiting...`
+            });
+
+            // Squirrel event handled and app will exit in 1000ms, so don't do anything else
+            return;
+        }
 
         // autoUpdater.autoDownload = true;
         // autoUpdater.allowPrerelease = true; // Include this only if you want pre-releases to be considered.

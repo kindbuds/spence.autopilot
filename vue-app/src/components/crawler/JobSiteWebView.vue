@@ -643,6 +643,7 @@ export default {
         // console.log(delay, "delay");
         setTimeout(async () => {
           this.jobs.push(jobData);
+          console.log(this.jobs, "this.jobs");
           if (!jobData.dupe) {
             // console.log(jobData, " > sending job to db");
             window.electron.saveJob(JSON.parse(JSON.stringify(jobData)));

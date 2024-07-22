@@ -6,7 +6,7 @@
         :cols="isMdAndUp ? 8 : 12"
       >
         <v-row>
-          <v-col v-if="isMdAndUp" cols="2">
+          <v-col v-if="isMdAndUp" cols="2" class="text-center">
             <img
               src="https://dt0651nvi2bbs.cloudfront.net/spence-face.png"
               alt="Spence"

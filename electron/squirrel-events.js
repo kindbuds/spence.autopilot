@@ -12,7 +12,9 @@ function handleSquirrelEvent(application) {
     //     return false;
     // }
 
-    const updateDotExe = path.resolve(path.join(path.resolve(process.execPath, '..'), '..', 'Update.exe'));
+    const appFolder = path.resolve(process.execPath, '..');
+    const rootAtomFolder = path.resolve(appFolder, '..');
+    const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
     const exeName = path.basename(process.execPath);
 
     const spawn = function (command, args) {
@@ -52,6 +54,17 @@ function handleSquirrelEvent(application) {
             message: 'No Squirrel event detected. This might be a normal app start.'
         });
     }
+
+    dialog.showMessageBox({
+        type: 'info',
+        title: 'Squirrel Details',
+        message: `Update.exe path: ${updateDotExe}
+        Executable Path: ${process.execPath}
+        exeName: ${exeName}
+        App Folder: ${appFolder}
+        Root Atom Folder: ${rootAtomFolder}
+        `,
+    });
 
     switch (squirrelEvent) {
         case '--squirrel-install':

@@ -45,15 +45,24 @@ if (setupEvents.handleSquirrelEvent(app)) {
 }
 
 
-// autoUpdater.setFeedURL({
-//     provider: 'github',
-//     owner: 'kindbuds',
-//     repo: 'spence.autopilot',
-// });
-// autoUpdater.logger = require("electron-log");
+autoUpdater.setFeedURL({
+    provider: 'github',
+    owner: 'kindbuds',
+    repo: 'spence.autopilot',
+});
+autoUpdater.logger = require("electron-log");
 // autoUpdater.logger.transports.file.level = "info";
 
 // // Set up autoUpdater event listeners
+autoUpdater.on('update-downloaded', (info) => {
+    console.log('Update downloaded; will install now:', info);
+    dialog.showMessageBox({
+        title: 'Installation Ready',
+        message: 'The update has downloaded and will be installed now.'
+    }).then(() => {
+        autoUpdater.quitAndInstall();
+    });
+});
 // autoUpdater.on('checking-for-update', () => {
 //     console.log('Checking for update...');
 //     eShared.logtofile('Checking for update...')

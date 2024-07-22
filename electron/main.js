@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog } = require('electron');
-const { autoUpdater } = require('electron-updater');
+// const { autoUpdater } = require('electron-updater');
 const { build } = require('./package.json');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -25,73 +25,79 @@ const amplifyUri = !isDev
 
 if (require('electron-squirrel-startup')) return;
 
-autoUpdater.setFeedURL({
-    provider: 'github',
-    owner: 'kindbuds',
-    repo: 'spence.autopilot',
-});
-autoUpdater.logger = require("electron-log");
-autoUpdater.logger.transports.file.level = "info";
+const setupEvents = require('./squirrel-events');
+if (setupEvents.handleSquirrelEvent(app)) {
+    // Squirrel event handled and app will exit in 1000ms, so don't do anything else
+    return;
+}
 
-// Set up autoUpdater event listeners
-autoUpdater.on('checking-for-update', () => {
-    console.log('Checking for update...');
-    eShared.logtofile('Checking for update...')
-});
+// autoUpdater.setFeedURL({
+//     provider: 'github',
+//     owner: 'kindbuds',
+//     repo: 'spence.autopilot',
+// });
+// autoUpdater.logger = require("electron-log");
+// autoUpdater.logger.transports.file.level = "info";
 
-autoUpdater.on('update-available', (info) => {
-    console.log('Update available:', info);
-    eShared.logtofile('Update available:')
-    eShared.logtofile(info)
+// // Set up autoUpdater event listeners
+// autoUpdater.on('checking-for-update', () => {
+//     console.log('Checking for update...');
+//     eShared.logtofile('Checking for update...')
+// });
 
-    dialog.showMessageBox({
-        type: 'info',
-        title: 'Update Available',
-        message: 'A new version is available. It will be installed after restart.',
-        buttons: ['Restart', 'Later']
-    }).then((result) => {
-        if (result.response === 0) { // The user chose to restart now
-            autoUpdater.quitAndInstall();
-        }
-    });
-});
+// autoUpdater.on('update-available', (info) => {
+//     console.log('Update available:', info);
+//     eShared.logtofile('Update available:')
+//     eShared.logtofile(info)
 
-autoUpdater.on('update-not-available', (info) => {
-    console.log('Update not available:', info);
-    eShared.logtofile('Update not available:')
-    eShared.logtofile(info)
-});
+//     dialog.showMessageBox({
+//         type: 'info',
+//         title: 'Update Available',
+//         message: 'A new version is available. It will be installed after restart.',
+//         buttons: ['Restart', 'Later']
+//     }).then((result) => {
+//         if (result.response === 0) { // The user chose to restart now
+//             autoUpdater.quitAndInstall();
+//         }
+//     });
+// });
 
-autoUpdater.on('error', (err) => {
-    eShared.logtofile('Error in auto-updater:');
-    eShared.logtofile(err)
+// autoUpdater.on('update-not-available', (info) => {
+//     console.log('Update not available:', info);
+//     eShared.logtofile('Update not available:')
+//     eShared.logtofile(info)
+// });
 
-    dialog.showMessageBox({
-        type: 'error',
-        title: 'Update Error',
-        message: `There was a problem updating the application.
-        
-        ${err.message || err.toString()}
+// autoUpdater.on('error', (err) => {
+//     eShared.logtofile('Error in auto-updater:');
+//     eShared.logtofile(err)
 
-        ${JSON.stringify(err)}
-        `
-    });
-});
+//     dialog.showMessageBox({
+//         type: 'error',
+//         title: 'Update Error',
+//         message: `There was a problem updating the application.
 
-autoUpdater.on('download-progress', (progressObj) => {
-    let log_message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
-    console.log(log_message);
-});
+//         ${err.message || err.toString()}
 
-autoUpdater.on('update-downloaded', (info) => {
-    console.log('Update downloaded; will install now:', info);
-    dialog.showMessageBox({
-        title: 'Installation Ready',
-        message: 'The update has downloaded and will be installed now.'
-    }).then(() => {
-        autoUpdater.quitAndInstall();
-    });
-});
+//         ${JSON.stringify(err)}
+//         `
+//     });
+// });
+
+// autoUpdater.on('download-progress', (progressObj) => {
+//     let log_message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
+//     console.log(log_message);
+// });
+
+// autoUpdater.on('update-downloaded', (info) => {
+//     console.log('Update downloaded; will install now:', info);
+//     dialog.showMessageBox({
+//         title: 'Installation Ready',
+//         message: 'The update has downloaded and will be installed now.'
+//     }).then(() => {
+//         autoUpdater.quitAndInstall();
+//     });
+// });
 /*
     autoUpdater.on('update-available', () => {
         mainWindow.webContents.send('update-available');
@@ -124,49 +130,6 @@ autoUpdater.on('update-downloaded', (info) => {
 */
 
 
-
-const handleSquirrelEvent = function () {
-    if (process.argv.length === 1) {
-        return false;
-    }
-
-    const appFolder = path.resolve(process.execPath, '..');
-    const rootAtomFolder = path.resolve(appFolder, '..');
-    const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-    const exeName = path.basename(process.execPath);
-
-    const spawnUpdate = function (args) {
-        let spawnedProcess, error;
-
-        try {
-            spawnedProcess = spawn(updateDotExe, args, { detached: true });
-        } catch (error) { }
-
-        return spawnedProcess;
-    };
-
-    const squirrelEvent = process.argv[1];
-    switch (squirrelEvent) {
-        case '--squirrel-install':
-        case '--squirrel-updated':
-            spawnUpdate(['--createShortcut', exeName]);
-            setTimeout(app.quit, 1000);
-            return true;
-
-        case '--squirrel-uninstall':
-            spawnUpdate(['--removeShortcut', exeName]);
-            setTimeout(app.quit, 1000);
-            return true;
-
-        case '--squirrel-obsolete':
-            app.quit();
-            return true;
-    }
-};
-
-if (handleSquirrelEvent()) {
-    return;
-}
 
 // This makes sure the app is single-instance
 const gotTheLock = app.requestSingleInstanceLock();
@@ -207,14 +170,14 @@ if (!gotTheLock) {
     app.whenReady().then(async () => {
         console.log('running app.whenReady()')
 
-        autoUpdater.autoDownload = true;
-        autoUpdater.allowPrerelease = true; // Include this only if you want pre-releases to be considered.
-        autoUpdater.autoInstallOnAppQuit = true;
+        // autoUpdater.autoDownload = true;
+        // autoUpdater.allowPrerelease = true; // Include this only if you want pre-releases to be considered.
+        // autoUpdater.autoInstallOnAppQuit = true;
 
-        // Check for updates
-        autoUpdater.checkForUpdatesAndNotify().catch(err => {
-            console.error('Failed to check for updates:', err);
-        });
+        // // Check for updates
+        // autoUpdater.checkForUpdatesAndNotify().catch(err => {
+        //     console.error('Failed to check for updates:', err);
+        // });
 
         await createWindow();
         ipcMain.on('search-cycle-completed', async (event, dte) => {
@@ -373,7 +336,7 @@ async function createWindow(loggedin = null) {
 
 
     ipcMain.on('restart-app', () => {
-        autoUpdater.quitAndInstall();
+        // autoUpdater.quitAndInstall();
     });
     ipcMain.on('toggle-fullscreen', () => {
         if (mainWindow.isMaximized()) {

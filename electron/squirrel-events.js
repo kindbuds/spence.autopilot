@@ -20,20 +20,20 @@ function handleSquirrelEvent(application) {
     const spawn = function (command, args) {
         try {
             let spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
-            spawnedProcess.on('error', (error) =>
-                dialog.showMessageBox({
-                    type: 'error',
-                    title: 'Process Spawn Error',
-                    message: `Error spawning ${command}: ${error.message}`
-                })
-            );
+            // spawnedProcess.on('error', (error) =>
+            //     dialog.showMessageBox({
+            //         type: 'error',
+            //         title: 'Process Spawn Error',
+            //         message: `Error spawning ${command}: ${error.message}`
+            //     })
+            // );
             return spawnedProcess;
         } catch (error) {
-            dialog.showMessageBox({
-                type: 'error',
-                title: 'Exception',
-                message: `Exception spawning process: ${error.message}`
-            });
+            // dialog.showMessageBox({
+            //     type: 'error',
+            //     title: 'Exception',
+            //     message: `Exception spawning process: ${error.message}`
+            // });
             return null;
         }
     };
@@ -42,29 +42,29 @@ function handleSquirrelEvent(application) {
     console.log(`Detected Squirrel event: ${squirrelEvent}`);
 
     if (squirrelEvent) {
-        dialog.showMessageBox({
-            type: 'info',
-            title: 'Squirrel Event Detected',
-            message: `Detected Squirrel event: ${squirrelEvent}`
-        });
+        // dialog.showMessageBox({
+        //     type: 'info',
+        //     title: 'Squirrel Event Detected',
+        //     message: `Detected Squirrel event: ${squirrelEvent}`
+        // });
     } else {
-        dialog.showMessageBox({
-            type: 'info',
-            title: 'No Squirrel Event Detected',
-            message: 'No Squirrel event detected. This might be a normal app start.'
-        });
+        // dialog.showMessageBox({
+        //     type: 'info',
+        //     title: 'No Squirrel Event Detected',
+        //     message: 'No Squirrel event detected. This might be a normal app start.'
+        // });
     }
 
-    dialog.showMessageBox({
-        type: 'info',
-        title: 'Squirrel Details',
-        message: `Update.exe path: ${updateDotExe}
-        Executable Path: ${process.execPath}
-        exeName: ${exeName}
-        App Folder: ${appFolder}
-        Root Atom Folder: ${rootAtomFolder}
-        `,
-    });
+    // dialog.showMessageBox({
+    //     type: 'info',
+    //     title: 'Squirrel Details',
+    //     message: `Update.exe path: ${updateDotExe}
+    //     Executable Path: ${process.execPath}
+    //     exeName: ${exeName}
+    //     App Folder: ${appFolder}
+    //     Root Atom Folder: ${rootAtomFolder}
+    //     `,
+    // });
 
     switch (squirrelEvent) {
         case '--squirrel-install':
@@ -83,11 +83,11 @@ function handleSquirrelEvent(application) {
             return true;
 
         default:
-            dialog.showMessageBox({
-                type: 'warning',
-                title: 'Unknown Squirrel Event',
-                message: `Unknown Squirrel event: ${squirrelEvent}`
-            });
+            // dialog.showMessageBox({
+            //     type: 'warning',
+            //     title: 'Unknown Squirrel Event',
+            //     message: `Unknown Squirrel event: ${squirrelEvent}`
+            // });
             return false;
     }
 }

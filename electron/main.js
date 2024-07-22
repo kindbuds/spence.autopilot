@@ -31,6 +31,19 @@ updateElectronApp({
     logger: require('electron-log')
 })
 
+const setupEvents = require('./squirrel-events');
+if (setupEvents.handleSquirrelEvent(app)) {
+
+    // dialog.showMessageBox({
+    //     type: 'info',
+    //     title: 'Squirrel Event',
+    //     message: `Squirrel event was handled. Exiting...`
+    // });
+
+    // Squirrel event handled and app will exit in 1000ms, so don't do anything else
+    return;
+}
+
 
 // autoUpdater.setFeedURL({
 //     provider: 'github',
@@ -182,18 +195,7 @@ if (!gotTheLock) {
 
 
 
-        // const setupEvents = require('./squirrel-events');
-        // if (setupEvents.handleSquirrelEvent(app)) {
 
-        //     dialog.showMessageBox({
-        //         type: 'info',
-        //         title: 'Squirrel Event',
-        //         message: `Squirrel event was handled. Exiting...`
-        //     });
-
-        //     // Squirrel event handled and app will exit in 1000ms, so don't do anything else
-        //     return;
-        // }
 
         // autoUpdater.autoDownload = true;
         // autoUpdater.allowPrerelease = true; // Include this only if you want pre-releases to be considered.

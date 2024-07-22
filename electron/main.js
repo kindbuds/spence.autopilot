@@ -23,14 +23,6 @@ const amplifyUri = !isDev
     ? 'https://main.d1u7axsxvin7f4.amplifyapp.com/'
     : 'http://localhost:8080/'
 
-if (require('electron-squirrel-startup')) return;
-
-
-const { updateElectronApp } = require('update-electron-app')
-updateElectronApp({
-    logger: require('electron-log')
-})
-
 
 // autoUpdater.setFeedURL({
 //     provider: 'github',
@@ -141,6 +133,17 @@ if (!gotTheLock) {
     console.log("Quitting application, instance already running.");
     app.quit();
 } else {
+
+    if (require('electron-squirrel-startup')) return;
+
+
+    const { updateElectronApp } = require('update-electron-app')
+    updateElectronApp({
+        logger: require('electron-log')
+    })
+
+
+
     app.on('second-instance', async (event, commandLine, workingDirectory) => {
         eShared.logtofile(`Command Line: ${JSON.stringify(commandLine)}`);
         eShared.logtofile(`Second instance detected: ${commandLine}`);
@@ -171,28 +174,28 @@ if (!gotTheLock) {
     app.whenReady().then(async () => {
         console.log('running app.whenReady()')
 
-        dialog.showMessageBox({
-            type: 'info',
-            title: 'Squirrel Event',
-            message: `App is ready`
-        });
+        // dialog.showMessageBox({
+        //     type: 'info',
+        //     title: 'Squirrel Event',
+        //     message: `App is ready`
+        // });
 
         // autoUpdater.checkForUpdates()
 
 
 
-        const setupEvents = require('./squirrel-events');
-        if (setupEvents.handleSquirrelEvent(app)) {
+        // const setupEvents = require('./squirrel-events');
+        // if (setupEvents.handleSquirrelEvent(app)) {
 
-            dialog.showMessageBox({
-                type: 'info',
-                title: 'Squirrel Event',
-                message: `Squirrel event was handled. Exiting...`
-            });
+        //     dialog.showMessageBox({
+        //         type: 'info',
+        //         title: 'Squirrel Event',
+        //         message: `Squirrel event was handled. Exiting...`
+        //     });
 
-            // Squirrel event handled and app will exit in 1000ms, so don't do anything else
-            return;
-        }
+        //     // Squirrel event handled and app will exit in 1000ms, so don't do anything else
+        //     return;
+        // }
 
         // autoUpdater.autoDownload = true;
         // autoUpdater.allowPrerelease = true; // Include this only if you want pre-releases to be considered.
@@ -507,7 +510,7 @@ async function handleAuthCallback(fullUrl) {
 app.on('will-finish-launching', () => {
     app.on('open-url', (event, url) => {
         event.preventDefault();
-        dialog.showErrorBox('Welcome Back', `You arrived from 2: ${url}`);
+        // dialog.showErrorBox('Welcome Back', `You arrived from 2: ${url}`);
         // Additional handling code...
     });
 });

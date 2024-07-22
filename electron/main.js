@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog, autoUpdater } = require('electron');
 // const { autoUpdater } = require('electron-updater');
 const { build } = require('./package.json');
 const path = require('path');
@@ -84,15 +84,15 @@ if (require('electron-squirrel-startup')) return;
 //     console.log(log_message);
 // });
 
-// autoUpdater.on('update-downloaded', (info) => {
-//     console.log('Update downloaded; will install now:', info);
-//     dialog.showMessageBox({
-//         title: 'Installation Ready',
-//         message: 'The update has downloaded and will be installed now.'
-//     }).then(() => {
-//         autoUpdater.quitAndInstall();
-//     });
-// });
+autoUpdater.on('update-downloaded', (info) => {
+    console.log('Update downloaded; will install now:', info);
+    dialog.showMessageBox({
+        title: 'Installation Ready',
+        message: 'The update has downloaded and will be installed now.'
+    }).then(() => {
+        autoUpdater.quitAndInstall();
+    });
+});
 /*
     autoUpdater.on('update-available', () => {
         mainWindow.webContents.send('update-available');
@@ -169,6 +169,18 @@ if (!gotTheLock) {
             type: 'info',
             title: 'Squirrel Event',
             message: `App is ready`
+        });
+
+        autoUpdater.checkForUpdates()
+
+        updateApp = require('update-electron-app')({
+            logger: require('electron-log')
+        })
+
+        updateApp({
+            // repo: 'PhiloNL/electron-hello-world', // defaults to package.json
+            updateInterval: '1 hour',
+            notifyUser: true
         });
 
         const setupEvents = require('./squirrel-events');

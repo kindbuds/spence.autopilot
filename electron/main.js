@@ -26,6 +26,12 @@ const amplifyUri = !isDev
 if (require('electron-squirrel-startup')) return;
 
 
+const { updateElectronApp } = require('update-electron-app')
+updateElectronApp({
+    logger: require('electron-log')
+})
+
+
 // autoUpdater.setFeedURL({
 //     provider: 'github',
 //     owner: 'kindbuds',
@@ -84,15 +90,15 @@ if (require('electron-squirrel-startup')) return;
 //     console.log(log_message);
 // });
 
-autoUpdater.on('update-downloaded', (info) => {
-    console.log('Update downloaded; will install now:', info);
-    dialog.showMessageBox({
-        title: 'Installation Ready',
-        message: 'The update has downloaded and will be installed now.'
-    }).then(() => {
-        autoUpdater.quitAndInstall();
-    });
-});
+// autoUpdater.on('update-downloaded', (info) => {
+//     console.log('Update downloaded; will install now:', info);
+//     dialog.showMessageBox({
+//         title: 'Installation Ready',
+//         message: 'The update has downloaded and will be installed now.'
+//     }).then(() => {
+//         autoUpdater.quitAndInstall();
+//     });
+// });
 /*
     autoUpdater.on('update-available', () => {
         mainWindow.webContents.send('update-available');
@@ -171,17 +177,9 @@ if (!gotTheLock) {
             message: `App is ready`
         });
 
-        autoUpdater.checkForUpdates()
+        // autoUpdater.checkForUpdates()
 
-        updateApp = require('update-electron-app')({
-            logger: require('electron-log')
-        })
 
-        updateApp({
-            // repo: 'PhiloNL/electron-hello-world', // defaults to package.json
-            updateInterval: '1 hour',
-            notifyUser: true
-        });
 
         const setupEvents = require('./squirrel-events');
         if (setupEvents.handleSquirrelEvent(app)) {

@@ -248,7 +248,7 @@ export default {
       const avgMatchPercentage = this.user.existing_jobs.reduce((acc, job) => {
         const day = format(new Date(job.added), "yyyy-MM-dd");
 
-        console.log(day, "day");
+        // console.log(day, "day");
         // const day = new Date(job.added);
         if (job.percentage !== null) {
           if (!acc[day]) {

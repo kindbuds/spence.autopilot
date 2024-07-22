@@ -239,7 +239,7 @@ export default {
     if (window.electron) {
       if (window.electron.onJobNew) {
         window.electron.onJobNew(async (jobData) => {
-          console.log("Received new job data in component!:", jobData);
+          // console.log("Received new job data in component!:", jobData);
           await this.processData(jobData);
         });
       }
@@ -336,7 +336,7 @@ export default {
         if (!webview) return;
         setTimeout(() => {
           try {
-            webview.openDevTools();
+            // webview.openDevTools();
           } catch {
             console.log("openDevTools failed");
           }
@@ -358,7 +358,7 @@ export default {
           webview,
           this.selectors.signInSignals
         );
-        console.log(loggedIn, "onDomReady.loggedIn");
+        // console.log(loggedIn, "onDomReady.loggedIn");
         if (!loggedIn) {
           this.$emit("auth-required");
         }
@@ -412,7 +412,7 @@ export default {
       }
     },
     togglePause(set_val = null) {
-      console.log(set_val, "togglePause");
+      // console.log(set_val, "togglePause");
       if (!this.initialized) return;
 
       this.isPaused = set_val !== null ? set_val : !this.isPaused;
@@ -464,12 +464,12 @@ export default {
     },
 
     async pollForJobCompletion() {
-      console.log("Polling for updates...");
+      console.log("Polling for results...");
       try {
         const checkResponse = await window.electron.checkJobCompletion(
           this.sessionID
         );
-        console.log(checkResponse, "checkResponse");
+        console.log(checkResponse, "results");
         const autoJobs = checkResponse.jobs;
         const usage = checkResponse.usage;
         this.can_generate_percents = usage.generate_percents;
@@ -561,12 +561,12 @@ export default {
       jobData.voted_jobs = this.filterAndSortVotedJobs();
 
       if (!jobData.skipped) {
-        console.log(
-          this.can_generate_percents,
-          this.working_job_count,
-          this.user.autopilot.usage.daily_limit,
-          "this.can_generate_percents @ this.jobQueue.push"
-        );
+        // console.log(
+        //   this.can_generate_percents,
+        //   this.working_job_count,
+        //   this.user.autopilot.usage.daily_limit,
+        //   "this.can_generate_percents @ this.jobQueue.push"
+        // );
         jobData.nopercent =
           !this.can_generate_percents ||
           this.working_job_count >= this.user.autopilot.usage.daily_limit;
@@ -603,10 +603,10 @@ export default {
       }
     },
     updateWebviewLastSearchCycle() {
-      console.log(
-        this.lastSearchCycleCompleted,
-        "this.lastSearchCycleCompleted"
-      );
+      // console.log(
+      //   this.lastSearchCycleCompleted,
+      //   "this.lastSearchCycleCompleted"
+      // );
       if (
         !this.lastSearchCycleCompleted ||
         !(this.lastSearchCycleCompleted instanceof Date) ||
@@ -640,11 +640,11 @@ export default {
           (this.jobs.length > 0 || this.jobQueue.length > 0) && !jobData.skipped
             ? this.jobDelay
             : 0;
-        console.log(delay, "delay");
+        // console.log(delay, "delay");
         setTimeout(async () => {
           this.jobs.push(jobData);
           if (!jobData.dupe) {
-            console.log(jobData, " > sending job to db");
+            // console.log(jobData, " > sending job to db");
             window.electron.saveJob(JSON.parse(JSON.stringify(jobData)));
           }
           this.$nextTick(() => {
@@ -655,8 +655,8 @@ export default {
               return null;
             }
           });
-          console.log(delay, "delay");
-          console.log("Added job:", jobData);
+          // console.log(delay, "delay");
+          // console.log("Added job:", jobData);
           await this.startQueueProcessing();
         }, delay);
       } else {
@@ -701,7 +701,7 @@ export default {
       for (const term of this.user.autopilot.searches.sort(
         () => Math.random() - 0.5
       )) {
-        console.log(this.isPaused, "performSearch.this.isPaused");
+        // console.log(this.isPaused, "performSearch.this.isPaused");
         if (this.isPaused) {
           console.log("Search paused");
           await new Promise((resolve) => {
@@ -721,13 +721,13 @@ export default {
           console.error("Script execution failed:", error);
           return false;
         });
-        console.log("executing search...");
+        console.log("executing search: ", term);
         await this.scrollToBottomAndLogLinks(webview, term);
-        console.log("search COMPLETED");
+        // console.log("search COMPLETED");
         await new Promise((resolve) =>
           setTimeout(resolve, Math.floor(Math.random() * 5000) + 1000)
         );
-        console.log("done");
+        // console.log("done");
       }
       this.sleeping = true;
       this.lastSearchCycleCompleted = new Date();
@@ -777,7 +777,7 @@ export default {
         webview,
         this.selectors.signInSignals
       );
-      console.log(isSignedIn, "typeSearchTerm.isSignedIn");
+      // console.log(isSignedIn, "typeSearchTerm.isSignedIn");
       if (!isSignedIn) {
         this.$emit("auth-required");
       }
@@ -858,7 +858,7 @@ export default {
     },
     scrollToBottomAndLogLinks(webview, search) {
       try {
-        console.log("SCROLLING!");
+        // console.log("SCROLLING!");
         return webview.executeJavaScript(`
   (async () => {
     window.continueProcessing = () => {};
@@ -1002,8 +1002,8 @@ async function clickLinksSequentially(jobCards) {
       }
 
       console.log(jobCard, 'jobCard')
-      const siteId = jobCard.getAttribute('data-job-id');
-      alert(siteId);
+      const siteId = jobCard.getAttribute('${this.selectors.siteIdSelector}');
+      // alert(siteId);
       const linkElement = jobCard.querySelector('${
         this.selectors.jobCardListTitle
       }');
@@ -1017,6 +1017,7 @@ async function clickLinksSequentially(jobCards) {
         console.log(document.body, 'delaying for 10 minutes so you can inspect');
         await delay(600000);
       }
+      // alert(linkText)
 
       const employerElement = jobCard.querySelector('${
         this.selectors.jobCardPrimaryDescription
@@ -1100,7 +1101,7 @@ async function clickLinksSequentially(jobCards) {
 
       const jobCards = document.querySelectorAll('${
         this.selectors.scaffoldList
-      } div.job-card-container');
+      }');
       const shouldStop = await clickLinksSequentially(jobCards);
       console.log(shouldStop, 'shouldStop');
 

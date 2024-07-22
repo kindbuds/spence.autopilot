@@ -136,7 +136,6 @@ if (!gotTheLock) {
 
     if (require('electron-squirrel-startup')) return;
 
-
     const { updateElectronApp } = require('update-electron-app')
     updateElectronApp({
         logger: require('electron-log')

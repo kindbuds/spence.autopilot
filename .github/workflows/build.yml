@@ -73,5 +73,7 @@ jobs:
         with:
           files: |
             ./dist/windows/squirrel.windows/x64/*.exe
+            ./dist/windows/squirrel.windows/x64/*.nupkg
+            ./dist/windows/squirrel.windows/x64/RELEASES
           draft: false
           prerelease: false

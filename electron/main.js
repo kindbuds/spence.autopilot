@@ -24,6 +24,14 @@ const amplifyUri = !isDev
     : 'http://localhost:8080/'
 
 
+if (require('electron-squirrel-startup')) return;
+
+const { updateElectronApp } = require('update-electron-app')
+updateElectronApp({
+    logger: require('electron-log')
+})
+
+
 // autoUpdater.setFeedURL({
 //     provider: 'github',
 //     owner: 'kindbuds',
@@ -133,15 +141,6 @@ if (!gotTheLock) {
     console.log("Quitting application, instance already running.");
     app.quit();
 } else {
-
-    if (require('electron-squirrel-startup')) return;
-
-    const { updateElectronApp } = require('update-electron-app')
-    updateElectronApp({
-        logger: require('electron-log')
-    })
-
-
 
     app.on('second-instance', async (event, commandLine, workingDirectory) => {
         eShared.logtofile(`Command Line: ${JSON.stringify(commandLine)}`);

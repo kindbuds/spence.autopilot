@@ -3,14 +3,14 @@ const path = require('path');
 const ChildProcess = require('child_process');
 
 function handleSquirrelEvent(application) {
-    if (process.argv.length === 1) {
-        dialog.showMessageBox({
-            type: 'info',
-            title: 'Squirrel Event',
-            message: 'No Squirrel event detected.'
-        });
-        return false;
-    }
+    // if (process.argv.length === 1) {
+    //     dialog.showMessageBox({
+    //         type: 'info',
+    //         title: 'Squirrel Event',
+    //         message: 'No Squirrel event detected.'
+    //     });
+    //     return false;
+    // }
 
     const updateDotExe = path.resolve(path.join(path.resolve(process.execPath, '..'), '..', 'Update.exe'));
     const exeName = path.basename(process.execPath);
@@ -37,11 +37,21 @@ function handleSquirrelEvent(application) {
     };
 
     const squirrelEvent = process.argv[1];
-    dialog.showMessageBox({
-        type: 'info',
-        title: 'Squirrel Event',
-        message: `Handling Squirrel event: ${squirrelEvent}`
-    });
+    console.log(`Detected Squirrel event: ${squirrelEvent}`);
+
+    if (squirrelEvent) {
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Squirrel Event Detected',
+            message: `Detected Squirrel event: ${squirrelEvent}`
+        });
+    } else {
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'No Squirrel Event Detected',
+            message: 'No Squirrel event detected. This might be a normal app start.'
+        });
+    }
 
     switch (squirrelEvent) {
         case '--squirrel-install':

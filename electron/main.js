@@ -31,129 +31,6 @@ updateElectronApp({
     logger: require('electron-log')
 })
 
-// const setupEvents = require('./squirrel-events');
-// if (setupEvents.handleSquirrelEvent(app)) {
-
-//     // dialog.showMessageBox({
-//     //     type: 'info',
-//     //     title: 'Squirrel Event',
-//     //     message: `Squirrel event was handled. Exiting...`
-//     // });
-
-//     // Squirrel event handled and app will exit in 1000ms, so don't do anything else
-//     return;
-// }
-
-
-// autoUpdater.setFeedURL({
-//     provider: 'github',
-//     owner: 'kindbuds',
-//     repo: 'spence.autopilot',
-// });
-// autoUpdater.logger = require("electron-log");
-// autoUpdater.logger.transports.file.level = "info";
-
-// // Set up autoUpdater event listeners
-// autoUpdater.on('update-downloaded', (info) => {
-//     console.log('Update downloaded; will install now:', info);
-//     dialog.showMessageBox({
-//         title: 'Installation Ready',
-//         message: 'The update has downloaded and will be installed now.'
-//     }).then(() => {
-//         autoUpdater.quitAndInstall();
-//     });
-// });
-// autoUpdater.on('checking-for-update', () => {
-//     console.log('Checking for update...');
-//     eShared.logtofile('Checking for update...')
-// });
-
-// autoUpdater.on('update-available', (info) => {
-//     console.log('Update available:', info);
-//     eShared.logtofile('Update available:')
-//     eShared.logtofile(info)
-
-//     dialog.showMessageBox({
-//         type: 'info',
-//         title: 'Update Available',
-//         message: 'A new version is available. It will be installed after restart.',
-//         buttons: ['Restart', 'Later']
-//     }).then((result) => {
-//         if (result.response === 0) { // The user chose to restart now
-//             autoUpdater.quitAndInstall();
-//         }
-//     });
-// });
-
-// autoUpdater.on('update-not-available', (info) => {
-//     console.log('Update not available:', info);
-//     eShared.logtofile('Update not available:')
-//     eShared.logtofile(info)
-// });
-
-// autoUpdater.on('error', (err) => {
-//     eShared.logtofile('Error in auto-updater:');
-//     eShared.logtofile(err)
-
-//     dialog.showMessageBox({
-//         type: 'error',
-//         title: 'Update Error',
-//         message: `There was a problem updating the application.
-
-//         ${err.message || err.toString()}
-
-//         ${JSON.stringify(err)}
-//         `
-//     });
-// });
-
-// autoUpdater.on('download-progress', (progressObj) => {
-//     let log_message = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
-//     console.log(log_message);
-// });
-
-// autoUpdater.on('update-downloaded', (info) => {
-//     console.log('Update downloaded; will install now:', info);
-//     dialog.showMessageBox({
-//         title: 'Installation Ready',
-//         message: 'The update has downloaded and will be installed now.'
-//     }).then(() => {
-//         autoUpdater.quitAndInstall();
-//     });
-// });
-/*
-    autoUpdater.on('update-available', () => {
-        mainWindow.webContents.send('update-available');
-    });
-
-    autoUpdater.on('error', message => {
-        log.error('There was a problem updating the application');
-        log.error(message);
-    });
-
-    autoUpdater.on('update-downloaded', () => {
-        const dialogOpts = {
-            type: 'info',
-            buttons: ['Restart', 'Later'],
-            title: 'Application Update',
-            message: info.releaseName,
-            detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-        };
-
-        dialog.showMessageBox(dialogOpts).then((returnValue) => {
-            if (returnValue.response === 0) autoUpdater.quitAndInstall();
-        });
-
-        mainWindow.webContents.send('update-downloaded');
-    });
-
-    autoUpdater.on('download-progress', (progressObj) => {
-        mainWindow.webContents.send('download-progress', progressObj);
-    });
-*/
-
-
-
 // This makes sure the app is single-instance
 const gotTheLock = app.requestSingleInstanceLock();
 console.log(gotTheLock, 'gotTheLock')
@@ -163,7 +40,6 @@ if (!gotTheLock) {
     console.log("Quitting application, instance already running.");
     app.quit();
 } else {
-
     app.on('second-instance', async (event, commandLine, workingDirectory) => {
         eShared.logtofile(`Command Line: ${JSON.stringify(commandLine)}`);
         eShared.logtofile(`Second instance detected: ${commandLine}`);
@@ -171,49 +47,14 @@ if (!gotTheLock) {
         eShared.logtofile(`protocolUrl: ${protocolUrl}`);
         eShared.logtofile(`loaderWindow: ${JSON.stringify(loaderWindow)}`);
 
-        // dialog.showErrorBox('Welcome Back', `You arrived from 1: ${commandLine.pop().slice(0, -1)}`)
-
-
         if (protocolUrl) {
             await handleAuthCallback(protocolUrl); // Modify this function to handle the protocol logic
         }
-
-        // app.quit();
-
-        // // Focus on the loader window if it exists, otherwise focus on the main window
-        // if (loaderWindow) {
-        //     if (loaderWindow.isMinimized()) loaderWindow.restore();
-        //     loaderWindow.focus();
-        // } else if (mainWindow) {
-        //     if (mainWindow.isMinimized()) mainWindow.restore();
-        //     mainWindow.focus();
-        // }
     });
 
 
     app.whenReady().then(async () => {
         console.log('running app.whenReady()')
-
-        // dialog.showMessageBox({
-        //     type: 'info',
-        //     title: 'Squirrel Event',
-        //     message: `App is ready`
-        // });
-
-        // autoUpdater.checkForUpdates()
-
-
-
-
-
-        // autoUpdater.autoDownload = true;
-        // autoUpdater.allowPrerelease = true; // Include this only if you want pre-releases to be considered.
-        // autoUpdater.autoInstallOnAppQuit = true;
-
-        // // Check for updates
-        // autoUpdater.checkForUpdatesAndNotify().catch(err => {
-        //     console.error('Failed to check for updates:', err);
-        // });
 
         await createWindow();
         ipcMain.on('search-cycle-completed', async (event, dte) => {

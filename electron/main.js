@@ -164,8 +164,6 @@ async function createWindow(loggedin = null) {
 
     console.log(isDev, process.env.NODE_ENV, 'isDev')
     mainWindow.maximize();
-    // mainWindow.loadURL(isDev ? 'http://localhost:8080' : `file://${path.join(__dirname, '/vue-app/dist/index.html')}`);
-    // mainWindow.loadURL(loggedin ? 'http://localhost:8080' : loginUri);
 
     console.log(amplifyUri, 'amplifyUri')
     mainWindow.loadURL(amplifyUri);
@@ -395,8 +393,8 @@ ipcMain.on('logout', async (event) => {
     storage.remove('auth', function (error) {
         if (error) throw error;
         console.log('User logged out, auth data removed.');
-        //  mainWindow.loadURL('http://localhost:3000/logout/?autopilot=true');
-        mainWindow.loadURL('https://app.getspence.ai/logout/?autopilot=true');
+        mainWindow.loadURL('http://localhost:3000/logout/?autopilot=true');
+        // mainWindow.loadURL('https://app.getspence.ai/logout/?autopilot=true');
         // createLoaderWindow();
     });
 })

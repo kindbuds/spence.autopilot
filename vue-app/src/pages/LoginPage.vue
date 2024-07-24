@@ -37,8 +37,8 @@ export default {
     },
     redirectToJoin() {
       // alert("http://localhost:3000/get-started?autopilot=true");
-      window.location.href = "http://localhost:3000/get-started?autopilot=true";
-      //  "https://app.getspence.ai/get-started/?autopilot=true";
+      //   window.location.href = "http://localhost:3000/get-started?autopilot=true";
+      "https://app.getspence.ai/get-started/?autopilot=true";
     },
   },
 };

@@ -8,6 +8,7 @@
       <template v-slot:default>
         <v-main class="pa-0">
           <job-site-web-view
+            v-if="user"
             :url="urls.search"
             :selectedJob="selectedJob"
             @authRequired="onAuthRequired"
@@ -70,8 +71,6 @@ export default {
     // this.urls.search = `https://www.linkedin.com/jobs/search/?f_TPR=r604800&f_WT=2&sortBy=DD&f_SB2=${this.translateSalary()}&f_E=${this.translateExperience()}`;
 
     // production below
-    this.urls.search = `https://www.linkedin.com/jobs/search/?${this.translateLocation()}&sortBy=DD&f_SB2=${this.translateSalary()}&f_E=${this.translateExperience()}`;
-    console.log(this.urls.search, "this.urls.search");
   },
   beforeUnmount() {
     if (window.electron) {
@@ -83,6 +82,13 @@ export default {
     selectedJob(newVal, oldVal) {
       console.log("selectedJob changed from", oldVal, "to", newVal);
       this.updateColumns();
+    },
+    user(newVal) {
+      this.urls.search = `https://www.linkedin.com/jobs/search/?${this.translateLocation()}&sortBy=DD${this.translateSalary()}&f_E=${this.translateExperience()}`;
+      console.log(this.urls.search, "this.urls.search");
+
+      console.log(newVal, "watch.user");
+      // alert("watch.user");
     },
   },
   methods: {
@@ -103,6 +109,20 @@ export default {
     translateLocation() {
       if (!this.user) return;
 
+      console.log(this.user, "translateLocation");
+
+      // eslint-disable-next-line
+      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347" || true) {
+        // jeff chiarelli
+        // alert("chia1");
+        let retval = `f_WT=1,3`;
+
+        if (this.user.autopilot.location) {
+          retval += `&location=${this.user.autopilot.location}`;
+        }
+        return retval;
+      }
+
       if (!this.user.autopilot.location) return "f_WT=2";
 
       return `f_WT=1,3,2&location=${this.user.autopilot.location}`;
@@ -110,16 +130,26 @@ export default {
     translateSalary() {
       if (!this.user) return;
 
-      if (this.user.autopilot.salary <= 40000) return 1;
-      else if (this.user.autopilot.salary <= 60000) return 2;
-      else if (this.user.autopilot.salary <= 80000) return 3;
-      else if (this.user.autopilot.salary <= 100000) return 4;
-      else if (this.user.autopilot.salary <= 120000) return 5;
-      else if (this.user.autopilot.salary <= 140000) return 6;
-      else if (this.user.autopilot.salary <= 160000) return 7;
-      else if (this.user.autopilot.salary <= 180000) return 8;
-      else if (this.user.autopilot.salary <= 200000) return 9;
-      else return 10;
+      // eslint-disable-next-line
+      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347" || true) {
+        // jeff chiarelli
+        // alert("chia2");
+        return "";
+      }
+
+      let salaryLevel;
+      if (this.user.autopilot.salary <= 40000) salaryLevel = 1;
+      else if (this.user.autopilot.salary <= 60000) salaryLevel = 2;
+      else if (this.user.autopilot.salary <= 80000) salaryLevel = 3;
+      else if (this.user.autopilot.salary <= 100000) salaryLevel = 4;
+      else if (this.user.autopilot.salary <= 120000) salaryLevel = 5;
+      else if (this.user.autopilot.salary <= 140000) salaryLevel = 6;
+      else if (this.user.autopilot.salary <= 160000) salaryLevel = 7;
+      else if (this.user.autopilot.salary <= 180000) salaryLevel = 8;
+      else if (this.user.autopilot.salary <= 200000) salaryLevel = 9;
+      else salaryLevel = 10;
+
+      return `&f_SB2=${salaryLevel}`;
     },
     translateExperience() {
       if (!this.user) return;

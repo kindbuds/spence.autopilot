@@ -111,8 +111,7 @@ export default {
 
       console.log(this.user, "translateLocation");
 
-      // eslint-disable-next-line
-      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347" || true) {
+      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347") {
         // jeff chiarelli
         // alert("chia1");
         let retval = `f_WT=1,3`;
@@ -130,8 +129,7 @@ export default {
     translateSalary() {
       if (!this.user) return;
 
-      // eslint-disable-next-line
-      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347" || true) {
+      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347") {
         // jeff chiarelli
         // alert("chia2");
         return "";

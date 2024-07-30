@@ -14,13 +14,8 @@ eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
 require('dotenv').config();
 let loaderWindow, mainWindow, authWindow;
 const isDev = process.env.NODE_ENV === 'development';
-// const auth0 = require('auth0-js');
-// const redirectUri = 'https://app.getspence.ai/oauth_token/?autopilot=true'
-// const redirectUri = 'http://localhost:3000/?autopilot=true'
-// const loginUri = 'https://app.getspence.ai/?autopilot=true'
-const amplifyUri = !isDev
-    ? 'https://main.d1u7axsxvin7f4.amplifyapp.com/'
-    : 'http://localhost:8080/'
+const amplifyUri = process.env.AMPLIFY_DOMAIN
+const spenceDomain = process.env.SPENCE_DOMAIN
 
 
 if (require('electron-squirrel-startup')) return;
@@ -167,6 +162,17 @@ async function createWindow(loggedin = null) {
 
     console.log(amplifyUri, 'amplifyUri')
     mainWindow.loadURL(amplifyUri);
+
+    // Log URL changes
+    mainWindow.webContents.on('did-navigate', (event, url) => {
+        console.log('Navigated to:', url);
+        mainWindow.webContents.executeJavaScript(`console.log('Navigated to:', '${url}');`);
+    });
+
+    mainWindow.webContents.on('did-navigate-in-page', (event, url) => {
+        console.log('Navigated within page to:', url);
+        mainWindow.webContents.executeJavaScript(`console.log('Navigated within page to:', '${url}');`);
+    });
 
     mainWindow.on('page-title-updated', (event) => {
         event.preventDefault();
@@ -393,8 +399,7 @@ ipcMain.on('logout', async (event) => {
     storage.remove('auth', function (error) {
         if (error) throw error;
         console.log('User logged out, auth data removed.');
-        mainWindow.loadURL('http://localhost:3000/logout/?autopilot=true');
-        // mainWindow.loadURL('https://app.getspence.ai/logout/?autopilot=true');
+        mainWindow.loadURL(`${spenceDomain}logout/?autopilot=true`);
         // createLoaderWindow();
     });
 })
@@ -511,11 +516,9 @@ ipcMain.on('vote-job', async (event, voteData) => {
 
 
 const api = {
-    baseUrl: 'https://api.kindbuds.ai/',   //    'http://localhost:3003/',
-    // spenceUrl: 'http://localhost:3010/spence/',
-    spenceUrl: 'https://api.kindbuds.ai/bots/spence/', // import.meta.env.VITE_API_SPENCE_URL,
-    api2Url: 'https://api.kindbuds.ai/bots/',
-    //  api2Url: 'http://localhost:3009/',
+    baseUrl: process.env.API_BASE,
+    spenceUrl: process.env.API_SPENCE,
+    api2Url: process.env.API_API2,
 };
 
 const sendToApi = async (url, data, response_type = 'text') => {

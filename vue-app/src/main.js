@@ -24,7 +24,6 @@ import './assets/main.css';
 import '@mdi/font/css/materialdesignicons.css';
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-
 Chart.register(...registerables);
 
 

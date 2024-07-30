@@ -28,17 +28,22 @@
 export default {
   name: "LoginPage",
   components: {},
+  data() {
+    return {
+      baseDomain: window.electron.SPENCE_DOMAIN
+        ? window.electron.SPENCE_DOMAIN
+        : "https://app.getspence.ai/",
+    };
+  },
   async mounted() {
-    console.log(this.user, "this.user");
+    // console.log(this.user, "this.user");
   },
   methods: {
     redirectToLogin() {
-      window.location.href = "https://app.getspence.ai/login?autopilot=true";
+      window.location.href = `${this.baseDomain}login?autopilot=true`;
     },
     redirectToJoin() {
-      // alert("http://localhost:3000/get-started?autopilot=true");
-      //   window.location.href = "http://localhost:3000/get-started?autopilot=true";
-      "https://app.getspence.ai/get-started/?autopilot=true";
+      window.location.href = `${this.baseDomain}get-started?autopilot=true`;
     },
   },
 };

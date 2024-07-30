@@ -1,13 +1,16 @@
 const { contextBridge, ipcRenderer, shell } = require('electron');
 const auth0 = require('auth0-js');
-const redirectUri = 'https://app.getspence.ai/oauth_token/?autopilot=true'
-// const redirectUri = 'http://localhost:3000/oauth_token/?autopilot=true&state=none'
-// const auth0 = require('auth0-js');
-// import auth0 from 'auth0-js';
-// const auth0 = require('auth0-js');
+const spenceDomain = process.env.SPENCE_DOMAIN
+const redirectUri = `${spenceDomain}oauth_token/?autopilot=true&state=none`
+
+window.env = {
+    SPENCE_DOMAIN: process.env.SPENCE_DOMAIN
+};
+
 contextBridge.exposeInMainWorld(
     'electron',
     {
+        SPENCE_DOMAIN: process.env.SPENCE_DOMAIN,
         ipcRenderer: {
             send: (channel, data) => {
                 ipcRenderer.send(channel, data);

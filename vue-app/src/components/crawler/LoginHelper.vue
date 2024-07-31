@@ -52,7 +52,7 @@ export default {
     // next tick
     //  setTimeout(() => {
     this.webview = this.$refs.loginHelper;
-    console.log(this.webview, "LoginHelper.webview");
+    //  console.log(this.webview, "LoginHelper.webview");
     if (this.webview) {
       this.webview.addEventListener(
         "did-start-navigation",
@@ -80,7 +80,7 @@ export default {
         "https://www.linkedin.com/feed/",
         "https://www.linkedin.com/checkpoint/",
       ];
-      console.log("Navigation started:", event.url);
+      //    console.log("Navigation started:", event.url);
 
       if (urls.includes(event.url)) this.loading = true;
       //this.$refs.loginHelper.classList.add("hidden");
@@ -88,13 +88,13 @@ export default {
     onNavigationEnd(event) {
       //  this.loading = false;
       const urls = ["https://www.linkedin.com/feed/"];
-      console.log("Navigation ended:", event.url);
+      //    console.log("Navigation ended:", event.url);
 
       if (urls.includes(event.url)) this.loading = true;
     },
     async checkLogin() {
       //  setTimeout(async () => {
-      console.log("in checkLogin");
+      //   console.log("in checkLogin");
       try {
         if (!this.webview) {
           this.webview = this.$refs.loginHelper;
@@ -107,19 +107,19 @@ export default {
           this.webview,
           this.selectors.signInSignals
         );
-        console.log(isSignedIn, "isSignedIn");
+        //   console.log(isSignedIn, "isSignedIn");
         // if (isSignedIn) is2FA = await shared.check2FAButton(this.webview);
         // console.log(is2FA, "is2FA");
 
         if (isSignedIn) {
           // this.loading = true;
-          console.log("User is logged in");
+          //    console.log("User is logged in");
           this.loading = true;
           // Emit an event or call another method to handle post-login logic
           this.$emit("login-success");
         } else {
           this.loading = false;
-          console.log("User is not logged in");
+          //   console.log("User is not logged in");
           // this.$emit("login-failure");
         }
       } catch (error) {

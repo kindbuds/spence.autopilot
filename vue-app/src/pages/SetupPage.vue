@@ -8,7 +8,7 @@
         <v-card elevation="0">
           <v-card-text class="pa-0">
             <div v-if="step === 1" style="margin-top: 10vh">
-              <h1 class="text-left">Let's Get Setup!</h1>
+              <h1 class="text-left">Autopilot Setup</h1>
               <v-form>
                 <p class="text-body-1 text-grey-lighten-1 mt-6 mb-10">
                   Please describe what you want from your job search in the box
@@ -104,7 +104,7 @@ export default {
     if (window.electron) {
       if (window.electron.onSetupCompleted) {
         window.electron.onSetupCompleted(async (setupData) => {
-          console.log("Received new setup data in component!:", setupData);
+          //  console.log("Received new setup data in component!:", setupData);
           this.final_config = setupData;
           this.user.autopilot = setupData;
           this.$store.commit("setUser", this.user);
@@ -128,7 +128,7 @@ export default {
         about_search: this.jobSearchInput,
         max_applicants: 100,
       };
-      console.log(payload, "payload");
+      //   console.log(payload, "payload");
       this.nextStep();
       // window.electron.onSetupCompleted((setupData) => {
       //   console.log("Setup completed with data:", setupData);
@@ -141,12 +141,12 @@ export default {
         this.step++;
       }
     },
-    submitSetup(searchTerms) {
+    submitSetup() {
       // Handle the final submission of the setup
-      console.log("Setup complete:", {
-        jobSearchInput: this.jobSearchInput,
-        searchTerms: searchTerms,
-      });
+      // console.log("Setup complete:", {
+      //   jobSearchInput: this.jobSearchInput,
+      //   searchTerms: searchTerms,
+      // });
       window.location.href = "/";
     },
   },

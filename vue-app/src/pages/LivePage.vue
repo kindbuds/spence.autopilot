@@ -62,7 +62,7 @@ export default {
   mounted() {
     if (window.electron) {
       window.electron.onJobDetails((jobDetails) => {
-        console.log("Job details received in Vue:", jobDetails);
+        // ("Job details received in Vue:", jobDetails);
         // Handle the job details, e.g., store them in Vue data/component state
       });
     }
@@ -80,14 +80,14 @@ export default {
   },
   watch: {
     selectedJob(newVal, oldVal) {
-      console.log("selectedJob changed from", oldVal, "to", newVal);
+      //  console.log("selectedJob changed from", oldVal, "to", newVal);
       this.updateColumns();
     },
     user(newVal) {
       this.urls.search = `https://www.linkedin.com/jobs/search/?${this.translateLocation()}&sortBy=DD${this.translateSalary()}&f_E=${this.translateExperience()}`;
-      console.log(this.urls.search, "this.urls.search");
+      //   console.log(this.urls.search, "this.urls.search");
 
-      console.log(newVal, "watch.user");
+      //   console.log(newVal, "watch.user");
       // alert("watch.user");
     },
   },
@@ -102,14 +102,14 @@ export default {
     },
     onJobSelected(job) {
       // alert("LivePage.onJobSelected");
-      console.log(job, "LivePage.onJobSelected");
+      //   console.log(job, "LivePage.onJobSelected");
       this.$refs.jobListLayout.displayJob(job);
       this.selectedJob = job;
     },
     translateLocation() {
       if (!this.user) return;
 
-      console.log(this.user, "translateLocation");
+      //   console.log(this.user, "translateLocation");
 
       if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347") {
         // jeff chiarelli
@@ -167,7 +167,7 @@ export default {
       return encodeURIComponent(experienceLevels.join(","));
     },
     async onLoginSuccess() {
-      console.log("onLoginSuccess");
+      //  console.log("onLoginSuccess");
       // this.auth = false;
       setTimeout(() => {
         this.auth = false;
@@ -175,7 +175,7 @@ export default {
       // await shared.delay(10000);
     },
     onAuthRequired() {
-      console.log("onAuthRequired");
+      //  console.log("onAuthRequired");
       // alert("onAuthRequired");
       // this.$nextTick(() => {
       //   this.auth = true;

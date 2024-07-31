@@ -73,7 +73,7 @@ export default {
   emits: ["jobDetailClosed"],
   methods: {
     async onLoginSuccess() {
-      console.log("onLoginSuccess");
+      // ("onLoginSuccess");
       // this.auth = false;
       setTimeout(() => {
         this.auth = false;
@@ -81,7 +81,7 @@ export default {
       // await shared.delay(10000);
     },
     onAuthRequired() {
-      console.log("onAuthRequired");
+      //    console.log("onAuthRequired");
       // alert("onAuthRequired");
       // this.$nextTick(() => {
       //   this.auth = true;
@@ -96,9 +96,9 @@ export default {
       this.$emit("jobDetailClosed");
     },
     displayJob(job) {
-      console.log("JobListLayout.displayJob called with:", job);
+      //  console.log("JobListLayout.displayJob called with:", job);
       this.selectedJob = this.selectedJob != job ? job : null;
-      console.log("JobListLayout.selectedJob updated to:", this.selectedJob);
+      //   console.log("JobListLayout.selectedJob updated to:", this.selectedJob);
     },
   },
 };

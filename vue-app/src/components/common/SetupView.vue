@@ -239,7 +239,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.config, "this.config");
+    // console.log(this.config, "this.config");
     //  this.user.autopilot =
   },
   computed: {
@@ -298,7 +298,7 @@ export default {
           about_search: this.localAboutSearch,
           max_applicants: this.localMaxApplicants,
         };
-        console.log(config, "config");
+        //  console.log(config, "config");
         this.$emit("submit", config);
         this.user.autopilot = config;
         window.electron.saveSettings(JSON.parse(JSON.stringify(config))); // Ensure the object is cloneable

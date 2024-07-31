@@ -248,7 +248,7 @@ export default {
         // console.log("Sentinel:", this.$refs.sentinel); // Log the sentinel
         observer.observe(this.$refs.sentinel);
       } catch (err) {
-        console.log("observer failed");
+        //   console.log("observer failed");
       }
       if (this.individualJob) this.emitJob(this.individualJob);
     }, 2000);
@@ -294,7 +294,7 @@ export default {
       this.showFilters = !this.showFilters;
     },
     clearIndividualJob() {
-      console.log("clearIndividualJob");
+      //  console.log("clearIndividualJob");
       this.individualJob = null;
       this.$router.push({ query: { ...this.$route.query, show: null } });
 
@@ -313,7 +313,7 @@ export default {
     },
     filterJobs() {
       if (!this.jobs || this.jobs.length === 0) return;
-      console.log(this.jobs, this.jobs.length, "this.jobs.length");
+      //   console.log(this.jobs, this.jobs.length, "this.jobs.length");
       const query = this.searchQuery ? this.searchQuery.toLowerCase() : "";
       const now = new Date();
       this.individualJob = null;
@@ -322,7 +322,7 @@ export default {
         const guid = this.$route.query.show;
         filtered = this.jobs.filter((job) => job.guid === guid);
         if (filtered.length === 0) return;
-        console.log(filtered, "filtered");
+        //     console.log(filtered, "filtered");
         this.individualJob = filtered[0];
       } else {
         filtered = this.jobs.filter((job) => {
@@ -361,7 +361,7 @@ export default {
         );
       }
 
-      console.log(filtered, filtered.length, "filtered");
+      //   console.log(filtered, filtered.length, "filtered");
       this.filteredJobs = filtered;
       this.visibleJobs = this.filteredJobs.slice(0, this.pageSize); // Reset visibleJobs
     },
@@ -377,20 +377,20 @@ export default {
 
       this.$refs.jobListLayout.displayJob(job);
       this.selectedJob = job;
-      console.log(job, "JobsPage.emitJob");
+      //   console.log(job, "JobsPage.emitJob");
       this.$emit("jobSelected", job);
 
       this.$nextTick(() => {
         if (job) {
           const jobRef = this.$refs["job-" + job.id];
           if (!jobRef[0]) return;
-          console.log(jobRef, "jobRef");
-          console.log(jobRef[0], "jobRef[0]");
+          //   console.log(jobRef, "jobRef");
+          //    console.log(jobRef[0], "jobRef[0]");
           if (jobRef && jobRef[0]) {
             const jobElement = jobRef[0].$el;
             const container = this.$refs.jobContainer.$el;
-            console.log(container, "container");
-            console.log(jobElement, "jobElement");
+            //    console.log(container, "container");
+            //     console.log(jobElement, "jobElement");
 
             if (jobElement && container) {
               const containerRect = container.getBoundingClientRect();
@@ -409,7 +409,7 @@ export default {
     },
 
     onJobVoted(voteData) {
-      console.log(voteData, "onJobVoted");
+      // console.log(voteData, "onJobVoted");
       const jobIndex = this.jobs.findIndex((job) => job.id === voteData.jobId);
       if (jobIndex !== -1) {
         this.jobs[jobIndex] = {

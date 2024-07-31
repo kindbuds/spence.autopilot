@@ -35,7 +35,7 @@
               class="text-grey-lighten-1 pa-2 mt-1 ml-2"
               color="transparent"
               id="composer"
-              style="height: 35px; 2px solid rgb(70 108 95)"
+              style="height: 35px; border: 2px solid rgb(70 108 95)"
             >
               <v-icon style="color: #b3f5e5 !important; font-size: 20px"
                 >mdi-auto-fix</v-icon
@@ -182,31 +182,31 @@ export default {
   },
   mounted() {
     window.electron.onNewWindowRequest((newUrl) => {
-      console.log(`New window requested for URL: ${newUrl}`);
+      //  console.log(`New window requested for URL: ${newUrl}`);
       this.currentUrl = newUrl;
       this.reloadWebView();
     });
   },
   watch: {
     url(newUrl) {
-      console.log(`URL changed: ${newUrl}`);
+      //  console.log(`URL changed: ${newUrl}`);
       if (newUrl !== this.lastLoadedUrl) {
-        console.log(
-          `New URL is different from last loaded URL: ${this.lastLoadedUrl}. Reloading webview.`
-        );
+        // console.log(
+        //   `New URL is different from last loaded URL: ${this.lastLoadedUrl}. Reloading webview.`
+        // );
         this.currentUrl = newUrl;
         this.reloadWebView();
       } else {
-        console.log(
-          `New URL is the same as last loaded URL: ${this.lastLoadedUrl}. Not reloading webview.`
-        );
+        // console.log(
+        //   `New URL is the same as last loaded URL: ${this.lastLoadedUrl}. Not reloading webview.`
+        // );
         this.loading = false;
       }
     },
   },
   created() {
     if (this.url) {
-      console.log(`Initial URL: ${this.url}`);
+      //  console.log(`Initial URL: ${this.url}`);
       this.currentUrl = this.url;
       this.reloadWebView();
     }
@@ -222,7 +222,7 @@ export default {
           break;
       }
       this.contentType = content_type;
-      console.log(content_type, "generateContent");
+      //  console.log(content_type, "generateContent");
       this.$nextTick(() => {
         this.$refs.composerTray.toggleTray();
       });
@@ -241,19 +241,19 @@ export default {
     },
     onWillNavigate(event) {
       const newUrl = event.url;
-      console.log(`Will navigate to URL: ${newUrl}`);
+      //   console.log(`Will navigate to URL: ${newUrl}`);
       this.currentUrl = newUrl;
     },
     onDidNavigate(event) {
       const newUrl = event.url;
-      console.log(`Did navigate to URL: ${newUrl}`);
+      //  console.log(`Did navigate to URL: ${newUrl}`);
       this.currentUrl = newUrl;
     },
     copyUrlToClipboard() {
       navigator.clipboard
         .writeText(this.currentUrl)
         .then(() => {
-          console.log("URL copied to clipboard");
+          //      console.log("URL copied to clipboard");
         })
         .catch((err) => {
           console.error("Could not copy text: ", err);
@@ -263,14 +263,14 @@ export default {
       this.$emit("jobDetailClosed");
     },
     reloadWebView() {
-      console.log("Reloading webview...");
+      //  console.log("Reloading webview...");
       //  this.loading = true;
       this.isLoading = true; // Set the flag to true when reloading
       this.$nextTick(() => {
         const webview = this.$refs.jobWebView;
         if (webview) {
           try {
-            console.log(`Setting webview src to: ${this.currentUrl}`);
+            //        console.log(`Setting webview src to: ${this.currentUrl}`);
             webview.src = this.currentUrl;
             //  this.isLoading = false;
           } catch {
@@ -280,7 +280,7 @@ export default {
       });
     },
     async onDomReady() {
-      console.log("DOM is ready.");
+      // console.log("DOM is ready.");
       this.loading = false;
       const webview = this.$refs.jobWebView;
       if (!webview) {
@@ -315,7 +315,7 @@ export default {
           )
           .then((applyUrl) => {
             if (applyUrl) {
-              console.log("Apply Url:", applyUrl);
+              //       console.log("Apply Url:", applyUrl);
               this.applyUrl = applyUrl;
               // Add event listeners to the buttons
               setTimeout(() => {
@@ -331,7 +331,7 @@ export default {
     addButtonListeners() {
       const script = `
       const buttons = document.querySelectorAll("${this.selectors.applyButton}");
-      console.log(buttons,'buttons')
+    //  console.log(buttons,'buttons')
       buttons.forEach((button) => {
         const ariaLabel = button.getAttribute("aria-label");
         if (!ariaLabel || !ariaLabel.startsWith("${this.selectors.easyApplyButtonAriaLabel}")) {
@@ -351,7 +351,7 @@ export default {
     onStartLoading() {
       const webview = this.$refs.jobWebView;
       if (webview) {
-        console.log("Webview started loading.", webview.src);
+        //    console.log("Webview started loading.", webview.src);
         this.loading = false;
         try {
           if (webview.src === "https://www.linkedin.com/feed/") {
@@ -389,7 +389,7 @@ export default {
 
         this.stopLoadingTimeout = setTimeout(async () => {
           await this.verifyLoadingAnimationCompleted();
-          console.log("Webview stopped loading.");
+          //     console.log("Webview stopped loading.");
 
           this.removeUnwantedElements();
 
@@ -400,7 +400,7 @@ export default {
           // Set the flag to false when loading stops
           if (this.url) {
             this.lastLoadedUrl = this.url;
-            console.log(`Updated lastLoadedUrl to: ${this.lastLoadedUrl}`);
+            //   console.log(`Updated lastLoadedUrl to: ${this.lastLoadedUrl}`);
 
             const webview = this.$refs.jobWebView;
             if (webview) {
@@ -408,7 +408,7 @@ export default {
                 webview,
                 this.selectors.signInSignals
               );
-              console.log(loggedIn, "onDomReady.loggedIn");
+              //     console.log(loggedIn, "onDomReady.loggedIn");
               if (!loggedIn) {
                 //  alert("auth-required1");
                 this.$emit("auth-required");

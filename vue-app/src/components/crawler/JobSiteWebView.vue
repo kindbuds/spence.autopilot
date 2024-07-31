@@ -248,7 +248,7 @@ export default {
       window.electron.onUserReloaded(async (event, userdata) => {
         this.user_loaded = true;
         this.working_job_count = userdata.autopilot.usage.daily_job_count;
-        console.log(this.user, userdata, "Received user reloaded");
+        // console.log(this.user, userdata, "Received user reloaded");
 
         await this.fetchPreloadPath();
         let guid = shared.getGuid();
@@ -260,10 +260,10 @@ export default {
           return;
         }
         webview.preload = this.preload;
-        console.log(webview.preload, "webview.preload");
+        // console.log(webview.preload, "webview.preload");
 
-        console.log(userdata.autopilot, "this.user.autopilot");
-        console.log(userdata.autopilot.usage, "this.user.autopilot.usage");
+        //  console.log(userdata.autopilot, "this.user.autopilot");
+        //  console.log(userdata.autopilot.usage, "this.user.autopilot.usage");
         this.can_generate_percents = userdata.autopilot.usage.generate_percents;
         await this.startQueueProcessing();
       });
@@ -284,7 +284,7 @@ export default {
   },
   watch: {
     selectedJob(newVal) {
-      console.log(newVal, "watch.selectedJob");
+      //  console.log(newVal, "watch.selectedJob");
 
       if (!this.isMdAndUp) {
         this.togglePause(
@@ -297,10 +297,10 @@ export default {
   },
   methods: {
     onWillNavigate(event) {
-      console.log("Navigation started:", event.url);
+      //     console.log("Navigation started:", event.url);
     },
     onDidNavigate(event) {
-      console.log("Navigation completed:", event.url);
+      //    console.log("Navigation completed:", event.url);
     },
     cleanupWebview() {
       const webview = this.$refs.linkedinWebView;
@@ -314,7 +314,7 @@ export default {
       if (job === this.selectedJob) job = null;
       if (!this.isMdAndUp && job) this.isPaused_existing = this.isPaused;
 
-      console.log(job, "JobSiteWebView.emitJob");
+      //   console.log(job, "JobSiteWebView.emitJob");
       this.$emit("jobSelected", job);
 
       setTimeout(() => {
@@ -328,7 +328,7 @@ export default {
       }, 1000);
     },
     async onDomReady() {
-      console.log(this.domReadyListenerAdded, "onDomReady");
+      // (this.domReadyListenerAdded, "onDomReady");
       if (!this.domReadyListenerAdded) {
         this.startAutopilot();
         this.domReadyListenerAdded = true;
@@ -338,7 +338,7 @@ export default {
           try {
             // webview.openDevTools();
           } catch {
-            console.log("openDevTools failed");
+            //     console.log("openDevTools failed");
           }
 
           if (this.user.last_search_cycle) {
@@ -380,10 +380,10 @@ export default {
         `);
     },
     onJobSaved(saveData) {
-      console.log(saveData, "onJobSaved");
+      //     console.log(saveData, "onJobSaved");
     },
     onJobVoted(voteData) {
-      console.log(voteData, "onJobVoted");
+      //    console.log(voteData, "onJobVoted");
       const jobIndex = this.jobs.findIndex((job) => job.id === voteData.jobId);
       if (jobIndex !== -1) {
         this.jobs[jobIndex] = {
@@ -426,11 +426,11 @@ export default {
       const continueProcessingScript = `
     try {
       if (window.continueProcessing) {
-        console.log('executing window.continueProcessing');
+      //   console.log('executing window.continueProcessing');
         window.continueProcessing();
-        console.log('executed window.continueProcessing');
+      //   console.log('executed window.continueProcessing');
       } else {
-        console.log('window.continueProcessing doesnt exist');
+     //    console.log('window.continueProcessing doesnt exist');
       }
     } catch (err) {
       console.error('Error executing continueProcessing script:', err);
@@ -440,15 +440,15 @@ export default {
       webview
         .executeJavaScript(setPausedScript)
         .then(() => {
-          console.log(
-            `System should be ${
-              !this.initialized
-                ? "initializing"
-                : this.isPaused
-                ? "paused"
-                : "running"
-            }`
-          );
+          // console.log(
+          //   `System should be ${
+          //     !this.initialized
+          //       ? "initializing"
+          //       : this.isPaused
+          //       ? "paused"
+          //       : "running"
+          //   }`
+          // );
 
           if (!this.isPaused) {
             webview.executeJavaScript(continueProcessingScript).catch((err) => {
@@ -464,12 +464,12 @@ export default {
     },
 
     async pollForJobCompletion() {
-      console.log("Polling for results...");
+      //     console.log("Polling for results...");
       try {
         const checkResponse = await window.electron.checkJobCompletion(
           this.sessionID
         );
-        console.log(checkResponse, "results");
+        //     console.log(checkResponse, "results");
         const autoJobs = checkResponse.jobs;
         const usage = checkResponse.usage;
         this.can_generate_percents = usage.generate_percents;
@@ -519,13 +519,13 @@ export default {
     },
     stopPollJobCompletion() {
       if (this.pollingInterval) {
-        console.log("Stopping job polling...");
+        //    console.log("Stopping job polling...");
         clearInterval(this.pollingInterval);
         this.pollingInterval = null;
       }
     },
     async processData(jobData) {
-      console.log(`evaluating job: ${jobData.title} @  ${jobData.employer}`);
+      //    console.log(`evaluating job: ${jobData.title} @  ${jobData.employer}`);
       this.jobDelay = 4000;
       const foundInExistingJobs = this.user.existing_jobs.findIndex(
         (f) => f.siteid == jobData.siteId
@@ -544,16 +544,16 @@ export default {
         foundInJobQueue > -1 ||
         foundInJobs > -1
       ) {
-        console.log(" > job already processed");
+        //   console.log(" > job already processed");
         jobData.skipped = true;
         this.jobDelay = 0;
         return;
       }
 
       if (jobData.applicantCount >= this.user.autopilot.max_applicants) {
-        console.log(
-          ` > job has too many applicants (${this.user.autopilot.max_applicants})`
-        );
+        // console.log(
+        //   ` > job has too many applicants (${this.user.autopilot.max_applicants})`
+        // );
         jobData.status = "Skipped - too many applicants";
         jobData.skipped = true;
         this.jobDelay = 0;
@@ -596,9 +596,9 @@ export default {
           ...this.jobs,
         ]);
         webview.executeJavaScript(`
-           console.log('Setting window.existingJobs in webview context');
+        //   console.log('Setting window.existingJobs in webview context');
            window.existingJobs = ${combinedJobs};
-           console.log(window.existingJobs.length, 'window.existingJobs');
+        //   console.log(window.existingJobs.length, 'window.existingJobs');
          `);
       }
     },
@@ -619,9 +619,9 @@ export default {
         const lastSearchCycleCompleted =
           this.lastSearchCycleCompleted.toISOString();
         webview.executeJavaScript(`
-      console.log('Setting window.lastSearchCycle in webview context');
+  //    console.log('Setting window.lastSearchCycle in webview context');
       window.lastSearchCycleCompleted = new Date('${lastSearchCycleCompleted}');
-      console.log(window.lastSearchCycleCompleted, 'window.lastSearchCycleCompleted');
+  //    console.log(window.lastSearchCycleCompleted, 'window.lastSearchCycleCompleted');
     `);
       }
     },
@@ -643,7 +643,7 @@ export default {
         // console.log(delay, "delay");
         setTimeout(async () => {
           this.jobs.push(jobData);
-          console.log(this.jobs, "this.jobs");
+          //    console.log(this.jobs, "this.jobs");
           if (!jobData.dupe) {
             // console.log(jobData, " > sending job to db");
             window.electron.saveJob(JSON.parse(JSON.stringify(jobData)));
@@ -670,20 +670,20 @@ export default {
         const safeDirname = dirname.replace(/\\/g, "/");
         this.preload = `file:///${safeDirname}/test-preload.js`;
       } catch {
-        console.log(null, "fetchPreloadPath");
+        //  console.log(null, "fetchPreloadPath");
         return null;
       }
-      console.log(this.preload, "fetchPreloadPath");
+      //  console.log(this.preload, "fetchPreloadPath");
     },
     async startAutopilot() {
-      console.log("autopilot initialized");
+      //   console.log("autopilot initialized");
 
       const webview = this.$refs.linkedinWebView;
       if (!webview) {
         console.error("Webview is not initialized.");
         return;
       }
-      console.log(this.preload, "this.preload");
+      //   console.log(this.preload, "this.preload");
       webview.preload = this.preload;
       this.updateWebviewJobs();
       try {
@@ -704,13 +704,13 @@ export default {
       )) {
         // console.log(this.isPaused, "performSearch.this.isPaused");
         if (this.isPaused) {
-          console.log("Search paused");
+          //     console.log("Search paused");
           await new Promise((resolve) => {
             this.continueProcessing = resolve;
           });
         }
 
-        console.log(`Performing search "${term}"`);
+        //    console.log(`Performing search "${term}"`);
         await this.typeSearchTerm(term);
 
         const script = `
@@ -722,7 +722,7 @@ export default {
           console.error("Script execution failed:", error);
           return false;
         });
-        console.log("executing search: ", term);
+        //    console.log("executing search: ", term);
         await this.scrollToBottomAndLogLinks(webview, term);
         // console.log("search COMPLETED");
         await new Promise((resolve) =>
@@ -771,7 +771,7 @@ export default {
           webview.addEventListener("dom-ready", resolve, { once: true });
         });
       } catch {
-        console.log("type search term failed");
+        //    console.log("type search term failed");
       }
 
       const isSignedIn = await shared.checkSignInButton(
@@ -924,9 +924,9 @@ export default {
         }
 
         if (applicantCount >= 0) {
-          console.log(applicantCount + ' applicants');
+     //      console.log(applicantCount + ' applicants');
         } else {
-          console.log('No span with "applicants" found');
+     //      console.log('No span with "applicants" found');
         }
       } catch (error) {
         console.error('Error:', error);
@@ -973,7 +973,7 @@ export default {
      const siteIdMatch = siteIdArray.includes(jobData.siteId);
 
      if (siteIdMatch){
-      console.log('stopDupe due to siteId', jobData.siteId)
+    //   console.log('stopDupe due to siteId', jobData.siteId)
       return true;
      }
 
@@ -989,11 +989,11 @@ export default {
    }
 
 async function clickLinksSequentially(jobCards) {
-  console.log(jobCards, 'clickLinksSequentially');
+ //  console.log(jobCards, 'clickLinksSequentially');
   return new Promise(async (resolve) => {
     let jobIndex = 0;
     for (let jobCard of jobCards) {
-      console.log(jobIndex + 1, 'processing job card of: ' + jobCards.length);
+ //      console.log(jobIndex + 1, 'processing job card of: ' + jobCards.length);
       jobIndex++;
 
       if (window.isPaused) {
@@ -1002,20 +1002,20 @@ async function clickLinksSequentially(jobCards) {
         });
       }
 
-      console.log(jobCard, 'jobCard')
+   //    console.log(jobCard, 'jobCard')
       const siteId = jobCard.getAttribute('${this.selectors.siteIdSelector}');
       // alert(siteId);
       const linkElement = jobCard.querySelector('${
         this.selectors.jobCardListTitle
       }');
-      console.log(jobCard, 'jobCard');
-      console.log(linkElement, 'linkElement');
+    //   console.log(jobCard, 'jobCard');
+    //   console.log(linkElement, 'linkElement');
 
       const linkText = linkElement ? linkElement.textContent.trim() : 'No title found';
 
       if (linkText === 'No title found') {
         alert('No title found');
-        console.log(document.body, 'delaying for 10 minutes so you can inspect');
+      //   console.log(document.body, 'delaying for 10 minutes so you can inspect');
         await delay(600000);
       }
       // alert(linkText)
@@ -1031,11 +1031,11 @@ async function clickLinksSequentially(jobCards) {
         employer: employer,
         siteId: siteId,
       };
-      console.log(jobData, 'jobData');
+    //   console.log(jobData, 'jobData');
       const stopDupe = stopDupeJobs(jobData);
-      console.log(stopDupe, 'stopDupe');
+    //   console.log(stopDupe, 'stopDupe');
       if (stopDupe) {
-        console.log(stopDupeJobs(jobData), 'stopDupeJobs(jobData)');
+    //     console.log(stopDupeJobs(jobData), 'stopDupeJobs(jobData)');
         dupe = true;
         skipped = true;
         if (autopilotConfig.searchType === 'refresh') {
@@ -1060,7 +1060,7 @@ async function clickLinksSequentially(jobCards) {
         vote_feedback: "",
         previous_jobs: ${JSON.stringify(this.filterAndSortJobs())},
       };
-      console.log(jobDetails, 'jobDetails');
+     //  console.log(jobDetails, 'jobDetails');
 
       if (linkElement && !jobDetails.skipped) {
         if (linkElement.offsetParent === null) {
@@ -1073,9 +1073,9 @@ async function clickLinksSequentially(jobCards) {
 
         jobDetails.description = getJobDescription();
         jobDetails.applicantCount = getApplicantCount();
-        console.log(jobDetails.applicantCount, 'jobDetails.applicantCount');
+      //   console.log(jobDetails.applicantCount, 'jobDetails.applicantCount');
       }
-      console.log(jobDetails, 'jobDetails');
+    //   console.log(jobDetails, 'jobDetails');
 
       try {
        window.electronAPI.jobDiscovered(jobDetails);
@@ -1104,13 +1104,13 @@ async function clickLinksSequentially(jobCards) {
         this.selectors.scaffoldList
       }');
       const shouldStop = await clickLinksSequentially(jobCards);
-      console.log(shouldStop, 'shouldStop');
+    //   console.log(shouldStop, 'shouldStop');
 
-      console.log('Scrolled to bottom and ready to log links.');
-      console.log(autopilotConfig.isPaging, 'autopilotConfig.isPaging')
+    //   console.log('Scrolled to bottom and ready to log links.');
+    //   console.log(autopilotConfig.isPaging, 'autopilotConfig.isPaging')
 
       if (shouldStop) {
-        console.log('Stopping paging due to duplicate job found.');
+   //      console.log('Stopping paging due to duplicate job found.');
         break;
       }
 
@@ -1119,7 +1119,7 @@ async function clickLinksSequentially(jobCards) {
           this.selectors.nextPageButton
         }');
         if (nextPageButton && nextPageButton.offsetParent !== null) {
-          console.log('clicking next page')
+         //  console.log('clicking next page')
           nextPageButton.click();
           await new Promise(resolve => setTimeout(resolve, 4000));
           currentPage++;
@@ -1144,22 +1144,22 @@ if (
       !(window.lastSearchCycleCompleted instanceof Date) ||
       isNaN(Date.parse(window.lastSearchCycleCompleted))
     ) {
-      console.log("No last search cycle completed date found.");
+   //    console.log("No last search cycle completed date found.");
       autopilotConfig.isPaging = true;
     } else if (window.lastSearchCycleCompleted instanceof Date) {
   const timeDifference = new Date() - window.lastSearchCycleCompleted;
   const minutes = Math.floor(timeDifference / 60000);
   const seconds = ((timeDifference % 60000) / 1000).toFixed(0);
-  console.log('Time since Last Search Cycle:', minutes + ':' + seconds);
+ //  console.log('Time since Last Search Cycle:', minutes + ':' + seconds);
   autopilotConfig.isPaging = timeDifference > hoursInMillis;
-  console.log('Time difference is greater than ' + hoursToRefresh + ' hours:', timeDifference > hoursInMillis);
+ //  console.log('Time difference is greater than ' + hoursToRefresh + ' hours:', timeDifference > hoursInMillis);
 } else {
-  console.log('Invalid date format for last search cycle completed.');
+ //  console.log('Invalid date format for last search cycle completed.');
   autopilotConfig.isPaging = false;
 }
 
 autopilotConfig.searchType = autopilotConfig.isPaging ? "full" : "refresh";
-console.log(autopilotConfig, 'autopilotConfig');
+//  console.log(autopilotConfig, 'autopilotConfig');
 
   try {
     const container = document.querySelector('${
@@ -1175,10 +1175,10 @@ console.log(autopilotConfig, 'autopilotConfig');
       this.selectors.noResultsBannerImage
     }');
     if (h1NoJobs && h1NoJobs.offsetParent !== null) {
-      console.log('No Jobs Found for Search!');
+    //   console.log('No Jobs Found for Search!');
       return false;
     } else {
-      console.log('We have jobs!');
+    //   console.log('We have jobs!');
     }
 
     await processJobPages(container);

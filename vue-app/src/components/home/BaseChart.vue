@@ -44,8 +44,8 @@ export default {
     },
   },
   mounted() {
-    console.log(this.data, "this.data");
-    console.log(this.options, "this.options");
+    //    console.log(this.data, "this.data");
+    //   console.log(this.options, "this.options");
   },
 };
 </script>

@@ -84,7 +84,7 @@ export default {
   },
   mounted() {
     if (this.job && this.job.vote !== null) {
-      console.log(this.job, "JobVote");
+      //  console.log(this.job, "JobVote");
       this.currentVote = this.job.vote;
     }
   },
@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     submitVote(vote) {
-      console.log(vote, this.currentVote, "submitVote");
+      //   console.log(vote, this.currentVote, "submitVote");
       if (this.currentVote != null) {
         this.currentVote = null;
         this.feedback = "";
@@ -108,7 +108,7 @@ export default {
         this.currentVote = vote;
         this.dialog = true;
       }
-      console.log(this.currentVote, "this.currentVote");
+      //     console.log(this.currentVote, "this.currentVote");
 
       if (this.currentVote != null) {
         this.dialog = true;
@@ -133,7 +133,7 @@ export default {
         vote: this.currentVote,
         feedback: trimmedFeedback.length > 0 ? trimmedFeedback : null,
       };
-      console.log(voteData, "voteData");
+      //   console.log(voteData, "voteData");
       window.electron.voteJob(voteData);
       this.$emit("jobVoted", voteData);
       // Add your API call here to save the voteData

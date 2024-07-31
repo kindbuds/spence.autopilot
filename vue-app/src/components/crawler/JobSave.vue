@@ -55,7 +55,7 @@ export default {
         jobId: this.job.guid ? this.job.guid : this.job.id,
         saved: this.currentSaved,
       };
-      console.log(saveData, "saveData");
+      //(saveData, "saveData");
       window.electron.userSaveJob(saveData);
       this.$emit("jobSaved", saveData);
     },

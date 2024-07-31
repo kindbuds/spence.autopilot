@@ -44,7 +44,7 @@ export default {
   methods: {
     submitSettings(config) {
       // Handle the final submission of the settings
-      console.log("Setup complete:", config);
+      // console.log("Setup complete:", config);
     },
   },
 };

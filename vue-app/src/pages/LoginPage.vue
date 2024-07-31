@@ -40,10 +40,10 @@ export default {
   },
   methods: {
     redirectToLogin() {
-      window.location.href = `${this.baseDomain}login?autopilot=true`;
+      window.location.href = `${this.baseDomain}login/?autopilot=true`;
     },
     redirectToJoin() {
-      window.location.href = `${this.baseDomain}get-started?autopilot=true`;
+      window.location.href = `${this.baseDomain}join/?autopilot=true`;
     },
   },
 };

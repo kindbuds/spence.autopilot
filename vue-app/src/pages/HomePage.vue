@@ -212,7 +212,7 @@ export default {
     };
   },
   mounted() {
-    console.log("HomePage mounted");
+    //   console.log("HomePage mounted");
 
     if (this.user) {
       this.chartData.data = this.chartDataTotalJobs();
@@ -227,7 +227,7 @@ export default {
       // this.newestMatches = this.getNewestMatches();
     }
 
-    console.log(this.chartData.data, "this.chartData.data");
+    //  console.log(this.chartData.data, "this.chartData.data");
   },
   methods: {
     getTopMatches() {

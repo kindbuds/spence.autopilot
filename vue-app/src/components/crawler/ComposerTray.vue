@@ -123,7 +123,7 @@ export default {
       this.loading = true;
       this.coverLetter = null;
       this.trayData = null;
-      console.log(this.trayData, "this.trayData.watch.job");
+      // console.log(this.trayData, "this.trayData.watch.job");
       this.showTray = false;
     },
   },
@@ -135,15 +135,15 @@ export default {
       const divContent = this.$refs.coverLetterDiv
         ? this.$refs.coverLetterDiv.innerHTML.replace(/<br>/g, "\n")
         : "";
-      console.log(divContent, "divContent");
+      //  console.log(divContent, "divContent");
       this.coverLetter = divContent;
 
-      console.log(this.job, "ComposerTray.job");
+      //   console.log(this.job, "ComposerTray.job");
       const saveData = {
         jobId: this.job.guid ? this.job.guid : this.job.id,
         coverletter: divContent,
       };
-      console.log(saveData, "saveData");
+      //   console.log(saveData, "saveData");
       window.electron.saveCoverletter(saveData);
 
       setTimeout(() => {
@@ -157,9 +157,9 @@ export default {
       const divContent = this.$refs.coverLetterDiv
         ? this.$refs.coverLetterDiv.innerHTML.replace(/<br>/g, "\n")
         : "";
-      console.log(this.$refs, "this.$refs");
-      console.log(this.coverLetter != divContent, "equal?");
-      console.log("checkContentModified");
+      // console.log(this.$refs, "this.$refs");
+      // console.log(this.coverLetter != divContent, "equal?");
+      // console.log("checkContentModified");
       this.contentModified = this.coverLetter != divContent;
     },
     copyCoverLetter() {
@@ -171,9 +171,9 @@ export default {
 
       try {
         document.execCommand("copy");
-        console.log("Cover letter copied to clipboard");
+        //  console.log("Cover letter copied to clipboard");
       } catch (err) {
-        console.error("Failed to copy text: ", err);
+        //   console.error("Failed to copy text: ", err);
       }
 
       selection.removeAllRanges();
@@ -185,13 +185,13 @@ export default {
           JSON.parse(JSON.stringify(this.job))
         );
         // Handle the job content here, e.g., display it in the UI
-        console.log(jobContent);
+        // console.log(jobContent);
       } catch (error) {
         console.error("Error fetching job content:", error);
       }
     },
     async toggleTray() {
-      console.log(this.contentType, "toggleTray");
+      //  console.log(this.contentType, "toggleTray");
 
       if (this.showTray) {
         // Save the current content of the div before collapsing the tray
@@ -211,7 +211,7 @@ export default {
             JSON.parse(JSON.stringify(this.job))
           );
           this.coverLetter = jobContent.coverletter;
-          console.log(jobContent, "jobContent");
+          //  console.log(jobContent, "jobContent");
 
           this.$nextTick(() => {
             this.loading = !this.coverLetter;

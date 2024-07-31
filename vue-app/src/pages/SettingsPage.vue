@@ -42,7 +42,7 @@ export default {
     };
   },
   methods: {
-    submitSettings(config) {
+    submitSettings() {
       // Handle the final submission of the settings
       // console.log("Setup complete:", config);
     },

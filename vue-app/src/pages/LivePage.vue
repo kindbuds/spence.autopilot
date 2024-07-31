@@ -61,10 +61,10 @@ export default {
   },
   mounted() {
     if (window.electron) {
-      window.electron.onJobDetails((jobDetails) => {
-        // ("Job details received in Vue:", jobDetails);
-        // Handle the job details, e.g., store them in Vue data/component state
-      });
+      // window.electron.onJobDetails(() => {
+      //   // ("Job details received in Vue:", jobDetails);
+      //   // Handle the job details, e.g., store them in Vue data/component state
+      // });
     }
 
     // testing week for paging
@@ -79,11 +79,11 @@ export default {
     }
   },
   watch: {
-    selectedJob(newVal, oldVal) {
+    selectedJob() {
       //  console.log("selectedJob changed from", oldVal, "to", newVal);
       this.updateColumns();
     },
-    user(newVal) {
+    user() {
       this.urls.search = `https://www.linkedin.com/jobs/search/?${this.translateLocation()}&sortBy=DD${this.translateSalary()}&f_E=${this.translateExperience()}`;
       //   console.log(this.urls.search, "this.urls.search");
 

@@ -180,7 +180,7 @@ export default {
     },
     async fetchJobContent() {
       try {
-        const jobContent = await window.electron.getJobContent(
+        await window.electron.getJobContent(
           this.contentType,
           JSON.parse(JSON.stringify(this.job))
         );

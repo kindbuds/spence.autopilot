@@ -296,10 +296,10 @@ export default {
     },
   },
   methods: {
-    onWillNavigate(event) {
+    onWillNavigate() {
       //     console.log("Navigation started:", event.url);
     },
-    onDidNavigate(event) {
+    onDidNavigate() {
       //    console.log("Navigation completed:", event.url);
     },
     cleanupWebview() {
@@ -379,7 +379,7 @@ export default {
           });
         `);
     },
-    onJobSaved(saveData) {
+    onJobSaved() {
       //     console.log(saveData, "onJobSaved");
     },
     onJobVoted(voteData) {

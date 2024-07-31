@@ -3,14 +3,11 @@ const auth0 = require('auth0-js');
 const spenceDomain = process.env.SPENCE_DOMAIN
 const redirectUri = `${spenceDomain}oauth_token/?autopilot=true&state=none`
 
-window.env = {
-    SPENCE_DOMAIN: process.env.SPENCE_DOMAIN
-};
-
 contextBridge.exposeInMainWorld(
     'electron',
     {
         SPENCE_DOMAIN: process.env.SPENCE_DOMAIN,
+        AMPLIFY_DOMAIN: process.env.AMPLIFY_DOMAIN,
         ipcRenderer: {
             send: (channel, data) => {
                 ipcRenderer.send(channel, data);

@@ -6,6 +6,7 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const storage = require('electron-json-storage');
 const appData = app.getPath('appData');
+const { AuthenticationClient } = require('auth0');
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')
 eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
@@ -396,10 +397,12 @@ ipcMain.on('variable-request', function (event, arg) {
 });
 
 ipcMain.on('logout', async (event) => {
-    storage.remove('auth', function (error) {
+    storage.remove('auth', async (error) => {
         if (error) throw error;
         console.log('User logged out, auth data removed.');
-        mainWindow.loadURL(`${spenceDomain}logout/?autopilot=true`);
+
+        console.log('LOGGED OUT!')
+        // mainWindow.loadURL(amplifyUri);
         // createLoaderWindow();
     });
 })

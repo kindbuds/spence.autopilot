@@ -25,7 +25,10 @@
     </v-alert>
     <v-row>
       <v-col cols="12">
-        <v-card elevation="0">
+        <v-card
+          elevation="0"
+          :color="context === 'setup' ? 'transparent' : null"
+        >
           <v-card-text class="pa-0" :class="!isMdAndUp ? 'pt-5' : 'pa-5'">
             <v-form ref="setupForm">
               <v-row class="pb-8">
@@ -305,6 +308,7 @@ export default {
 
         setTimeout(() => {
           this.loading = false;
+          this.validateForm();
         }, 1500);
       } catch (error) {
         console.error("Error calling save_config API:", error);

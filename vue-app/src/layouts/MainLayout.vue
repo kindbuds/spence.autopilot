@@ -199,7 +199,7 @@ export default {
 
 .scrollable {
   overflow-y: auto;
-  height: calc(100vh - 64px);
+  height: 100vh !important;
 }
 
 .spence-image {

@@ -5,12 +5,12 @@
   >
     <v-row justify="center" :class="{ 'align-self-start': step === 1 }">
       <v-col cols="12" md="10">
-        <v-card elevation="0">
+        <v-card elevation="0" color="transparent">
           <v-card-text class="pa-0">
             <div v-if="step === 1" style="margin-top: 10vh">
-              <h1 class="text-left">Autopilot Setup</h1>
+              <h1 class="text-left">✈️ Autopilot Setup</h1>
               <v-form>
-                <p class="text-body-1 text-grey-lighten-1 mt-6 mb-10">
+                <p class="text-body-1 text-white mt-6 mb-10">
                   Please describe what you want from your job search in the box
                   below. This information will help me understand your
                   preferences and desired outcomes, allowing me to match you
@@ -25,7 +25,9 @@
                   :rules="[(v) => v.length <= 500 || 'Max 500 characters']"
                 ></v-textarea>
                 <v-btn
-                  color="teal-darken-1"
+                  color="purple darken-2"
+                  size="x-large"
+                  rounded
                   class="float-right"
                   @click="submitJobSearchDetail"
                   >Submit</v-btn
@@ -72,6 +74,7 @@ import { useDisplay } from "vuetify";
 
 export default {
   name: "SetupPage",
+  layout: "blank",
   components: {
     SetupView,
   },
@@ -101,6 +104,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.user, "this.user");
     if (window.electron) {
       if (window.electron.onSetupCompleted) {
         window.electron.onSetupCompleted(async (setupData) => {

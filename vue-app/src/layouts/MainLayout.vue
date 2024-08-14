@@ -40,7 +40,6 @@
         <v-spacer></v-spacer>
 
         <!-- Refresh Button -->
-
         <v-btn
           color="grey"
           v-if="isDevelopment"

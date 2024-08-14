@@ -107,29 +107,44 @@ export default {
       this.selectedJob = job;
     },
     translateLocation() {
+      // 1 = onsite
+      // 2 = remote
+      // 3 = hybrid
+
       if (!this.user) return;
 
-      //   console.log(this.user, "translateLocation");
+      let locationTypes = [];
 
-      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347") {
-        // jeff chiarelli
-        // alert("chia1");
-        let retval = `f_WT=1,3`;
-
-        if (this.user.autopilot.location) {
-          retval += `&location=${this.user.autopilot.location}`;
-        }
-        return retval;
+      // Add respective codes based on the boolean values from the database
+      if (this.user.autopilot.is_onsite) {
+        locationTypes.push(1); // Onsite
+      }
+      if (this.user.autopilot.is_remote) {
+        locationTypes.push(2); // Remote
+      }
+      if (this.user.autopilot.is_hybrid) {
+        locationTypes.push(3); // Hybrid
       }
 
-      if (!this.user.autopilot.location) return "f_WT=2";
+      // Join the location types with commas
+      let locationTypeString = locationTypes.join(",");
 
-      return `f_WT=1,3,2&location=${this.user.autopilot.location}`;
+      // Start constructing the retval string
+      let retval = `f_WT=${locationTypeString}`;
+
+      // Append location if available
+      if (this.user.autopilot.location) {
+        retval += `&location=${encodeURIComponent(
+          this.user.autopilot.location
+        )}`;
+      }
+      return retval;
     },
     translateSalary() {
       if (!this.user) return;
 
-      if (this.user.userid === "0dfad5ac-72ca-4271-aad3-17e2c8b20347") {
+      console.log(this.user.autopilot, "this.user.autopilot");
+      if (this.user.autopilot.disable_salary) {
         // jeff chiarelli
         // alert("chia2");
         return "";

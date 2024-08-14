@@ -30,7 +30,7 @@
           :color="context === 'setup' ? 'transparent' : null"
         >
           <v-card-text class="pa-0" :class="!isMdAndUp ? 'pt-5' : 'pa-5'">
-            <v-form ref="setupForm">
+            <v-form ref="setupForm" v-model="isFormValid">
               <v-row class="pb-8">
                 <v-col cols="12" md="4">
                   <div>
@@ -57,6 +57,7 @@
                     show-ticks="always"
                     thumb-color="teal-accent-2"
                     :hide-details="true"
+                    :disabled="localDisableSalary"
                   >
                     <template v-slot:tick-label="{ tick }">
                       <span
@@ -104,12 +105,81 @@
                 <v-col cols="12" md="8">
                   <v-checkbox
                     label="Remote"
-                    :disabled="true"
                     v-model="localRemote"
                     :hide-details="true"
                     color="teal-accent-2"
                   />
-                  <v-alert>Location support coming soon.</v-alert>
+                  <v-checkbox
+                    label="Hybrid"
+                    v-model="localHybrid"
+                    :hide-details="true"
+                    color="teal-accent-2"
+                  />
+                  <v-checkbox
+                    label="On-site"
+                    v-model="localOnsite"
+                    :hide-details="true"
+                    color="teal-accent-2"
+                  />
+                  <v-alert
+                    type="error"
+                    color="red-lighten-3"
+                    variant="tonal"
+                    v-show="!isAtLeastOneSelected"
+                    transition="scale-transition"
+                    dismissible
+                  >
+                    At least one location type must be selected.
+                  </v-alert>
+                </v-col>
+              </v-row>
+              <v-row v-if="showLocation" class="pb-8">
+                <v-col cols="12" md="4">
+                  <div>
+                    <h2>Search Location</h2>
+                    <p class="text-subtitle-1 text-grey-lighten-1 pt-2">
+                      Specify your preferred geographic location.
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="8">
+                  <v-row no-gutters>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="localLocation"
+                        :rules="[
+                          (v) => {
+                            // Trim the input and check if it's not empty
+                            const trimmed = v.trim();
+                            const isValid = !isLocationRequired || !!trimmed;
+                            console.log(
+                              `Validating: '${trimmed}', isValid: ${isValid}`
+                            );
+                            return isValid || 'Location is required';
+                          },
+                        ]"
+                        :disabled="!isLocationRequired"
+                        class="mb-2"
+                      ></v-text-field>
+
+                      <v-alert variant="tonal" color="grey-darken-3">
+                        <v-checkbox
+                          v-model="localDisableSalary"
+                          label="Disable salary filter?"
+                          :hide-details="true"
+                          class="text-white font-weight-bold"
+                        ></v-checkbox>
+                        <v-container
+                          class="text-grey-lighten-1 text-subtitle-1 pt-0"
+                        >
+                          When you specify a geographic location, you risk
+                          salary ranges not being required in your location and
+                          receiving very few results. Disabling will apply to
+                          onsite, hybrid, and remote searches.
+                        </v-container>
+                      </v-alert>
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
               <v-row class="pb-8">
@@ -224,6 +294,7 @@ export default {
   },
   data() {
     return {
+      isFormValid: false,
       loading: false,
       localSearchTerms: [...this.config.searches],
       localSalary: this.config.salary,
@@ -234,18 +305,34 @@ export default {
       localExperienceLevels: this.config.experience_levels
         ? [...this.config.experience_levels]
         : [],
-      localRemote: true,
+      localRemote: this.config.is_remote,
+      localHybrid: this.config.is_hybrid,
+      localOnsite: this.config.is_onsite,
+      localLocation: this.config.location,
+      localDisableSalary: this.config.disable_salary,
       showTicks: [20000, 100000, 200000],
       juniorExperienceLevels: ["Internship", "Entry", "Associate"],
       seniorExperienceLevels: ["Mid-Senior", "Director", "Executive"],
-      isFormValid: false,
     };
   },
   mounted() {
-    // console.log(this.config, "this.config");
+    this.isFormValid = false;
+    console.log(this.isFormValid, "this.isFormValid");
+    console.log(this.config, "this.config");
     //  this.user.autopilot =
   },
   computed: {
+    isAtLeastOneSelected() {
+      return this.localRemote || this.localHybrid || this.localOnsite;
+    },
+    showLocation() {
+      if (!this.config) return false;
+
+      return this.localHybrid || this.localOnsite;
+    },
+    isLocationRequired() {
+      return this.localHybrid || this.localOnsite;
+    },
     formattedSalary() {
       return `$${this.localSalary
         .toString()
@@ -254,19 +341,43 @@ export default {
   },
   watch: {
     localSearchTerms: {
-      handler() {
-        this.validateForm();
+      async handler() {
+        await this.validateForm();
       },
       deep: true, // Add this line to watch for deep changes
     },
-    localExperienceLevels() {
-      this.validateForm();
+    async localExperienceLevels() {
+      await this.validateForm();
     },
-    localSalary() {
-      this.validateForm();
+    async localSalary() {
+      await this.validateForm();
     },
-    localMaxApplicants() {
-      this.validateForm();
+    async localMaxApplicants() {
+      await this.validateForm();
+    },
+
+    async localRemote() {
+      await this.validateForm();
+    },
+    async localHybrid(newVal) {
+      if (!newVal && !this.localOnsite) {
+        this.localLocation = "";
+        this.localDisableSalary = false;
+      }
+      await this.validateForm();
+    },
+    async localOnsite(newVal) {
+      if (!newVal && !this.localHybrid) {
+        this.localLocation = "";
+        this.localDisableSalary = false;
+      }
+      await this.validateForm();
+    },
+    async localLocation() {
+      await this.validateForm();
+    },
+    async localDisableSalary() {
+      await this.validateForm();
     },
     config: {
       handler(newVal) {
@@ -274,17 +385,29 @@ export default {
         this.localSalary = newVal.salary;
         this.localMaxApplicants = newVal.max_applicants;
         this.localExperienceLevels = newVal.experience_levels;
-        this.localRemote = newVal.remote || true; // Add this line if remote is part of config
+        this.localRemote = newVal.is_remote; // Add this line if remote is part of config
+        this.localHybrid = newVal.is_hybrid;
+        this.localOnsite = newVal.is_onsite;
+        this.localLocation = newVal.location;
+        this.localDisableSalary = newVal.disable_salary;
       },
       deep: true,
     },
   },
   methods: {
-    validateForm() {
-      this.$refs.setupForm.validate();
-      this.isFormValid = this.$refs.setupForm.validate();
+    async validateForm() {
+      console.log("1Form Valid Before Validation:", this.isFormValid);
+      const validObj = await this.$refs.setupForm.validate();
+      this.isFormValid = validObj.valid && this.isAtLeastOneSelected;
+      console.log("1Form Valid After Validation:", this.isFormValid);
     },
     async submitForm() {
+      console.log("2Form Valid Before Validation:", this.isFormValid);
+      const validObj = await this.$refs.setupForm.validate();
+      this.isFormValid = validObj.valid && this.isAtLeastOneSelected;
+      console.log("2Form Valid After Validation:", this.isFormValid);
+      if (!this.isFormValid) return;
+
       this.loading = true;
 
       try {
@@ -300,15 +423,21 @@ export default {
           searches: trimmedSearchTerms,
           about_search: this.localAboutSearch,
           max_applicants: this.localMaxApplicants,
+          location: this.localLocation,
+          is_remote: this.localRemote,
+          is_hybrid: this.localHybrid,
+          is_onsite: this.localOnsite,
+          disable_salary: this.localDisableSalary,
         };
-        //  console.log(config, "config");
+        // console.log(config, "config");
         this.$emit("submit", config);
         this.user.autopilot = config;
         window.electron.saveSettings(JSON.parse(JSON.stringify(config))); // Ensure the object is cloneable
 
-        setTimeout(() => {
+        setTimeout(async () => {
           this.loading = false;
-          this.validateForm();
+          // await this.validateForm();
+          this.isFormValid = false;
         }, 1500);
       } catch (error) {
         console.error("Error calling save_config API:", error);

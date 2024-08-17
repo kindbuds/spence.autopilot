@@ -108,17 +108,20 @@
                     v-model="localRemote"
                     :hide-details="true"
                     color="teal-accent-2"
+                    density="compact"
                   />
                   <v-checkbox
                     label="Hybrid"
                     v-model="localHybrid"
                     :hide-details="true"
+                    density="compact"
                     color="teal-accent-2"
                   />
                   <v-checkbox
                     label="On-site"
                     v-model="localOnsite"
                     :hide-details="true"
+                    density="compact"
                     color="teal-accent-2"
                   />
                   <v-alert
@@ -201,6 +204,7 @@
                         v-model="localExperienceLevels"
                         :value="level"
                         :hide-details="true"
+                        density="compact"
                         color="teal-accent-2"
                       />
                     </v-col>
@@ -212,13 +216,14 @@
                         v-model="localExperienceLevels"
                         :value="level"
                         :hide-details="true"
+                        density="compact"
                         color="teal-accent-2"
                       />
                     </v-col>
                   </v-row>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row class="pb-8">
                 <v-col cols="12" md="4">
                   <div>
                     <h2>Searches</h2>
@@ -240,6 +245,74 @@
                         x-small
                         :hide-details="true"
                       ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+              <v-row class="pb-8">
+                <v-col cols="12" md="4">
+                  <div>
+                    <h2>Negative Keywords</h2>
+                    <p class="text-subtitle-1 text-grey-lighten-1 pt-2">
+                      Filter out job post titles and description by keyword.
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="8">
+                  <v-btn
+                    @click="addNegativeKeyword"
+                    class="mb-4"
+                    color="teal-accent-2"
+                    size="small"
+                    prepend-icon="mdi-plus"
+                    >Add</v-btn
+                  >
+                  <v-row
+                    v-for="(kw, index) in localNegativeKeywords"
+                    :key="index"
+                    class="mb-2"
+                    no-gutters
+                  >
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="kw.keyword"
+                        :ref="`keywordInput-${index}`"
+                        label="Keyword"
+                        dense
+                        :hide-details="true"
+                        :autofocus="true"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      class="d-flex align-center justify-space-between"
+                    >
+                      <span class="text-subtitle-1 text-grey-darken-1">
+                        Applies to:</span
+                      >
+                      <v-radio-group
+                        v-model="kw.applies_to"
+                        inline
+                        :hide-details="true"
+                        class="flex-grow-1"
+                      >
+                        <v-radio label="Title" value="title"></v-radio>
+                        <v-radio
+                          label="Description"
+                          value="description"
+                        ></v-radio>
+                        <v-radio label="Both" value="both"></v-radio>
+                      </v-radio-group>
+                      <v-btn
+                        icon
+                        elevation="0"
+                        color="transparent"
+                        size="x-small"
+                        class="text-red"
+                        @click="removeNegativeKeyword(index)"
+                      >
+                        <v-icon>mdi-trash-can-outline</v-icon>
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-col>
@@ -267,9 +340,11 @@
 <script>
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
+import * as shared from "@/helpers/shared.js";
 
 export default {
   name: "SetupView",
+  emits: ["submit"],
   props: {
     config: {
       type: Object,
@@ -305,11 +380,13 @@ export default {
       localExperienceLevels: this.config.experience_levels
         ? [...this.config.experience_levels]
         : [],
+      localUsage: this.config.usage,
       localRemote: this.config.is_remote,
       localHybrid: this.config.is_hybrid,
       localOnsite: this.config.is_onsite,
       localLocation: this.config.location,
       localDisableSalary: this.config.disable_salary,
+      localNegativeKeywords: this.config.negative_keywords,
       showTicks: [20000, 100000, 200000],
       juniorExperienceLevels: ["Internship", "Entry", "Associate"],
       seniorExperienceLevels: ["Mid-Senior", "Director", "Executive"],
@@ -390,17 +467,25 @@ export default {
         this.localOnsite = newVal.is_onsite;
         this.localLocation = newVal.location;
         this.localDisableSalary = newVal.disable_salary;
+        this.localNegativeKeywords = newVal.negative_keywords;
       },
       deep: true,
     },
   },
   methods: {
+    addNegativeKeyword() {
+      this.localNegativeKeywords.push({ keyword: "", applies_to: "both" });
+    },
+    removeNegativeKeyword(index) {
+      this.localNegativeKeywords.splice(index, 1);
+    },
     async validateForm() {
       console.log("1Form Valid Before Validation:", this.isFormValid);
       const validObj = await this.$refs.setupForm.validate();
       this.isFormValid = validObj.valid && this.isAtLeastOneSelected;
       console.log("1Form Valid After Validation:", this.isFormValid);
     },
+
     async submitForm() {
       console.log("2Form Valid Before Validation:", this.isFormValid);
       const validObj = await this.$refs.setupForm.validate();
@@ -416,6 +501,10 @@ export default {
           .map((term) => term.trim())
           .filter((term) => term !== "");
 
+        const processedKeywords = shared.processKeywords(
+          this.localNegativeKeywords
+        );
+
         const config = {
           guid: this.user.userid,
           salary: this.localSalary,
@@ -428,8 +517,10 @@ export default {
           is_hybrid: this.localHybrid,
           is_onsite: this.localOnsite,
           disable_salary: this.localDisableSalary,
+          negative_keywords: processedKeywords,
+          usage: this.localUsage,
         };
-        // console.log(config, "config");
+        console.log(config, "submitForm.config");
         this.$emit("submit", config);
         this.user.autopilot = config;
         window.electron.saveSettings(JSON.parse(JSON.stringify(config))); // Ensure the object is cloneable
@@ -452,9 +543,18 @@ export default {
 </script>
 
 <style>
-/* .v-slider-track__fill {
-  opacity: 0;
+/* .negative-keyword-container
+{
+  
 } */
+
+.negative-keyword-container .v-radio-group {
+  max-width: calc(100% - 50px); /* Leave space for remove button */
+}
+.negative-keyword-container .v-btn {
+  min-width: 40px; /* Ensures the remove button does not take too much space */
+}
+
 .tick-label {
   font-size: 12px;
   color: wheat !important;

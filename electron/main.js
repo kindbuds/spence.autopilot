@@ -78,6 +78,7 @@ if (!gotTheLock) {
 
             const userData = await loadUserData(gptUser.userid);
             gptUser.existing_jobs = userData.existing_jobs;
+            gptUser.autopilot.usage = userData.usage;
 
             eShared.logtofile(`gptUser: ${JSON.stringify(gptUser)}`);
 
@@ -91,7 +92,7 @@ if (!gotTheLock) {
 
             const userData = await loadUserData(user.userid);
             user.existing_jobs = userData.existing_jobs;
-
+            console.log(userData, 'load-user.userData')
             event.reply('userDataResponse', user);
         });
 
@@ -103,6 +104,8 @@ if (!gotTheLock) {
             const newSetup = await sendToApi(`${api.api2Url}autopilot/setup`, setupData, 'json');
             console.log(newSetup, 'newSetup')
             let user = await eShared.loadUserData();
+            console.log(user, 'user')
+            newSetup.usage = user.usage
             user.autopilot = newSetup
             await eShared.setAuth(user, eShared.logtofile);
             event.sender.send('setup-completed', newSetup);
@@ -110,12 +113,15 @@ if (!gotTheLock) {
 
         ipcMain.on('save-settings', async (event, config) => {
             console.log('main.save-settings', config);
-            let settingsSaved = await sendToApi(`${api.api2Url}autopilot/save_config`, config);
-            console.log(settingsSaved, 'settingsSaved');
+            // let settingsSaved = 
+            await sendToApi(`${api.api2Url}autopilot/save_config`, config);
+            // console.log(settingsSaved, 'settingsSaved');
 
-            let user = await eShared.loadUserData();
-            user.autopilot = config
-            await eShared.setAuth(user, eShared.logtofile);
+            // let user = await eShared.loadUserData();
+            // console.log(user, 'userData.save-settings')
+            // config.usage = user.usage;
+            // user.autopilot = config
+            // await eShared.setAuth(user, eShared.logtofile);
         });
         ipcMain.handle('is-logged-in', async (event) => {
             return await eShared.isLoggedIn();
@@ -276,6 +282,29 @@ async function createWindow(loggedin = null) {
             throw error;
         }
     });
+
+    ipcMain.on('add-negative-keyword', async (event, keyword) => {
+        console.log('in ipcMain.add-negative-keyword')
+        const user = await eShared.loadUserData();
+        const payload = {
+            userid: user.userid,
+            keyword,
+        }
+        await sendToApi(`${api.api2Url}autopilot/negative_kw`, payload);
+    });
+
+    ipcMain.on('add-company-filter', async (event, companyFilter) => {
+        console.log('in ipcMain.add-company-filter')
+        const user = await eShared.loadUserData();
+        const payload = {
+            userid: user.userid,
+            companyFilter,
+        }
+        await sendToApi(`${api.api2Url}autopilot/company_filter`, payload);
+    });
+
+
+
 
 
     // if (isDev)
@@ -505,9 +534,6 @@ ipcMain.on('save-job', async (event, jobData) => {
     let jobUploaded = await sendToApi(`${api.api2Url}autopilot/upload_job`, jobData);
     // console.log(jobUploaded, 'jobUploaded');
 });
-
-
-
 
 
 ipcMain.on('vote-job', async (event, voteData) => {

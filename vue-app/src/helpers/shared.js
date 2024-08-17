@@ -12,6 +12,33 @@ module.exports.delay = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
+module.exports.processKeywords = (keywords) => {
+    const keywordSet = new Set(); // Use a Set to handle duplicates
+
+    return keywords.reduce((acc, keywordObj) => {
+        let { keyword, applies_to } = keywordObj;
+        keyword = keyword.trim().toLowerCase(); // Trim and lowercase the keyword
+
+        // Validate keyword: discard if it's empty or only special characters or numbers
+        if (keyword && /^[a-z0-9]*[a-z][a-z0-9]*$/i.test(keyword)) {
+            // Ensure keyword contains at least one alphabet
+            if (!keywordSet.has(keyword)) {
+                // Check if the keyword has already been added
+                keywordSet.add(keyword);
+                acc.push({ keyword, applies_to });
+            } else {
+                // If the keyword exists, update the 'applies' to 'both' if it is not already 'both'
+                const existingKeyword = acc.find((kw) => kw.keyword === keyword);
+                if (existingKeyword && existingKeyword.applies_to !== "both") {
+                    existingKeyword.applies_to = "both";
+                }
+            }
+        }
+
+        return acc;
+    }, []);
+};
+
 module.exports.lowMidHigh = (strPercent) => {
     if (!strPercent == null) return "high";
     const iPercent = parseInt(strPercent);

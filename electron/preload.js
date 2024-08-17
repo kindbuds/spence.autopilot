@@ -65,6 +65,12 @@ contextBridge.exposeInMainWorld(
                 callback(jobData);
             });
         },
+        addNegativeKeyword: (keyword) => {
+            ipcRenderer.send('add-negative-keyword', keyword);
+        },
+        addCompanyFilter: (companyFilter) => {
+            ipcRenderer.send('add-company-filter', companyFilter);
+        },
         removeJobNewListener: () => {
             ipcRenderer.removeAllListeners('new-job');
         },
@@ -72,7 +78,6 @@ contextBridge.exposeInMainWorld(
             console.log('preload.js.loadUser')
             ipcRenderer.send('load-user')
         },
-
         onAuthComplete: (callback) => ipcRenderer.on('auth-complete', callback),
         sendAuthCallback: (fullUrl) => {
             const urlParams = new URLSearchParams(fullUrl);

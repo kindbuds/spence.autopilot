@@ -1,21 +1,21 @@
 <template>
   <v-btn
     elevation="0"
-    icon="mdi-thumb-up"
-    size="x-small"
-    color="transparent"
-    :class="{ active: currentVote === true }"
-    class="thumb-butt"
-    @click="submitVote(true)"
-  ></v-btn>
-  <v-btn
-    elevation="0"
     icon="mdi-thumb-down"
     size="x-small"
     color="transparent"
     :class="{ active: currentVote === false }"
-    class="thumb-butt"
+    class="thumb-butt down"
     @click="submitVote(false)"
+  ></v-btn>
+  <v-btn
+    elevation="0"
+    icon="mdi-heart"
+    size="x-small"
+    color="transparent"
+    :class="{ active: currentVote === true }"
+    class="thumb-butt heart"
+    @click="submitVote(true)"
   ></v-btn>
   <v-dialog v-model="dialog" max-width="500px">
     <v-card>
@@ -113,7 +113,6 @@ export default {
       if (this.currentVote != null) {
         this.dialog = true;
       }
-
       this.submitFeedback(false);
     },
     saveFeedback() {
@@ -136,6 +135,15 @@ export default {
       //   console.log(voteData, "voteData");
       window.electron.voteJob(voteData);
       this.$emit("jobVoted", voteData);
+
+      //  const saveData = {
+      //         jobId: this.job.guid ? this.job.guid : this.job.id,
+      //         saved: this.currentSaved,
+      //       };
+      //       //(saveData, "saveData");
+      //       window.electron.userSaveJob(saveData);
+      //       this.$emit("jobSaved", saveData);
+
       // Add your API call here to save the voteData
       // Example API call using axios (make sure axios is imported)
       // axios.post('/api/vote', voteData)
@@ -172,8 +180,11 @@ export default {
   position: relative;
   top: 7px;
 }
-.thumb-butt.active {
+.thumb-butt.down.active {
   color: white !important;
   border: 1px solid #ffffff99;
+}
+.thumb-butt.heart.active {
+  color: #ff8096 !important;
 }
 </style>

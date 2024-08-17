@@ -57,7 +57,8 @@
           </v-col>
           <v-col class="ma-0 pa-0 text-right" style="white-space: nowrap">
             <JobVote :job="job" @jobVoted="onJobVoted" />
-            <JobSave :job="job" @jobSaved="onJobSaved" />
+            <!-- <JobSave :job="job" @jobSaved="onJobSaved" /> -->
+            <JobOptions :job="job" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -67,7 +68,8 @@
 
 <script>
 import JobVote from "@/components/crawler/JobVote.vue";
-import JobSave from "@/components/crawler/JobSave.vue";
+import JobOptions from "@/components/crawler/JobOptions.vue";
+// import JobSave from "@/components/crawler/JobSave.vue"; JobSave,
 
 export default {
   props: {
@@ -78,7 +80,7 @@ export default {
   },
   components: {
     JobVote,
-    JobSave,
+    JobOptions,
   },
   computed: {
     isSelected() {

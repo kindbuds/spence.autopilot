@@ -336,9 +336,9 @@ export default {
         if (!webview) return;
         setTimeout(() => {
           try {
-            // webview.openDevTools();
+            webview.openDevTools();
           } catch {
-            //     console.log("openDevTools failed");
+            console.log("openDevTools failed");
           }
 
           if (this.user.last_search_cycle) {
@@ -859,6 +859,10 @@ export default {
     },
     scrollToBottomAndLogLinks(webview, search) {
       try {
+        // console.log(
+        //   this.user.autopilot.negative_keywords,
+        //   "this.user.autopilot.negative_keywords"
+        // );
         // console.log("SCROLLING!");
         return webview.executeJavaScript(`
   (async () => {
@@ -866,7 +870,10 @@ export default {
     const autopilotConfig = {
       isPaging: false,
       searchType: null,
+      negativeKeywords: ${JSON.stringify(this.user.autopilot.negative_keywords)}
     };
+    // alert(JSON.stringify(autopilotConfig.negativeKeywords.length))
+    // console.log(autopilotConfig,'autopilotConfig')
 
     function smoothScrollToBottom(container) {
       return new Promise(resolve => {
@@ -967,6 +974,34 @@ export default {
       return description.replace(/\\s+/g, ' ').trim();
     }
 
+     function stopFiltered(jobData) {
+        console.log('Starting filter check for job:', jobData.title);
+
+        const isFiltered = autopilotConfig.negativeKeywords.some(keywordObj => {
+        console.log('Checking keyword:', keywordObj.keyword, 'with applies setting:', keywordObj.applies_to);
+
+        if (keywordObj.applies_to === 'both' || keywordObj.applies_to === 'title') {
+          const titleContainsKeyword = jobData.title.toLowerCase().includes(keywordObj.keyword.toLowerCase());
+          console.log(\`Title '\${jobData.title}' contains keyword '\${keywordObj.keyword}': \${titleContainsKeyword}\`);
+          return titleContainsKeyword;
+        }
+
+        // Example to extend with 'description' check
+        if (keywordObj.applies_to === 'description' && jobData.description) {
+          const descriptionContainsKeyword = jobData.description.toLowerCase().includes(keywordObj.keyword.toLowerCase());
+          console.log(\`Description '\${jobData.description}' contains keyword '\${keywordObj.keyword}': \${descriptionContainsKeyword}\`);
+          return descriptionContainsKeyword;
+        }
+
+        // Log when no applicable condition matches
+        console.log('No applicable filter condition met for keyword:', keywordObj.keyword);
+        return false;
+      });
+
+     console.log('Filter result for job ' + jobData.title + ':', isFiltered);
+      return isFiltered;
+    }
+
     function stopDupeJobs(jobData) {
      const existingJobs = window.existingJobs || [];
      const siteIdArray = existingJobs.map((m) => m.siteid);
@@ -1031,9 +1066,9 @@ async function clickLinksSequentially(jobCards) {
         employer: employer,
         siteId: siteId,
       };
-    //   console.log(jobData, 'jobData');
+       console.log(jobData, 'jobData');
       const stopDupe = stopDupeJobs(jobData);
-    //   console.log(stopDupe, 'stopDupe');
+       console.log(stopDupe, 'stopDupe');
       if (stopDupe) {
     //     console.log(stopDupeJobs(jobData), 'stopDupeJobs(jobData)');
         dupe = true;
@@ -1044,6 +1079,12 @@ async function clickLinksSequentially(jobCards) {
         }
       }
 
+      let isFiltered = stopFiltered(jobData);
+      console.log(isFiltered, 'isFiltered');
+      if (isFiltered) {
+        skipped = true;        
+      }
+    
       const url = 'https://www.linkedin.com/jobs/search/?currentJobId=' + siteId;
       const jobDetails = {
         domain: '${this.domain}',
@@ -1074,6 +1115,12 @@ async function clickLinksSequentially(jobCards) {
         jobDetails.description = getJobDescription();
         jobDetails.applicantCount = getApplicantCount();
       //   console.log(jobDetails.applicantCount, 'jobDetails.applicantCount');
+      
+        isFiltered = stopFiltered(jobDetails);
+        console.log(isFiltered, 'isFiltered2');
+        if (isFiltered) {
+          jobDetails.skipped = true;        
+        }
       }
     //   console.log(jobDetails, 'jobDetails');
 

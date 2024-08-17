@@ -213,8 +213,7 @@ export default {
       ],
       statusFilterOptions: [
         { text: "All", value: "all" },
-        { text: "Upvoted", value: "upvoted" },
-        { text: "Saved", value: "saved" },
+        { text: "Saved", value: "upvoted" },
       ],
       filteredJobs: [],
       showFilters: false,

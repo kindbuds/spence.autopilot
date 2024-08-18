@@ -37,7 +37,7 @@
         no-gutters
       >
         <JobCard
-          v-for="(job, index) in jobs"
+          v-for="job in jobs"
           :key="job.id"
           context="live"
           :job="job"

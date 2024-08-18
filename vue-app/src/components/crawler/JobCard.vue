@@ -58,7 +58,7 @@
           <v-col class="ma-0 pa-0 text-right" style="white-space: nowrap">
             <JobVote :job="job" @jobVoted="onJobVoted" />
             <!-- <JobSave :job="job" @jobSaved="onJobSaved" /> -->
-            <JobOptions :job="job" />
+            <JobOptions :job="job" @newCompanyFilter="onNewCompanyFilter" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -78,6 +78,7 @@ export default {
     getJobStatusClass: Function,
     context: String,
   },
+  emits: ["newCompanyFilter"],
   components: {
     JobVote,
     JobOptions,
@@ -88,6 +89,9 @@ export default {
     },
   },
   methods: {
+    onNewCompanyFilter(payload) {
+      this.$emit("newCompanyFilter", payload);
+    },
     formatPercentage(percentage) {
       if (!percentage) return;
 

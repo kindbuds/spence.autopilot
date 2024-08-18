@@ -103,16 +103,22 @@
           block
           elevation="0"
           @click="show_company_detail = true"
-          prepend-icon="mdi-filter"
+          :class="{ filtered: isCompanyFiltered }"
+          :prepend-icon="isCompanyFiltered ? 'mdi-check' : 'mdi-filter'"
         >
           Filter Company
         </v-btn>
-        <v-container v-if="show_company_detail" class="pa-0 ma-0 py-3">
+        <v-container
+          v-if="show_company_detail"
+          class="pa-0 ma-0 py-3"
+          :class="{ 'pb-2': companyFilter }"
+        >
           <span class="text-grey text-caption">Filter: </span>
-          <span class="text-orange-accent-1">{{ job.employer_name }}</span>
+          <span class="text-orange-accent-1">{{ getEmployer }}</span>
           <v-form ref="form" v-model="valid">
             <v-container class="ma-0 pa-0">
               <v-checkbox
+                v-if="!companyFilter"
                 v-model="isCompanyFlagged"
                 @change="toggleFlagReason(isCompanyFlagged)"
                 hide-details
@@ -126,7 +132,10 @@
                 </template>
               </v-checkbox>
               <v-container v-if="showFlagReason" class="pa-0">
-                <p class="text-caption text-grey-lighten-1 pb-3">
+                <p
+                  v-if="!companyFilter"
+                  class="text-caption text-grey-lighten-1 pb-3"
+                >
                   Explain why you believe this company is involved in fraudulent
                   job posts or activities. Your report helps protect our
                   community.
@@ -140,6 +149,8 @@
                   dense
                   autofocus
                   :auto-grow="true"
+                  :class="{ 'pt-2': companyFilter && companyFilter.is_flagged }"
+                  :hide-details="companyFilter && companyFilter.is_flagged"
                 ></v-textarea>
               </v-container>
               <v-container
@@ -164,6 +175,13 @@
               </v-container>
             </v-container>
           </v-form>
+          <v-container
+            v-if="companyFilter"
+            class="text-white text-caption pa-0 pt-3"
+          >
+            <v-icon color="teal-accent-2">mdi-check</v-icon>
+            Company filtered
+          </v-container>
         </v-container>
       </v-list-item>
     </v-list>
@@ -174,7 +192,7 @@
 import * as shared from "@/helpers/shared.js";
 export default {
   name: "JobOptions",
-  emits: ["open-modal"],
+  emits: ["newCompanyFilter"],
   props: {
     job: Object,
   },
@@ -215,22 +233,57 @@ export default {
           (/^[a-zA-Z0-9\s]*$/.test(v) && /[a-zA-Z]/.test(v)) ||
           "Keyword cannot be just special characters or numbers.", // Ensures input is not just numbers or special characters and includes alphabetic characters
       ],
+      companyFilter: null,
     };
   },
   watch: {},
-  mounted() {},
-  computed: {},
+  mounted() {
+    // console.log(
+    //   this.user.autopilot.company_filters,
+    //   "this.user.autopilot.company_filters"
+    // );
+    this.companyFilter = this.matchingCompanyFilter;
+    if (this.companyFilter) {
+      this.isCompanyFiltered = true;
+      this.isCompanyFilterSaved = true;
+      this.isCompanyFlagged = this.companyFilter.is_flagged;
+      this.flagReason = this.companyFilter.flag_reason;
+      this.showFlagReason = this.isCompanyFlagged;
+      // this.show_company_detail = true;
+    }
+  },
+  computed: {
+    matchingCompanyFilter() {
+      if (!this.job || !this.user.autopilot.company_filters) {
+        return null;
+      }
+
+      const employerName = this.job.employer_name
+        ? this.job.employer_name.trim().toLowerCase()
+        : "";
+      return this.user.autopilot.company_filters.find(
+        (filter) => filter.company_name_lower === employerName
+      );
+    },
+    getEmployer() {
+      if (!this.job) return;
+      return this.job.employer_name
+        ? this.job.employer_name.trim()
+        : this.job.employer.trim();
+    },
+  },
   methods: {
     submitFlag() {
       if (this.valid) {
+        console.log(this.job, this.flagReason, "submitFlag");
         this.saving_company_filter = true;
         const payload = {
-          company: this.job.employer_name.trim(),
+          company: this.getEmployer,
           flagged: this.isCompanyFlagged,
           reason: this.isCompanyFlagged ? this.flagReason.trim() : null,
         };
         window.electron.addCompanyFilter(payload);
-
+        this.$emit("newCompanyFilter", payload);
         console.log("Submitted:", this.flagReason);
         setTimeout(() => {
           this.saving_company_filter = false;
@@ -244,8 +297,6 @@ export default {
 
     openFilterCompanyModal() {
       this.show_company_detail = !this.show_company_detail;
-
-      // this.$emit("open-modal");
     },
     async addNegativeKeyword() {
       const validationErrors = await this.$refs.negativeKeywordField.validate();
@@ -286,6 +337,9 @@ export default {
 </style>
 
 <style>
+.filtered i {
+  color: #64ffda;
+}
 .radio-applies .v-selection-control .v-label {
   font-weight: normal;
   color: inherit;

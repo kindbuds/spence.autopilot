@@ -143,8 +143,8 @@
           >
             <v-row ref="jobRow" class="job-row" no-gutters>
               <JobCard
-                v-for="(job, index) in visibleJobs"
-                :key="index"
+                v-for="job in visibleJobs"
+                :key="job.id"
                 context="jobs"
                 :job="job"
                 :ref="'job-' + job.id"
@@ -153,6 +153,7 @@
                 @jobSelected="emitJob"
                 @jobVoted="onJobVoted"
                 @jobSaved="onJobSaved"
+                @newCompanyFilter="onNewCompanyFilter"
               />
 
               <div ref="sentinel" class="sentinel"></div>
@@ -187,6 +188,8 @@ export default {
   },
   data() {
     return {
+      companyFilters: [],
+
       individualJob: null,
       visibleJobs: [],
       pageSize: window.innerWidth <= 768 ? 30 : 66, // Adjust these values as needed
@@ -268,6 +271,7 @@ export default {
             return bPercentage - aPercentage;
           });
         this.filterJobs();
+        this.companyFilters = this.user2.autopilot.company_filters;
       },
       {
         deep: true, //add this if u need to watch object properties change etc.
@@ -289,6 +293,9 @@ export default {
     },
   },
   methods: {
+    onNewCompanyFilter(payload) {
+      this.companyFilters.push(shared.transformCompanyFilter(payload));
+    },
     toggleFilters() {
       this.showFilters = !this.showFilters;
     },

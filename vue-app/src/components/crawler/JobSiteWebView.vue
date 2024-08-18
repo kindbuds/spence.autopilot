@@ -38,7 +38,7 @@
       >
         <JobCard
           v-for="(job, index) in jobs"
-          :key="index"
+          :key="job.id"
           context="live"
           :job="job"
           :ref="'job-' + job.id"
@@ -47,6 +47,7 @@
           @jobSelected="emitJob"
           @jobVoted="onJobVoted"
           @jobSaved="onJobSaved"
+          @newCompanyFilter="onNewCompanyFilter"
         />
       </v-row>
       <v-container v-else-if="initialized" class="fill-height" fluid>
@@ -196,6 +197,7 @@ export default {
   },
   data() {
     return {
+      companyFilters: [],
       getJobStatusClass: shared.getJobStatusClass,
       hideOverlay: false,
       lastSearchCycleCompleted: null,
@@ -248,24 +250,29 @@ export default {
       window.electron.onUserReloaded(async (event, userdata) => {
         this.user_loaded = true;
         this.working_job_count = userdata.autopilot.usage.daily_job_count;
-        // console.log(this.user, userdata, "Received user reloaded");
+        this.companyFilters = userdata.autopilot.company_filters;
+        console.log(this.companyFilters, "onUserReloaded.companyFilters");
 
         await this.fetchPreloadPath();
         let guid = shared.getGuid();
         this.sessionID = guid;
 
-        const webview = document.querySelector("webview");
-        if (!webview) {
-          console.error("Webview is not initialized.");
-          return;
-        }
-        webview.preload = this.preload;
-        // console.log(webview.preload, "webview.preload");
+        setTimeout(async () => {
+          const webview = document.querySelector("webview");
+          if (!webview) {
+            console.error("onUserReloaded.Webview is not initialized.");
+            return;
+          }
+          webview.preload = this.preload;
+          // console.log(webview.preload, "webview.preload");
 
-        //  console.log(userdata.autopilot, "this.user.autopilot");
-        //  console.log(userdata.autopilot.usage, "this.user.autopilot.usage");
-        this.can_generate_percents = userdata.autopilot.usage.generate_percents;
-        await this.startQueueProcessing();
+          //  console.log(userdata.autopilot, "this.user.autopilot");
+          //  console.log(userdata.autopilot.usage, "this.user.autopilot.usage");
+          this.can_generate_percents =
+            userdata.autopilot.usage.generate_percents;
+
+          await this.startQueueProcessing();
+        }, 1000);
       });
     }
     window.addEventListener("beforeunload", this.cleanupWebview);
@@ -296,6 +303,27 @@ export default {
     },
   },
   methods: {
+    onNewCompanyFilter(payload) {
+      // alert("in JobSiteWebView.onNewCompanyFilter!");
+      this.companyFilters.push(shared.transformCompanyFilter(payload));
+
+      const webview = this.$refs.linkedinWebView;
+      if (!webview) {
+        console.error("Webview is not initialized.");
+        return;
+      }
+      try {
+        return webview.executeJavaScript(`
+      (async () => {
+        window.autopilotConfig.companyFilters = ${JSON.stringify(
+          this.companyFilters
+        )};
+        console.log(window.autopilotConfig.companyFilters, 'RESET window.autopilotConfig.companyFilters');
+      })();`);
+      } catch (exc) {
+        console.error("resetting window.autopilotConfig.companyFilters failed");
+      }
+    },
     onWillNavigate() {
       //     console.log("Navigation started:", event.url);
     },
@@ -867,13 +895,16 @@ export default {
         return webview.executeJavaScript(`
   (async () => {
     window.continueProcessing = () => {};
-    const autopilotConfig = {
+    window.autopilotConfig = {
       isPaging: false,
       searchType: null,
-      negativeKeywords: ${JSON.stringify(this.user.autopilot.negative_keywords)}
+      negativeKeywords: ${JSON.stringify(
+        this.user.autopilot.negative_keywords
+      )},
+      companyFilters: ${JSON.stringify(this.companyFilters)},
     };
-    // alert(JSON.stringify(autopilotConfig.negativeKeywords.length))
-    // console.log(autopilotConfig,'autopilotConfig')
+    // alert(JSON.stringify(window.autopilotConfig.negativeKeywords.length))
+    // console.log(window.autopilotConfig,'window.autopilotConfig')
 
     function smoothScrollToBottom(container) {
       return new Promise(resolve => {
@@ -974,22 +1005,43 @@ export default {
       return description.replace(/\\s+/g, ' ').trim();
     }
 
-     function stopFiltered(jobData) {
-        console.log('Starting filter check for job:', jobData.title);
+    function stopFilteredCompany(jobData) {
+    // console.log('Starting company filter check for job:', jobData.employer);
 
-        const isFiltered = autopilotConfig.negativeKeywords.some(keywordObj => {
-        console.log('Checking keyword:', keywordObj.keyword, 'with applies setting:', keywordObj.applies_to);
+    const isFiltered = window.autopilotConfig.companyFilters.some(companyFilter => {
+        // Check if the job's employer (lowercased) matches any lowercased company names in the filters
+        const employerMatches = jobData.employer.toLowerCase() === companyFilter.company_name_lower;
+       
+        // console.log('Checking employer: ', jobData.employer, ' against filtered company: ', companyFilter.company_name,'. Match found: ',employerMatches);
+
+        if (employerMatches) {
+            console.log(' >> Job from ',  jobData.employer, ' is FILTERED out due to existing company filter');
+            return true;  // Stop the job from being processed further
+        }
+
+        return false;  // No need to filter this job, continue checking others
+    });
+
+    console.log('Filter result for company ' + jobData.employer + ':', isFiltered);
+    return isFiltered;
+}
+
+     function stopFiltered(jobData) {
+        // console.log('Starting filter check for job:', jobData.title);
+
+        const isFiltered = window.autopilotConfig.negativeKeywords.some(keywordObj => {
+        // console.log('Checking keyword:', keywordObj.keyword, 'with applies setting:', keywordObj.applies_to);
 
         if (keywordObj.applies_to === 'both' || keywordObj.applies_to === 'title') {
           const titleContainsKeyword = jobData.title.toLowerCase().includes(keywordObj.keyword.toLowerCase());
-          console.log(\`Title '\${jobData.title}' contains keyword '\${keywordObj.keyword}': \${titleContainsKeyword}\`);
+         // console.log(\`Title '\${jobData.title}' contains keyword '\${keywordObj.keyword}': \${titleContainsKeyword}\`);
           return titleContainsKeyword;
         }
 
         // Example to extend with 'description' check
         if (keywordObj.applies_to === 'description' && jobData.description) {
           const descriptionContainsKeyword = jobData.description.toLowerCase().includes(keywordObj.keyword.toLowerCase());
-          console.log(\`Description '\${jobData.description}' contains keyword '\${keywordObj.keyword}': \${descriptionContainsKeyword}\`);
+         // console.log(\`Description '\${jobData.description}' contains keyword '\${keywordObj.keyword}': \${descriptionContainsKeyword}\`);
           return descriptionContainsKeyword;
         }
 
@@ -1067,22 +1119,34 @@ async function clickLinksSequentially(jobCards) {
         siteId: siteId,
       };
        console.log(jobData, 'jobData');
+
       const stopDupe = stopDupeJobs(jobData);
        console.log(stopDupe, 'stopDupe');
       if (stopDupe) {
     //     console.log(stopDupeJobs(jobData), 'stopDupeJobs(jobData)');
         dupe = true;
         skipped = true;
-        if (autopilotConfig.searchType === 'refresh') {
+        if (window.autopilotConfig.searchType === 'refresh') {
           resolve(true);
           return;
         }
+      }     
+
+      let isFilteredCompany = false;
+      if(!stopDupe) {
+        isFilteredCompany = stopFilteredCompany(jobData);
+        // console.log(isFilteredCompany, 'isFilteredCompany');
+        if (isFilteredCompany) {
+          skipped = true;        
+        }
       }
 
-      let isFiltered = stopFiltered(jobData);
-      console.log(isFiltered, 'isFiltered');
-      if (isFiltered) {
-        skipped = true;        
+      if(!isFilteredCompany) {      
+          let isFiltered = stopFiltered(jobData);
+          console.log(isFiltered, 'isFiltered');
+          if (isFiltered) {
+            skipped = true;        
+          }
       }
     
       const url = 'https://www.linkedin.com/jobs/search/?currentJobId=' + siteId;
@@ -1117,7 +1181,7 @@ async function clickLinksSequentially(jobCards) {
       //   console.log(jobDetails.applicantCount, 'jobDetails.applicantCount');
       
         isFiltered = stopFiltered(jobDetails);
-        console.log(isFiltered, 'isFiltered2');
+        // console.log(isFiltered, 'isFiltered2');
         if (isFiltered) {
           jobDetails.skipped = true;        
         }
@@ -1154,14 +1218,14 @@ async function clickLinksSequentially(jobCards) {
     //   console.log(shouldStop, 'shouldStop');
 
     //   console.log('Scrolled to bottom and ready to log links.');
-    //   console.log(autopilotConfig.isPaging, 'autopilotConfig.isPaging')
+    //   console.log(window.autopilotConfig.isPaging, 'window.autopilotConfig.isPaging')
 
       if (shouldStop) {
    //      console.log('Stopping paging due to duplicate job found.');
         break;
       }
 
-      if (currentPage < maxPages && autopilotConfig.isPaging) {
+      if (currentPage < maxPages && window.autopilotConfig.isPaging) {
         const nextPageButton = document.querySelector('${
           this.selectors.nextPageButton
         }');
@@ -1192,21 +1256,21 @@ if (
       isNaN(Date.parse(window.lastSearchCycleCompleted))
     ) {
    //    console.log("No last search cycle completed date found.");
-      autopilotConfig.isPaging = true;
+      window.autopilotConfig.isPaging = true;
     } else if (window.lastSearchCycleCompleted instanceof Date) {
   const timeDifference = new Date() - window.lastSearchCycleCompleted;
   const minutes = Math.floor(timeDifference / 60000);
   const seconds = ((timeDifference % 60000) / 1000).toFixed(0);
  //  console.log('Time since Last Search Cycle:', minutes + ':' + seconds);
-  autopilotConfig.isPaging = timeDifference > hoursInMillis;
+  window.autopilotConfig.isPaging = timeDifference > hoursInMillis;
  //  console.log('Time difference is greater than ' + hoursToRefresh + ' hours:', timeDifference > hoursInMillis);
 } else {
  //  console.log('Invalid date format for last search cycle completed.');
-  autopilotConfig.isPaging = false;
+  window.autopilotConfig.isPaging = false;
 }
 
-autopilotConfig.searchType = autopilotConfig.isPaging ? "full" : "refresh";
-//  console.log(autopilotConfig, 'autopilotConfig');
+window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "refresh";
+//  console.log(window.autopilotConfig, 'window.autopilotConfig');
 
   try {
     const container = document.querySelector('${

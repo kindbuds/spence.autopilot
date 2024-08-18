@@ -249,7 +249,7 @@
                   </v-row>
                 </v-col>
               </v-row>
-              <v-row class="pb-8">
+              <v-row v-if="context !== 'setup'" class="pb-8">
                 <v-col cols="12" md="4">
                   <div>
                     <h2>Negative Keywords</h2>
@@ -268,7 +268,7 @@
                     >Add</v-btn
                   >
                   <v-row
-                    v-for="(kw, index) in localNegativeKeywords"
+                    v-for="(kw, index) in paginatedKeywords"
                     :key="index"
                     class="mb-2"
                     no-gutters
@@ -276,11 +276,10 @@
                     <v-col cols="12">
                       <v-text-field
                         v-model="kw.keyword"
-                        :ref="`keywordInput-${index}`"
+                        :ref="`keywordInput${index}`"
                         label="Keyword"
                         dense
                         :hide-details="true"
-                        :autofocus="true"
                       ></v-text-field>
                     </v-col>
                     <v-col
@@ -315,6 +314,111 @@
                       </v-btn>
                     </v-col>
                   </v-row>
+                  <v-container v-if="totalNegativePages > 1" class="pa-0 pt-2">
+                    <v-btn
+                      elevation="0"
+                      variant="outlined"
+                      icon="mdi-chevron-left"
+                      size="x-small"
+                      class="mr-2"
+                      @click="
+                        negative.currentPage > 1
+                          ? negative.currentPage--
+                          : negative.currentPage
+                      "
+                      :disabled="negative.currentPage <= 1"
+                    >
+                    </v-btn>
+                    <span class="text-grey-lighten-1"
+                      >Page {{ negative.currentPage }} of
+                      {{ totalNegativePages }}</span
+                    >
+                    <v-btn
+                      elevation="0"
+                      variant="outlined"
+                      icon="mdi-chevron-right"
+                      size="x-small"
+                      class="ml-2"
+                      @click="
+                        negative.currentPage < totalNegativePages
+                          ? negative.currentPage++
+                          : negative.currentPage
+                      "
+                      :disabled="negative.currentPage >= totalNegativePages"
+                    >
+                    </v-btn>
+                  </v-container>
+                </v-col>
+              </v-row>
+              <v-row v-if="context !== 'setup'" class="pb-8">
+                <v-col cols="12" md="4">
+                  <div>
+                    <h2>Company Filters</h2>
+                    <p class="text-subtitle-1 text-grey-lighten-1 pt-2">
+                      Manage your company filters.
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="8">
+                  <v-list>
+                    <v-list-item
+                      v-for="(filter, index) in paginatedCompanyFilters"
+                      :key="filter.company_name"
+                      class="text-body-1"
+                    >
+                      <v-row no-gutters>
+                        <v-col class="ma-0 pa-0" cols="10">
+                          {{ filter.company_name }}
+                        </v-col>
+                        <v-col class="ma-0 pa-0" cols="2">
+                          <v-btn
+                            icon
+                            elevation="0"
+                            color="transparent"
+                            size="x-small"
+                            class="text-red"
+                            @click="removeCompanyFilter(index)"
+                          >
+                            <v-icon>mdi-trash-can-outline</v-icon>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-list-item>
+                  </v-list>
+                  <v-container v-if="totalCompanyPages > 1" class="pa-0 pt-2">
+                    <v-btn
+                      elevation="0"
+                      variant="outlined"
+                      icon="mdi-chevron-left"
+                      size="x-small"
+                      class="mr-2"
+                      @click="
+                        company.currentPage > 1
+                          ? company.currentPage--
+                          : company.currentPage
+                      "
+                      :disabled="company.currentPage <= 1"
+                    >
+                    </v-btn>
+                    <span class="text-grey-lighten-1"
+                      >Page {{ company.currentPage }} of
+                      {{ totalCompanyPages }}</span
+                    >
+                    <v-btn
+                      elevation="0"
+                      variant="outlined"
+                      icon="mdi-chevron-right"
+                      size="x-small"
+                      class="ml-2"
+                      @click="
+                        company.currentPage < totalCompanyPages
+                          ? company.currentPage++
+                          : company.currentPage
+                      "
+                      :disabled="company.currentPage >= totalCompanyPages"
+                    >
+                    </v-btn>
+                  </v-container>
                 </v-col>
               </v-row>
               <v-row>
@@ -387,9 +491,18 @@ export default {
       localLocation: this.config.location,
       localDisableSalary: this.config.disable_salary,
       localNegativeKeywords: this.config.negative_keywords,
+      localCompanyFilters: this.config.company_filters,
       showTicks: [20000, 100000, 200000],
       juniorExperienceLevels: ["Internship", "Entry", "Associate"],
       seniorExperienceLevels: ["Mid-Senior", "Director", "Executive"],
+      negative: {
+        currentPage: 1,
+        perPage: 5,
+      },
+      company: {
+        currentPage: 1,
+        perPage: 5,
+      },
     };
   },
   mounted() {
@@ -399,6 +512,24 @@ export default {
     //  this.user.autopilot =
   },
   computed: {
+    paginatedCompanyFilters() {
+      const start = (this.company.currentPage - 1) * this.company.perPage;
+      const end = start + this.company.perPage;
+      return this.localCompanyFilters.slice(start, end);
+    },
+    totalCompanyPages() {
+      return Math.ceil(this.localCompanyFilters.length / this.company.perPage);
+    },
+    totalNegativePages() {
+      return Math.ceil(
+        this.localNegativeKeywords.length / this.negative.perPage
+      );
+    },
+    paginatedKeywords() {
+      let start = (this.negative.currentPage - 1) * this.negative.perPage;
+      let end = start + this.negative.perPage;
+      return this.localNegativeKeywords.slice(start, end);
+    },
     isAtLeastOneSelected() {
       return this.localRemote || this.localHybrid || this.localOnsite;
     },
@@ -468,16 +599,51 @@ export default {
         this.localLocation = newVal.location;
         this.localDisableSalary = newVal.disable_salary;
         this.localNegativeKeywords = newVal.negative_keywords;
+        this.localCompanyFilters = newVal.company_filters;
       },
       deep: true,
     },
   },
   methods: {
+    removeCompanyFilter(index) {
+      const globalIndex =
+        (this.company.currentPage - 1) * this.company.perPage + index;
+      this.localCompanyFilters.splice(globalIndex, 1); // Adjust index to global and remove
+
+      // After removal, check if there are no items left on the current page
+      if (
+        this.paginatedCompanyFilters.length === 0 &&
+        this.company.currentPage > 1
+      ) {
+        // If the current page is not the first page and it's empty, move to the previous page
+        this.company.currentPage--;
+      }
+    },
+
     addNegativeKeyword() {
-      this.localNegativeKeywords.push({ keyword: "", applies_to: "both" });
+      this.negative.currentPage = 1;
+      this.localNegativeKeywords.unshift({ keyword: "", applies_to: "both" });
+      this.$nextTick(() => {
+        console.log(this.$refs, "this.$refs");
+        // const inputRef = `keywordInput0`; // Since it's always added at the top, index is 0
+        if (this.$refs.keywordInput0) {
+          this.$refs.keywordInput0[0].focus();
+        }
+      });
     },
     removeNegativeKeyword(index) {
-      this.localNegativeKeywords.splice(index, 1);
+      // Calculate the global index in the full list
+      const globalIndex =
+        (this.negative.currentPage - 1) * this.negative.perPage + index;
+      this.localNegativeKeywords.splice(globalIndex, 1); // Remove the item using the global index
+
+      // After removal, check if there are no items left on the current page and there's another page to go back to
+      if (
+        this.paginatedKeywords.length === 0 &&
+        this.negative.currentPage > 1
+      ) {
+        this.negative.currentPage--; // Move back one page if the current page is empty
+      }
     },
     async validateForm() {
       console.log("1Form Valid Before Validation:", this.isFormValid);
@@ -485,7 +651,6 @@ export default {
       this.isFormValid = validObj.valid && this.isAtLeastOneSelected;
       console.log("1Form Valid After Validation:", this.isFormValid);
     },
-
     async submitForm() {
       console.log("2Form Valid Before Validation:", this.isFormValid);
       const validObj = await this.$refs.setupForm.validate();
@@ -518,6 +683,7 @@ export default {
           is_onsite: this.localOnsite,
           disable_salary: this.localDisableSalary,
           negative_keywords: processedKeywords,
+          company_filters: this.localCompanyFilters,
           usage: this.localUsage,
         };
         console.log(config, "submitForm.config");

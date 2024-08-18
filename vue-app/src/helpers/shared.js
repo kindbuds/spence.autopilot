@@ -11,7 +11,13 @@ module.exports.getGuid = () => {
 module.exports.delay = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
-
+module.exports.transformCompanyFilter = (payload) => {
+    payload.company_name = payload.company;
+    payload.company_name_lower = payload.company.toLowerCase();
+    payload.is_flagged = payload.flagged;
+    payload.flag_reason = payload.reason;
+    return payload
+}
 module.exports.processKeywords = (keywords) => {
     const keywordSet = new Set(); // Use a Set to handle duplicates
 

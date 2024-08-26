@@ -42,9 +42,9 @@ jobs:
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-      CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }} # Placeholder: Your certificate password
-      APPLE_ID: ${{ secrets.APPLE_ID }} # Placeholder: Your Apple ID
-      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }} # Placeholder: Your Apple app-specific password
+      CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -60,20 +60,23 @@ jobs:
           cd electron
           npm install
 
+      - name: Decode and save the certificate
+        run: |
+          echo "${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}" | base64 --decode > electron/developerID_application.p12
+
       - name: Import Apple Developer Certificate
         run: |
           security create-keychain -p actions build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p actions build.keychain
-          security import electron/developerID_application.p12 -k build.keychain -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign -v
-          security set-key-partition-list -S apple-tool:,apple: -s -k actions build.keychain
+          security import electron/developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k build.keychain
 
       - name: Build and Sign the App for macOS
         run: |
           cd electron
           npm run make
-          # Replace "Developer ID Application: Your Name (TeamID)" with your actual certificate name
-          codesign --deep --force --verbose --sign "Developer ID Application: Kind Buds, LLC" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence AI Career Autopilot.app
+          codesign --deep --force --verbose --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence AI Career Autopilot.app
 
       - name: Notarize the App (Optional but Recommended)
         run: |

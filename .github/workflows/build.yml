@@ -50,16 +50,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16'
-
-      - name: Install dependencies
-        run: |
-          cd electron
-          npm install
-
       - name: Decode and save the certificate
         run: |
           echo "${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}" | base64 --decode > electron/new_developerID_application.p12
@@ -71,6 +61,16 @@ jobs:
           security unlock-keychain -p actions build.keychain
           security import electron/new_developerID_application.p12 -k build.keychain -P "$MACOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k build.keychain
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd electron
+          npm install
 
       - name: Build and Sign the App for macOS
         run: |

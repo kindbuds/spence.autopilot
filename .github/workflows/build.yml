@@ -84,7 +84,7 @@ jobs:
         run: |
           cd electron
           npm run make
-          codesign --deep --force --verbose=4 --options runtime --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence AI Career Autopilot.app
+          codesign --deep --force --verbose --options runtime --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence AI Career Autopilot.app
 
       - name: Notarize the App (Optional but Recommended)
         run: |

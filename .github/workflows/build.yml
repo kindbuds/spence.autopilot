@@ -68,7 +68,7 @@ jobs:
 
       - name: Set key partition list
         run: |
-          security set-key-partition-list -S apple-tool:,apple: -s -k build.keychain -P "$CERTIFICATE_PASSWORD"
+          security set-key-partition-list -S apple-tool:,apple: -k "$CERTIFICATE_PASSWORD" build.keychain
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

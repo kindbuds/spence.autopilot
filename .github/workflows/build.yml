@@ -52,15 +52,23 @@ jobs:
 
       - name: Decode and save the certificate
         run: |
-          echo "${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}"
+          echo "${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}" | base64 --decode > electron/new_developerID_application.p12
 
-      - name: Import Apple Developer Certificate
+      - name: Create and unlock the keychain
         run: |
           security create-keychain -p actions build.keychain
+          security list-keychains -s build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p actions build.keychain
-          security import electron/developerID_application.p12 -k build.keychain -P "D@llas45549" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k build.keychain
+          security set-keychain-settings -t 3600 -u build.keychain
+
+      - name: Import the certificate into the keychain
+        run: |
+          security import electron/new_developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+
+      - name: Set key partition list
+        run: |
+          security set-key-partition-list -S apple-tool:,apple: -s -k build.keychain -P "$CERTIFICATE_PASSWORD"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

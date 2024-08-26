@@ -661,6 +661,7 @@ export default {
       }
 
       if (this.jobQueue.length > 0) {
+        console.log(this.jobQueue, "this.jobQueue");
         this.processingQueue = true;
         const jobData = this.jobQueue.shift();
 
@@ -671,7 +672,7 @@ export default {
         // console.log(delay, "delay");
         setTimeout(async () => {
           this.jobs.push(jobData);
-          //    console.log(this.jobs, "this.jobs");
+          console.log(this.jobs, "this.jobs");
           if (!jobData.dupe) {
             // console.log(jobData, " > sending job to db");
             window.electron.saveJob(JSON.parse(JSON.stringify(jobData)));
@@ -1353,7 +1354,7 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   bottom: 0;
   display: flex;
   flex-direction: column;
-  margin-bottom: 52px;
+  height: calc(100vh - 115px);
 }
 .job-master {
   position: relative;

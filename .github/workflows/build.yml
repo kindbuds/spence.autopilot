@@ -6,13 +6,9 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest
-    # strategy:
-    #   matrix:
-    #     os: [macos-latest, windows-latest]
-
-    timeout-minutes: 20  # Adjust the timeout to 20 minutes
+    timeout-minutes: 20
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -27,53 +23,64 @@ jobs:
         with:
           node-version: '16'
 
-      # - name: Set up Python (macOS only)
-      #   if: matrix.os == 'macos-latest'
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.10'
-
-      # - name: Set up Python virtual environment (macOS only)
-      #   if: matrix.os == 'macos-latest'
-      #   run: |
-      #     python3 -m venv venv
-      #     source venv/bin/activate
-      #     python3 -m pip install --upgrade pip
-      #     python3 -m pip install setuptools wheel
-
-      - name: Install dependencies and build the app
+      - name: Install dependencies and build the app for Windows
         run: |
           cd electron
           npm install
           npm run make  
 
-      - name: Upload artifact
+      - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-latest-build
           path: electron/out/make/*
-    
-  release:
-    needs: build
-    runs-on: ubuntu-latest
+
+  build-macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
 
     env:
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }} # Placeholder: Your certificate password
+      APPLE_ID: ${{ secrets.APPLE_ID }} # Placeholder: Your Apple ID
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }} # Placeholder: Your Apple app-specific password
 
     steps:
-      - name: Download Windows artifacts
-        uses: actions/download-artifact@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          name: windows-latest-build
-          path: ./dist/windows
-     
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd electron
+          npm install
+
+      - name: Import Apple Developer Certificate
+        run: |
+          security create-keychain -p actions build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p actions build.keychain
+          security import electron/developerID_application.p12 -k build.keychain -P $CERTIFICATE_PASSWORD -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k actions build.keychain
+
+      - name: Build and Sign the App for macOS
+        run: |
+          cd electron
+          npm run make
+          # Replace "Developer ID Application: Your Name (TeamID)" with your actual certificate name
+          codesign --deep --force --verbose --sign "Developer ID Application: Kind Buds, LLC" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence AI Career Autopilot.app
+
+      - name: Notarize the App (Optional but Recommended)
+        run: |
+          xcrun altool --notarize-app --primary-bundle-id "com.your.bundle.id" --username "$APPLE_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD" --file electron/out/make/mac/Spence AI Career Autopilot.app
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
         with:
-          files: |
-            ./dist/windows/squirrel.windows/x64/*.exe
-            ./dist/windows/squirrel.windows/x64/*.nupkg
-            ./dist/windows/squirrel.windows/x64/RELEASES
-          draft: false
-          prerelease: false
+          name: macos-latest-build
+          path: electron/out/make/*

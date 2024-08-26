@@ -59,7 +59,7 @@ jobs:
           security create-keychain -p actions build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p actions build.keychain
-          security import electron/new_developerID_application.p12 -k build.keychain -P "D@llas45549" -T /usr/bin/codesign
+          security import electron/developerID_application.p12 -k build.keychain -P "D@llas45549" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k build.keychain
 
       - name: Set up Node.js

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog, autoUpdater } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog } = require('electron');
 // const { autoUpdater } = require('electron-updater');
 const { build } = require('./package.json');
 const path = require('path');
@@ -113,7 +113,7 @@ if (!gotTheLock) {
 
         ipcMain.on('save-settings', async (event, config) => {
             console.log('main.save-settings', config);
-            // let settingsSaved = 
+            // let settingsSaved =
             await sendToApi(`${api.api2Url}autopilot/save_config`, config);
             // console.log(settingsSaved, 'settingsSaved');
 

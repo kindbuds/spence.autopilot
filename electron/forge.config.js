@@ -46,17 +46,18 @@ module.exports = {
     ignore: [
       'node_modules/fs-xattr'
     ],
-    osxSign: {
-      identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
-      hardenedRuntime: true,
-      entitlements: entitlementsPath, // Path to your entitlements file
-      entitlementsInherit: entitlementsPath, // Path to your entitlements file
-      gatekeeperAssess: false,
-      'gatekeeper-assess': false,
-      'deep': true,
-      'keychain': 'login.keychain-db'
-      // 'keychain-profile': p12Path // Path to your p12 file
-    },
+    osxSign: false,
+    // {
+    //   identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
+    //   hardenedRuntime: true,
+    //   entitlements: entitlementsPath, // Path to your entitlements file
+    //   entitlementsInherit: entitlementsPath, // Path to your entitlements file
+    //   gatekeeperAssess: false,
+    //   'gatekeeper-assess': false,
+    //   'deep': true,
+    //   'keychain': 'login.keychain-db'
+    //   // 'keychain-profile': p12Path // Path to your p12 file
+    // },
     osxNotarize: {
       appleId: "jeff.borden@kindbuds.us", // Replace with your Apple ID
       appleIdPassword: "lhua-eecg-lvgg-tshh" // Replace with your app-specific password

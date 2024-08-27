@@ -67,10 +67,16 @@ jobs:
           security default-keychain -s build.keychain
           security unlock-keychain -p actions build.keychain
           security set-keychain-settings -t 3600 -u build.keychain
+          security import electron/developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k actions "/Users/runner/Library/Keychains/build.keychain-db"
 
       - name: Import the certificate into the keychain
         run: |
           security import electron/developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+
+      - name: Set key partition list
+        run: |
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$CERTIFICATE_PASSWORD" /Users/runner/Library/Keychains/build.keychain-db
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -87,14 +93,34 @@ jobs:
           cd electron
           npm run make
 
-      - name: Sign the App
+      - name: Sign the individual binaries
         run: |
-          codesign --deep --force --verbose --options runtime --no-strict --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app
+          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+          APP_PATH="electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app"
 
-      - name: Create ZIP of the App
+          # Sign the main binary
+          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
+
+          # Sign all frameworks
+          for framework in "$APP_PATH/Contents/Frameworks/"*; do
+              codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$framework"
+          done
+
+      - name: Sign the entire App bundle
         run: |
-          cd electron/out/make/Spence-AI-Career-Autopilot-darwin-x64
-          zip -r Spence-AI-Career-Autopilot.zip Spence-AI-Career-Autopilot.app
+          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+          APP_PATH="electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app"
+          codesign --deep --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH"
+
+      - name: Verify the Signature
+        run: |
+          APP_PATH="electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app"
+          codesign --verify --deep --strict --verbose=2 "$APP_PATH"
+
+      - name: Package the App
+        run: |
+          cd electron/out/make/
+          zip -r Spence-AI-Career-Autopilot.zip Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app
 
       - name: Notarize the App
         run: |

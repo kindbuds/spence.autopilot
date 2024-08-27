@@ -36,6 +36,7 @@ module.exports = {
     },
   },
   packagerConfig: {
+    outDir: 'out/make',
     asar: true,
     icon: path.join(__dirname, "assets", "spence-face.ico"),
     extraResource: [

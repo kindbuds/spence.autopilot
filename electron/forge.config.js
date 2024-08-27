@@ -39,7 +39,7 @@ module.exports = {
       'node_modules/fs-xattr'
     ],
     osxSign: {
-      identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
+      identity: "Apple Development: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
       hardenedRuntime: true,
       entitlements: entitlementsPath, // Path to your entitlements file
       entitlementsInherit: entitlementsPath, // Path to your entitlements file

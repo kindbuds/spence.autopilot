@@ -44,7 +44,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       CERTIFICATE_PASSWORD: D@llas45549
       APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      APPLE_APP_SPECIFIC_PASSWORD: lhua-eecg-lvgg-tshh
 
     steps:
       - name: Checkout code
@@ -84,7 +84,7 @@ jobs:
         run: |
           cd electron
           npm run make
-          codesign --deep --force --verbose --options runtime --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence AI Career Autopilot.app
+          codesign --deep --force --verbose --options runtime --no-strict --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence AI Career Autopilot.app
 
       - name: Notarize the App (Optional but Recommended)
         run: |

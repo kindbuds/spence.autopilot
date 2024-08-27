@@ -42,12 +42,12 @@ module.exports = {
       entitlements: entitlementsPath, // Path to your entitlements file
       entitlementsInherit: entitlementsPath, // Path to your entitlements file
       gatekeeperAssess: false,
-      'keychain': 'login.keychain-db',
-      'keychain-profile': p12Path // Path to your p12 file
+      keychain: 'login.keychain-db',
+      // 'keychain-profile': p12Path // Path to your p12 file
     },
     osxNotarize: {
       appleId: "jeff.borden@kindbuds.us", // Replace with your Apple ID
-      appleIdPassword: "giec-qpnu-ncrl-gynv" // Replace with your app-specific password
+      appleIdPassword: "lhua-eecg-lvgg-tshh" // Replace with your app-specific password
     }
   },
   rebuildConfig: {},

@@ -58,7 +58,7 @@ module.exports = {
     //   'keychain': 'build.keychain-db'
     //   // 'keychain-profile': p12Path // Path to your p12 file
     // },
-    osxNotarize: {}
+    osxNotarize: false,
     // osxNotarize: {
     //   appleId: "jeff.borden@kindbuds.us", // Replace with your Apple ID
     //   appleIdPassword: "lhua-eecg-lvgg-tshh" // Replace with your app-specific password

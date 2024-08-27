@@ -45,6 +45,7 @@ module.exports = {
       entitlementsInherit: entitlementsPath, // Path to your entitlements file
       gatekeeperAssess: false,
       'gatekeeper-assess': false,
+      'deep': true,
       'keychain': 'login.keychain-db'
       // 'keychain-profile': p12Path // Path to your p12 file
     },

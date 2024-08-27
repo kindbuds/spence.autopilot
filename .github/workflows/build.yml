@@ -84,11 +84,11 @@ jobs:
           cd electron
           npm install
 
-      - name: Import Certs
-        uses: apple-actions/import-codesign-certs@v2
-        with:
-          p12-file-base64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
-          p12-password: $CERTIFICATE_PASSWORD
+      # - name: Import Certs
+      #   uses: apple-actions/import-codesign-certs@v2
+      #   with:
+      #     p12-file-base64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+      #     p12-password: $CERTIFICATE_PASSWORD
 
       - name: Build the App for macOS
         run: |

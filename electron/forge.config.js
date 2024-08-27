@@ -86,6 +86,7 @@ module.exports = {
         icon: path.join(__dirname, 'assets', 'spence-face.icns'), // Ensure you have an .icns icon for macOS
         overwrite: true,
         debug: false,
+        identity: null,
         format: 'ULFO'
       },
     },

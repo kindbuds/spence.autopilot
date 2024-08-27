@@ -32,7 +32,7 @@ module.exports = {
   hooks: {
     packageAfterCopy: async (forgeConfig, build_path) => {
       console.log(`\nBuild Path: ${build_path}`);
-      await minify(build_path + '/src');
+      // await minify(build_path + '/src');
     },
   },
   packagerConfig: {

@@ -74,10 +74,6 @@ jobs:
         run: |
           security import electron/developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
 
-      - name: Set key partition list
-        run: |
-          security set-key-partition-list -S apple-tool:,apple: -s -k "$CERTIFICATE_PASSWORD" /Users/runner/Library/Keychains/build.keychain-db
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:

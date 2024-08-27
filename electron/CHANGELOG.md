@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.192](https://github.com/kindbuds/spence.autopilot/compare/v0.0.191...v0.0.192) (2024-08-27)
+
 ### [0.0.191](https://github.com/kindbuds/spence.autopilot/compare/v0.0.190...v0.0.191) (2024-08-27)
 
 ### [0.0.190](https://github.com/kindbuds/spence.autopilot/compare/v0.0.189...v0.0.190) (2024-08-27)

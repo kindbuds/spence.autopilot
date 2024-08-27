@@ -52,6 +52,7 @@
     "electron-log": "^5.1.6",
     "electron-squirrel-startup": "^1.0.1",
     "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3.3.2",
     "path": "^0.12.7",
     "path-browserify": "^1.0.1",

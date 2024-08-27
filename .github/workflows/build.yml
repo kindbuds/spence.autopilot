@@ -39,7 +39,7 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
@@ -47,14 +47,18 @@ jobs:
       CERTIFICATE_PASSWORD: D@llas45549
       APPLE_ID: ${{ secrets.APPLE_ID }}
       APPLE_APP_SPECIFIC_PASSWORD: lhua-eecg-lvgg-tshh
+      TEAM_ID: SRJJDF6WDH
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Select Xcode Version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app/Contents/Developer
+
       - name: Decode and save the certificate
         run: |
-          echo "${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}" | base64 --decode > electron/new_developerID_application.p12
+          echo "${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}" | base64 --decode > electron/developerID_application.p12
 
       - name: Create and unlock the keychain
         run: |
@@ -66,11 +70,7 @@ jobs:
 
       - name: Import the certificate into the keychain
         run: |
-          security import electron/new_developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-
-      # - name: Set key partition list
-      #   run: |
-      #     security set-key-partition-list -S apple-tool:,apple: -k "$CERTIFICATE_PASSWORD" /Users/runner/Library/Keychains/build.keychain-db
+          security import electron/developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -82,15 +82,31 @@ jobs:
           cd electron
           npm install
 
-      - name: Build and Sign the App for macOS
+      - name: Build the App for macOS
         run: |
           cd electron
           npm run make
-          codesign --deep --force --verbose --options runtime --no-strict --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/mac/Spence-AI-Career-Autopilot.app
 
-      - name: Notarize the App (Optional but Recommended)
+      - name: Sign the App
         run: |
-          xcrun altool --notarize-app --primary-bundle-id "com.your.bundle.id" --username "$APPLE_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD" --file electron/out/make/mac/Spence-AI-Career-Autopilot.app
+          codesign --deep --force --verbose --options runtime --no-strict --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" --entitlements=electron/entitlements.plist electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app
+
+      - name: Create ZIP of the App
+        run: |
+          cd electron/out/make/Spence-AI-Career-Autopilot-darwin-x64
+          zip -r Spence-AI-Career-Autopilot.zip Spence-AI-Career-Autopilot.app
+
+      - name: Notarize the App
+        run: |
+          xcrun notarytool submit electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.zip --apple-id "$APPLE_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "$TEAM_ID" --wait
+
+      - name: Staple the Notarization Ticket
+        run: |
+          xcrun stapler staple electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app
+
+      - name: Verify Stapling
+        run: |
+          xcrun stapler validate electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app
 
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4

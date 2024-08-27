@@ -40,6 +40,7 @@ module.exports = {
     icon: path.join(__dirname, "assets", "spence-face.ico"),
     extraResource: [
       path.join(__dirname, "assets", "spence-face.ico"),
+      path.join(__dirname, "Info.plist"),
     ],
     ignore: [
       'node_modules/fs-xattr'

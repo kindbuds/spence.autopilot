@@ -1,3 +1,5 @@
+# build.yml
+
 name: Build and Release
 
 on:
@@ -27,7 +29,7 @@ jobs:
         run: |
           cd electron
           npm install
-          npm run make  
+          npm run make
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4

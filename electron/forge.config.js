@@ -42,7 +42,8 @@ module.exports = {
       entitlements: entitlementsPath, // Path to your entitlements file
       entitlementsInherit: entitlementsPath, // Path to your entitlements file
       gatekeeperAssess: false,
-      keychain: 'login.keychain-db',
+      'gatekeeper-assess': false,
+      'keychain': 'login.keychain-db'
       // 'keychain-profile': p12Path // Path to your p12 file
     },
     osxNotarize: {
@@ -73,6 +74,7 @@ module.exports = {
         icon: path.join(__dirname, 'assets', 'spence-face.icns'), // Ensure you have an .icns icon for macOS
         overwrite: true,
         debug: false,
+        format: 'ULFO'
       },
     },
   ],

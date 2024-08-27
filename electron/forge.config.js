@@ -46,7 +46,7 @@ module.exports = {
     ignore: [
       'node_modules/fs-xattr'
     ],
-    osxSign: false,
+    osxSign: {},
     // {
     //   identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
     //   hardenedRuntime: true,
@@ -86,7 +86,6 @@ module.exports = {
         icon: path.join(__dirname, 'assets', 'spence-face.icns'), // Ensure you have an .icns icon for macOS
         overwrite: true,
         debug: false,
-        identity: null,
         format: 'ULFO'
       },
     },

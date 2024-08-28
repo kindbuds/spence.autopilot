@@ -33,10 +33,11 @@ const token = jwt.sign(payload, privateKey, {
 
 
 const jwtToken = token
-const submissionId = '9f95561a-4177-4ca9-9674-4b8bb51bc8f1'; // Your notarization submission ID
+const submissionId = '337eea1e-24d7-4b6b-8556-ba50e0714dd9' // '9f95561a-4177-4ca9-9674-4b8bb51bc8f1'; // Your notarization submission ID
+
 
 // Define the API endpoint for checking the notarization status
-const url = `https://appstoreconnect.apple.com/notary/v2/submissions/${submissionId}/logs`;
+let url = `https://appstoreconnect.apple.com/notary/v2/submissions/${submissionId}`;
 
 // Make the GET request to check the notarization status
 axios.get(url, {
@@ -48,7 +49,26 @@ axios.get(url, {
 })
     .then(response => {
         console.log('Notarization Status:', response.data.data.attributes.status);
-        console.log(response.data)
+
+        if (response.data.data.attributes.status !== 'In Progress') {
+            url = `https://appstoreconnect.apple.com/notary/v2/submissions/${submissionId}/logs`;
+
+            axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => {
+                    url = response.data.data.attributes.developerLogUrl;
+                    axios.get(url).then(response => {
+
+                        console.log(response.data, 'NOT pending logs')
+                    });
+                });
+        }
+        // console.log(response.data)
     })
     .catch(error => {
         console.error('Error checking notarization status:', error.response ? error.response.data : error.message);

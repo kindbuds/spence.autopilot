@@ -127,10 +127,11 @@ jobs:
           # Sign the main binary
           codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
 
-          # Sign all frameworks
-          for framework in "$APP_PATH/Contents/Frameworks/"*; do
-              codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$framework"
-          done
+          # Sign each framework individually
+          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
+          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
+          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
+          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
 
       - name: Sign the entire App bundle
         run: |

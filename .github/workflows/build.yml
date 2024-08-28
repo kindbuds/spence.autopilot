@@ -31,6 +31,16 @@ jobs:
           npm install
           npm run make
 
+      - name: List contents of electron/out directory
+        run: |
+          echo "Listing contents of electron/out:"
+          dir electron/out
+
+      - name: List contents of electron/out/make directory
+        run: |
+          echo "Listing contents of electron/out/make:"
+          dir electron/out/make
+
       - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:

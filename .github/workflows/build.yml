@@ -150,6 +150,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-windows, build-macos]
 
+    env:
+      GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+
     steps:
       - name: Download Windows Installer
         uses: actions/download-artifact@v4

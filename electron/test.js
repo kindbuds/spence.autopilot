@@ -33,7 +33,7 @@ const token = jwt.sign(payload, privateKey, {
 
 
 const jwtToken = token
-const submissionId = '1604744d-87c3-40c8-b47d-f6eb8ed51671'
+const submissionId = '934588a4-7eac-4b8a-9a7d-f12e651d3a49'
 
 
 // Define the API endpoint for checking the notarization status

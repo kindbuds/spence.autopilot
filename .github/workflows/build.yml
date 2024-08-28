@@ -119,6 +119,88 @@ jobs:
       #     echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/"
       #     ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/
 
+    #   - name: Sign the individual binaries
+    #     run: |
+    #       SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+    #       ENTITLEMENTS="electron/entitlements.plist"
+
+    #       # Sign the main binary
+    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
+
+    #       # Sign each framework individually
+    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
+    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
+    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
+    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
+
+    #   # - name: Sign the entire App bundle
+    #   #   run: |
+    #   #     SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+    #   #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+    #   #     ENTITLEMENTS="electron/entitlements.plist"
+
+    #   #      codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
+
+    # - name: Sign the entire App bundle
+    #     run: |
+    #       SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+    #       ENTITLEMENTS="electron/entitlements.plist"
+
+    #       codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
+
+    #   - name: Verify the Main App Signature
+    #     run: |
+    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+    #       codesign -vvv --deep --strict "$APP_PATH"
+
+    #   - name: Verify Dependency Signatures
+    #     run: |
+    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Electron Framework.framework"
+    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework"
+    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Squirrel.framework"
+    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Mantle.framework"
+
+    #   # - name: Package the App
+    #   #   run: |
+    #   #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+    #   #     ZIP_PATH="electron/out/Spence-AI-Career-Autopilot.zip"
+
+    #   #     /usr/bin/ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"
+
+    #   - name: Package the App as a DMG
+    #     run: |
+    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+    #       DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
+
+    #       hdiutil create "$DMG_PATH" -volname "Spence-AI-Career-Autopilot" -srcfolder "$APP_PATH" -ov -format UDZO
+
+
+    #   - name: Debug Environment Variables
+    #     run: |
+    #       echo "Apple ID: jeff.borden@kindbuds.us"
+    #       echo "Team ID: SRJJDF6WDH"
+    #       echo "App Specific Password: $APPLE_APP_SPECIFIC_PASSWORD"
+
+    #   - name: Notarize the App
+    #     run: |
+    #       xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.dmg --apple-id "jeff.borden@kindbuds.us" --password "lhua-eecg-lvgg-tshh" --team-id "SRJJDF6WDH" --wait
+
+    #   - name: Staple the Notarization Ticket
+    #     run: |
+    #       xcrun stapler staple electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app
+
+    #   - name: Verify Stapling
+    #     run: |
+    #       xcrun stapler validate electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app
+
+    #   - name: Upload macOS artifact
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: macos-latest-build
+    #       path: electron/out/*
       - name: Sign the individual binaries
         run: |
           SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
@@ -140,49 +222,66 @@ jobs:
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
           ENTITLEMENTS="electron/entitlements.plist"
 
-           codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
+          codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
 
       - name: Verify the Main App Signature
         run: |
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
           codesign -vvv --deep --strict "$APP_PATH"
 
-      - name: Verify Dependency Signatures
+      - name: Package the App as a DMG
         run: |
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Electron Framework.framework"
-          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework"
-          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Squirrel.framework"
-          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Mantle.framework"
+          DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
 
-      - name: Package the App
+          hdiutil create "$DMG_PATH" -volname "Spence-AI-Career-Autopilot" -srcfolder "$APP_PATH" -ov -format UDZO
+
+      - name: Sign the DMG
         run: |
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-          ZIP_PATH="electron/out/Spence-AI-Career-Autopilot.zip"
+          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+          DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
 
-          /usr/bin/ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"
+          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$DMG_PATH"
 
-
-      - name: Debug Environment Variables
+      - name: Notarize the DMG
         run: |
-          echo "Apple ID: jeff.borden@kindbuds.us"
-          echo "Team ID: SRJJDF6WDH"
-          echo "App Specific Password: $APPLE_APP_SPECIFIC_PASSWORD"
-
-      - name: Notarize the App
-        run: |
-          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.zip --apple-id "jeff.borden@kindbuds.us" --password "lhua-eecg-lvgg-tshh" --team-id "SRJJDF6WDH" --wait
+          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.dmg --apple-id "jeff.borden@kindbuds.us" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "SRJJDF6WDH" --wait
 
       - name: Staple the Notarization Ticket
         run: |
-          xcrun stapler staple electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app
+          xcrun stapler staple electron/out/Spence-AI-Career-Autopilot.dmg
 
       - name: Verify Stapling
         run: |
-          xcrun stapler validate electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app
+          xcrun stapler validate electron/out/Spence-AI-Career-Autopilot.dmg
 
-      - name: Upload macOS artifact
+      - name: Upload macOS DMG
         uses: actions/upload-artifact@v4
         with:
-          name: macos-latest-build
-          path: electron/out/*
+          name: Spence-AI-Career-Autopilot.dmg
+          path: electron/out/Spence-AI-Career-Autopilot.dmg
+
+      - name: Upload Windows Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Spence-Setup.exe
+          path: electron/out/Spence-Setup.exe
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            electron/out/Spence-AI-Career-Autopilot.dmg
+            electron/out/Spence-Setup.exe
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove source code artifacts from GitHub Release
+        run: |
+          gh release delete-asset ${{ github.ref_name }} $(gh release view ${{ github.ref_name }} --json assets -q '.assets[].name' | grep -E 'source_code.zip|source_code.tar.gz') --yes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

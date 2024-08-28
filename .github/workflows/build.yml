@@ -157,8 +157,11 @@ jobs:
 
       - name: Package the App
         run: |
-          cd electron/out/
-          zip -r -X "Spence-AI-Career-Autopilot.zip" "Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          ZIP_PATH="electron/out/Spence-AI-Career-Autopilot.zip"
+
+          /usr/bin/ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"
+
 
       - name: Debug Environment Variables
         run: |

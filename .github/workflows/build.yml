@@ -168,8 +168,7 @@ jobs:
           echo "Listing contents of dist:"
           ls -la dist
 
-      - name: Update GitHub Release
-        id: create_release
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
@@ -177,5 +176,3 @@ jobs:
             dist/Spence-AI-Career-Autopilot.dmg
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

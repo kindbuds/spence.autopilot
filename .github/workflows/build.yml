@@ -150,13 +150,13 @@ jobs:
 
       - name: Debug Environment Variables
         run: |
-          echo "Apple ID: $APPLE_ID"
-          echo "Team ID: $TEAM_ID"
+          echo "Apple ID: jeff.borden@kindbuds.us"
+          echo "Team ID: SRJJDF6WDH"
           echo "App Specific Password: $APPLE_APP_SPECIFIC_PASSWORD"
 
       - name: Notarize the App
         run: |
-          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.zip --apple-id "$APPLE_ID" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "$TEAM_ID" --wait
+          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.zip --apple-id "jeff.borden@kindbuds.us" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "SRJJDF6WDH" --wait
 
       - name: Staple the Notarization Ticket
         run: |

@@ -163,20 +163,16 @@ jobs:
           name: Spence-AI-Career-Autopilot.dmg
           path: ./dist
 
+      - name: List contents of dist directory
+        run: |
+          echo "Listing contents of dist:"
+          ls -la dist
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             dist/Spence-Setup.exe
             dist/Spence-AI-Career-Autopilot.dmg
-          tag_name: ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Remove source code artifacts from GitHub Release
-        run: |
-          gh release delete-asset ${{ github.ref_name }} $(gh release view ${{ github.ref_name }} --json assets -q '.assets[].name' | grep -E 'source_code.zip|source_code.tar.gz') --yes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

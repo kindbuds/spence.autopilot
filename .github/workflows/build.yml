@@ -95,29 +95,29 @@ jobs:
           cd electron
           npm run package
 
-      # Step to output the contents of the main output directory
-      - name: List contents of the out output directory
-        run: |
-          echo "Listing contents of electron/out/"
-          ls -la electron/out/
+      # # Step to output the contents of the main output directory
+      # - name: List contents of the out output directory
+      #   run: |
+      #     echo "Listing contents of electron/out/"
+      #     ls -la electron/out/
 
-      # Step to output the contents of the darwin-arm64 directory
-      - name: List contents of the darwin-arm64 directory
-        run: |
-          echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/"
-          ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/
+      # # Step to output the contents of the darwin-arm64 directory
+      # - name: List contents of the darwin-arm64 directory
+      #   run: |
+      #     echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/"
+      #     ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/
 
-      # Step to output the contents of the MacOS directory within the app bundle
-      - name: List contents of the MacOS directory within the app bundle
-        run: |
-          echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/"
-          ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/
+      # # Step to output the contents of the MacOS directory within the app bundle
+      # - name: List contents of the MacOS directory within the app bundle
+      #   run: |
+      #     echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/"
+      #     ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/
 
-      # Step to output the contents of the Frameworks directory within the app bundle
-      - name: List contents of the Frameworks directory within the app bundle
-        run: |
-          echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/"
-          ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/
+      # # Step to output the contents of the Frameworks directory within the app bundle
+      # - name: List contents of the Frameworks directory within the app bundle
+      #   run: |
+      #     echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/"
+      #     ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/
 
       - name: Sign the individual binaries
         run: |
@@ -147,6 +147,12 @@ jobs:
         run: |
           cd electron/out/
           zip -r Spence-AI-Career-Autopilot.zip Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app
+
+      - name: Debug Environment Variables
+        run: |
+          echo "Apple ID: $APPLE_ID"
+          echo "Team ID: $TEAM_ID"
+          echo "App Specific Password: $APPLE_APP_SPECIFIC_PASSWORD"
 
       - name: Notarize the App
         run: |

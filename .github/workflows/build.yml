@@ -31,15 +31,15 @@ jobs:
           npm install
           npm run make
 
-      - name: List contents of electron/out directory
+      - name: List contents of Spence-AI-Career-Autopilot-win32-x64 directory
         run: |
-          echo "Listing contents of electron/out:"
-          dir electron/out
+          echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-win32-x64:"
+          dir electron/out/Spence-AI-Career-Autopilot-win32-x64
 
-      - name: List contents of electron/out/make directory
+      - name: List contents of squirrel.windows directory
         run: |
-          echo "Listing contents of electron/out/make:"
-          dir electron/out/make
+          echo "Listing contents of electron/out/make/squirrel.windows:"
+          dir electron/out/make/squirrel.windows
 
       - name: Upload Windows Installer
         uses: actions/upload-artifact@v4

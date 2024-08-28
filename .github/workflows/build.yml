@@ -142,10 +142,18 @@ jobs:
 
            codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
 
-      - name: Verify the Signature
+      - name: Verify the Main App Signature
         run: |
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-          codesign --verify --deep --strict --verbose=2 "$APP_PATH"
+          codesign -vvv --deep --strict "$APP_PATH"
+
+      - name: Verify Dependency Signatures
+        run: |
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Electron Framework.framework"
+          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework"
+          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Squirrel.framework"
+          codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Mantle.framework"
 
       - name: Package the App
         run: |

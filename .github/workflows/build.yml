@@ -31,11 +31,11 @@ jobs:
           npm install
           npm run make
 
-      - name: Upload Windows artifact
+      - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
-          name: windows-latest-build
-          path: electron/out/*
+          name: Spence-Setup.exe
+          path: electron/out/Spence-Setup.exe
 
   build-macos:
     runs-on: macos-latest

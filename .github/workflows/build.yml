@@ -125,19 +125,19 @@ jobs:
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
 
           # Sign the main binary
-          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
+          codesign --force --verbose --options runtime --timestamp --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
 
           # Sign each framework individually
-          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
-          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
-          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
-          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
+          codesign --force --verbose --options runtime --timestamp --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
+          codesign --force --verbose --options runtime --timestamp --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
+          codesign --force --verbose --options runtime --timestamp --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
+          codesign --force --verbose --options runtime --timestamp --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
 
       - name: Sign the entire App bundle
         run: |
           SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-          codesign --deep --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$APP_PATH"
+          codesign --deep --force --verbose --options runtime --timestamp --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" "$APP_PATH"
 
       - name: Verify the Signature
         run: |
@@ -157,7 +157,7 @@ jobs:
 
       - name: Notarize the App
         run: |
-          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.zip --apple-id "jeff.borden@kindbuds.us" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "SRJJDF6WDH" --wait
+          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.zip --apple-id "jeff.borden@kindbuds.us" --password "lhua-eecg-lvgg-tshh" --team-id "SRJJDF6WDH" --wait
 
       - name: Staple the Notarization Ticket
         run: |

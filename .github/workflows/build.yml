@@ -101,29 +101,23 @@ jobs:
           echo "Listing contents of electron/out/"
           ls -la electron/out/
 
-      - name: List contents of the make output directory
+      # Step to output the contents of the darwin-arm64 directory
+      - name: List contents of the darwin-arm64 directory
         run: |
-          echo "Listing contents of electron/out/make/"
-          ls -la electron/out/make/
-
-      # Step to output the contents of the app bundle directory
-      - name: List contents of the app bundle directory
-        run: |
-          echo "Listing contents of electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/"
-          ls -la electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/
+          echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/"
+          ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/
 
       # Step to output the contents of the MacOS directory within the app bundle
       - name: List contents of the MacOS directory within the app bundle
         run: |
-          echo "Listing contents of electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app/Contents/MacOS/"
-          ls -la electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app/Contents/MacOS/
+          echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/"
+          ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/
 
       # Step to output the contents of the Frameworks directory within the app bundle
       - name: List contents of the Frameworks directory within the app bundle
         run: |
-          echo "Listing contents of electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/"
-          ls -la electron/out/make/Spence-AI-Career-Autopilot-darwin-x64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/
-
+          echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/"
+          ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/
 
       - name: Sign the individual binaries
         run: |

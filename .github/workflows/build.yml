@@ -180,6 +180,9 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
       - name: Remove source code assets from GitHub Release
         run: |
           ASSETS=$(gh release view ${{ github.ref_name }} --json assets --jq '.assets[] | select(.name | test("source_code")) | .id')

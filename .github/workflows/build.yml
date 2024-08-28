@@ -44,10 +44,10 @@ jobs:
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-      CERTIFICATE_PASSWORD: D@llas45549
+      CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
       APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_APP_SPECIFIC_PASSWORD: lhua-eecg-lvgg-tshh
-      TEAM_ID: SRJJDF6WDH
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      TEAM_ID: ${{ secrets.TEAM_ID }}
 
     steps:
       - name: Checkout code
@@ -70,10 +70,6 @@ jobs:
           security import electron/developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k actions "/Users/runner/Library/Keychains/build.keychain-db"
 
-      - name: Import the certificate into the keychain
-        run: |
-          security import electron/developerID_application.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -84,123 +80,11 @@ jobs:
           cd electron
           npm install
 
-      # - name: Import Certs
-      #   uses: apple-actions/import-codesign-certs@v2
-      #   with:
-      #     p12-file-base64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
-      #     p12-password: $CERTIFICATE_PASSWORD
-
       - name: Build the App for macOS
         run: |
           cd electron
           npm run package
 
-      # # Step to output the contents of the main output directory
-      # - name: List contents of the out output directory
-      #   run: |
-      #     echo "Listing contents of electron/out/"
-      #     ls -la electron/out/
-
-      # # Step to output the contents of the darwin-arm64 directory
-      # - name: List contents of the darwin-arm64 directory
-      #   run: |
-      #     echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/"
-      #     ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/
-
-      # # Step to output the contents of the MacOS directory within the app bundle
-      # - name: List contents of the MacOS directory within the app bundle
-      #   run: |
-      #     echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/"
-      #     ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/MacOS/
-
-      # # Step to output the contents of the Frameworks directory within the app bundle
-      # - name: List contents of the Frameworks directory within the app bundle
-      #   run: |
-      #     echo "Listing contents of electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/"
-      #     ls -la electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app/Contents/Frameworks/
-
-    #   - name: Sign the individual binaries
-    #     run: |
-    #       SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-    #       ENTITLEMENTS="electron/entitlements.plist"
-
-    #       # Sign the main binary
-    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
-
-    #       # Sign each framework individually
-    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
-    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
-    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
-    #       codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
-
-    #   # - name: Sign the entire App bundle
-    #   #   run: |
-    #   #     SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-    #   #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-    #   #     ENTITLEMENTS="electron/entitlements.plist"
-
-    #   #      codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
-
-    # - name: Sign the entire App bundle
-    #     run: |
-    #       SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-    #       ENTITLEMENTS="electron/entitlements.plist"
-
-    #       codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
-
-    #   - name: Verify the Main App Signature
-    #     run: |
-    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-    #       codesign -vvv --deep --strict "$APP_PATH"
-
-    #   - name: Verify Dependency Signatures
-    #     run: |
-    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Electron Framework.framework"
-    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework"
-    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Squirrel.framework"
-    #       codesign -vvv --deep --strict "$APP_PATH/Contents/Frameworks/Mantle.framework"
-
-    #   # - name: Package the App
-    #   #   run: |
-    #   #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-    #   #     ZIP_PATH="electron/out/Spence-AI-Career-Autopilot.zip"
-
-    #   #     /usr/bin/ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"
-
-    #   - name: Package the App as a DMG
-    #     run: |
-    #       APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-    #       DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
-
-    #       hdiutil create "$DMG_PATH" -volname "Spence-AI-Career-Autopilot" -srcfolder "$APP_PATH" -ov -format UDZO
-
-
-    #   - name: Debug Environment Variables
-    #     run: |
-    #       echo "Apple ID: jeff.borden@kindbuds.us"
-    #       echo "Team ID: SRJJDF6WDH"
-    #       echo "App Specific Password: $APPLE_APP_SPECIFIC_PASSWORD"
-
-    #   - name: Notarize the App
-    #     run: |
-    #       xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.dmg --apple-id "jeff.borden@kindbuds.us" --password "lhua-eecg-lvgg-tshh" --team-id "SRJJDF6WDH" --wait
-
-    #   - name: Staple the Notarization Ticket
-    #     run: |
-    #       xcrun stapler staple electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app
-
-    #   - name: Verify Stapling
-    #     run: |
-    #       xcrun stapler validate electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app
-
-    #   - name: Upload macOS artifact
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: macos-latest-build
-    #       path: electron/out/*
       - name: Sign the individual binaries
         run: |
           SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
@@ -261,18 +145,29 @@ jobs:
           name: Spence-AI-Career-Autopilot.dmg
           path: electron/out/Spence-AI-Career-Autopilot.dmg
 
-      - name: Upload Windows Installer
-        uses: actions/upload-artifact@v4
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-macos]
+
+    steps:
+      - name: Download Windows Installer
+        uses: actions/download-artifact@v4
         with:
           name: Spence-Setup.exe
-          path: electron/out/Spence-Setup.exe
+          path: ./dist
+
+      - name: Download macOS DMG
+        uses: actions/download-artifact@v4
+        with:
+          name: Spence-AI-Career-Autopilot.dmg
+          path: ./dist
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            electron/out/Spence-AI-Career-Autopilot.dmg
-            electron/out/Spence-Setup.exe
+            dist/Spence-Setup.exe
+            dist/Spence-AI-Career-Autopilot.dmg
           tag_name: ${{ github.ref_name }}
           draft: false
           prerelease: false
@@ -284,4 +179,3 @@ jobs:
           gh release delete-asset ${{ github.ref_name }} $(gh release view ${{ github.ref_name }} --json assets -q '.assets[].name' | grep -E 'source_code.zip|source_code.tar.gz') --yes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-

@@ -173,7 +173,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/Spence-Setup.exe
+            dist/Spence-AI-Career-Autopilot.exe
             dist/Spence-AI-Career-Autopilot.dmg
           draft: false
           prerelease: false

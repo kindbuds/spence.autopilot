@@ -10,6 +10,26 @@ const p12Path = path.join(__dirname, 'developerID_application.p12');
 const entitlementsPath = path.join(__dirname, "entitlements.plist");
 
 
+function listDirectoryContents(dirPath) {
+  console.log(`\nListing contents of: ${dirPath}`);
+
+  try {
+    const files = fs.readdirSync(dirPath); // Read directory contents
+    files.forEach(file => {
+      const fullPath = path.join(dirPath, file);
+      const stats = fs.lstatSync(fullPath); // Get file stats
+      if (stats.isDirectory()) {
+        console.log(`${file}/ (directory)`);
+      } else {
+        console.log(`${file}/ (file)`);
+      }
+    });
+  } catch (err) {
+    console.error(`Error reading directory ${dirPath}: ${err.message}`);
+  }
+}
+
+
 console.log(`Checking .p12 file at: ${p12Path}`);
 fs.access(p12Path, fs.constants.F_OK, (err) => {
   if (err) {
@@ -32,28 +52,23 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
 module.exports = {
   hooks: {
     packageAfterCopy: async (forgeConfig, buildPath) => {
-      const outDir = path.resolve(__dirname, 'out');  // This removes the extra "electron"
-      const x64Path = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
-      const arm64Path = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
-      const universalPath = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
-
+      const outDir = path.resolve(__dirname, 'out');
       console.log(`Running packageAfterCopy hook with outDir: ${outDir}`);
+
+      const x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
+      const arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
+
+
       console.log(`x64Path: ${x64Path}`);
       console.log(`arm64Path: ${arm64Path}`);
-      console.log(`universalPath: ${universalPath}`);
 
-      // List everything in outDir to help debug the current directory contents
-      console.log('Listing contents of outDir:');
-      const files = fs.readdirSync(outDir);
-      files.forEach(file => {
-        const fullPath = path.join(outDir, file);
-        const stats = fs.lstatSync(fullPath);
-        if (stats.isDirectory()) {
-          console.log(`${file}/ (directory)`);
-        } else {
-          console.log(`${file}/ (file)`);
-        }
-      });
+      listDirectoryContents(outDir);
+      listDirectoryContents(x64Dir);
+      listDirectoryContents(arm64Dir);
+
+      const universalDir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
+      console.log(`universalPath: ${universalDir}`);
+      listDirectoryContents(universalDir);
 
       // Ensure both architecture builds exist
       if (fs.existsSync(x64Path) && fs.existsSync(arm64Path)) {

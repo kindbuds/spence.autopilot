@@ -15,11 +15,16 @@ function listDirectoryContentsRecursive(dirPath, level = 0) {
 
   try {
     let files = fs.readdirSync(dirPath); // Read directory contents
+    if (files.length === 0) {
+      console.log(`${prefix}(empty directory)`);
+      return;
+    }
     files.forEach(file => {
       let fullPath = path.join(dirPath, file);
       let stats = fs.lstatSync(fullPath); // Get file stats
 
-      if (file === 'node_modules' || file === '.git' || file === 'vue-app') {
+      // Ignore specific directories
+      if (file === 'node_modules' || file === '.git' || file === '.github' || file === 'vue-app') {
         console.log(`${prefix}${file}/ (ignored)`);
         return;
       }
@@ -28,7 +33,8 @@ function listDirectoryContentsRecursive(dirPath, level = 0) {
         console.log(`${prefix}${file}/ (directory)`);
         listDirectoryContentsRecursive(fullPath, level + 1); // Recurse into subdirectory
       } else {
-        //  console.log(`${prefix}${file} (file)`);
+        // Log files as well
+        // console.log(`${prefix}${file} (file)`);
       }
     });
   } catch (err) {

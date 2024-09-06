@@ -32,7 +32,7 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
 module.exports = {
   hooks: {
     packageAfterCopy: async (forgeConfig, buildPath) => {
-      const outDir = path.resolve(__dirname, 'electron', 'out');
+      const outDir = path.resolve(__dirname, 'out');  // This removes the extra "electron"
       const x64Path = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
       const arm64Path = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
       const universalPath = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');

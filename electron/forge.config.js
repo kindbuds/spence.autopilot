@@ -92,8 +92,7 @@ module.exports = {
         overwrite: true,
         debug: false,
         format: 'ULFO'
-      },
-      platforms: ['darwin'],
+      }
     },
   ],
   publishers: [

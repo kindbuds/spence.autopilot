@@ -5,6 +5,9 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const path = require('path');
 const fs = require('fs');
 const { makeUniversalApp } = require('@electron/universal');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 const p12Path = path.join(__dirname, 'developerID_application.p12');
 const entitlementsPath = path.join(__dirname, "entitlements.plist");
@@ -96,19 +99,18 @@ module.exports = {
       console.log(`arm64Dir: ${arm64Dir}`);
       console.log(`universalDir: ${universalDir}`);
 
-      // Sign x64 and arm64 builds before combining
       try {
         const signCommand = `codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"`;
 
         console.log('Signing x64 build...');
-        await exec(`${signCommand} ${path.join(x64Dir, 'Spence-AI-Career-Autopilot.app')}`);
+        await execPromise(`${signCommand} ${path.join(x64Dir, 'Spence-AI-Career-Autopilot.app')}`);
         console.log('x64 build signed successfully.');
 
         console.log('Signing arm64 build...');
-        await exec(`${signCommand} ${path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app')}`);
+        await execPromise(`${signCommand} ${path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app')}`);
         console.log('arm64 build signed successfully.');
 
-        // Ensure both architecture builds exist before combining
+        // Combine x64 and arm64 builds into a Universal binary
         if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
           console.log('Combining x64 and arm64 builds into a Universal binary...');
 
@@ -134,7 +136,7 @@ module.exports = {
       console.log('Signing the universal binary...');
 
       try {
-        await exec(`codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" ${universalAppPath}`);
+        await execPromise(`codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" ${universalAppPath}`);
         console.log('Universal binary signed successfully.');
       } catch (error) {
         console.error('Error during codesigning:', error);

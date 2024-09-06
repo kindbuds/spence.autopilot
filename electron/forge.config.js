@@ -118,7 +118,7 @@ module.exports = {
       // listDirectoryContents(arm64Dir);
 
       const universalDir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
-      console.log(`universalPath: ${universalDir}`);
+      console.log(`universalDir: ${universalDir}`);
       // listDirectoryContents(universalDir);
 
       // // Ensure both architecture builds exist
@@ -129,10 +129,10 @@ module.exports = {
         await makeUniversalApp({
           x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
           arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
-          outAppPath: path.join(universalPath, 'Spence-AI-Career-Autopilot.app'),
+          outAppPath: path.join(universalDir, 'Spence-AI-Career-Autopilot.app'),
         });
 
-        console.log('Universal binary created at:', universalPath);
+        console.log('Universal binary created at:', universalDir);
       } else {
         console.error('Could not find both x64 and arm64 builds to combine.');
       }

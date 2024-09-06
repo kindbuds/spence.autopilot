@@ -54,6 +54,8 @@ module.exports = {
     packageAfterCopy: async (forgeConfig, buildPath) => {
       const rootDir = path.resolve(__dirname, '..');  // Use the project root
       const outDir = path.join(rootDir, 'electron', 'out');  // Electron out directory
+      outDir = outDir.replace('spence.autopilot/spence.autopilot', 'spence.autopilot')
+
       console.log(`Running packageAfterCopy hook with outDir: ${outDir}`);
 
       const x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
@@ -72,13 +74,13 @@ module.exports = {
       listDirectoryContents(universalDir);
 
       // Ensure both architecture builds exist
-      if (fs.existsSync(x64Path) && fs.existsSync(arm64Path)) {
+      if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
         console.log('Combining x64 and arm64 builds into a Universal binary...');
 
         // Use @electron/universal to combine x64 and arm64 into a Universal binary
         await makeUniversalApp({
-          x64AppPath: path.join(x64Path, 'Spence-AI-Career-Autopilot.app'),
-          arm64AppPath: path.join(arm64Path, 'Spence-AI-Career-Autopilot.app'),
+          x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
+          arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
           outAppPath: path.join(universalPath, 'Spence-AI-Career-Autopilot.app'),
         });
 

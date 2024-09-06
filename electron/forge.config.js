@@ -42,7 +42,13 @@ module.exports = {
       console.log('Listing contents of buildPath:');
       const files = fs.readdirSync(buildPath);
       files.forEach(file => {
-        console.log(file);
+        const fullPath = path.join(buildPath, file);
+        const stats = fs.lstatSync(fullPath);
+        if (stats.isDirectory()) {
+          console.log(`${file}/ (directory)`);
+        } else {
+          console.log(`${file}/ (file)`);
+        }
       });
 
       console.log(`x64Path: ${x64Path}`);

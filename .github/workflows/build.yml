@@ -86,6 +86,11 @@ jobs:
           cd electron
           npm run package
 
+      - name: List contents of dist directory
+        run: |
+          echo "Listing contents of out:"
+          ls -la electron/out
+
       - name: Sign the individual binaries
         run: |
           SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"

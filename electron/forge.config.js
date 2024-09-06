@@ -28,7 +28,7 @@ function listDirectoryContentsRecursive(dirPath, level = 0) {
         console.log(`${prefix}${file}/ (directory)`);
         listDirectoryContentsRecursive(fullPath, level + 1); // Recurse into subdirectory
       } else {
-        console.log(`${prefix}${file} (file)`);
+        //  console.log(`${prefix}${file} (file)`);
       }
     });
   } catch (err) {
@@ -86,8 +86,8 @@ module.exports = {
 
       console.log('> listing variable test1')
       listDirectoryContentsRecursive(test1);       // Root directory
-      console.log('> listing variable test2')
-      listDirectoryContentsRecursive(test2);       // Root directory
+      // console.log('> listing variable test2')
+      // listDirectoryContentsRecursive(test2);       // Root directory
       // console.log('> listing variable rootDir')
       // listDirectoryContentsRecursive(rootDir);       // Root directory
       // console.log('> listing variable electronDir')

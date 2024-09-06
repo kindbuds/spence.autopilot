@@ -99,39 +99,25 @@ module.exports = {
       console.log(`arm64Dir: ${arm64Dir}`);
       console.log(`universalDir: ${universalDir}`);
 
-      try {
-        const signCommand = `codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"`;
+      // Ensure both architecture builds exist
+      if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
+        console.log('Combining x64 and arm64 builds into a Universal binary...');
 
-        console.log('Signing x64 build...');
-        await execPromise(`${signCommand} ${path.join(x64Dir, 'Spence-AI-Career-Autopilot.app')}`);
-        console.log('x64 build signed successfully.');
+        // Use @electron/universal to combine x64 and arm64 into a Universal binary, ignoring _CodeSignature
+        await makeUniversalApp({
+          x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
+          arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
+          outAppPath: path.join(universalDir, 'Spence-AI-Career-Autopilot.app'),
+          force: true,  // Force the merge despite differing non-binary files
+        });
 
-        console.log('Signing arm64 build...');
-        await execPromise(`${signCommand} ${path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app')}`);
-        console.log('arm64 build signed successfully.');
-
-        // Combine x64 and arm64 builds into a Universal binary
-        if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
-          console.log('Combining x64 and arm64 builds into a Universal binary...');
-
-          // Use @electron/universal to combine x64 and arm64 into a Universal binary
-          await makeUniversalApp({
-            x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
-            arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
-            outAppPath: path.join(universalDir, 'Spence-AI-Career-Autopilot.app'),
-          });
-
-          console.log('Universal binary created at:', universalDir);
-        } else {
-          console.error('Could not find both x64 and arm64 builds to combine.');
-        }
-      } catch (error) {
-        console.error('Error during signing or universal build creation:', error);
+        console.log('Universal binary created at:', universalDir);
+      } else {
+        console.error('Could not find both x64 and arm64 builds to combine.');
       }
     },
 
     postMake: async (forgeConfig, options) => {
-      // Sign the universal binary after combining
       const universalAppPath = path.join(__dirname, 'out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app');
       console.log('Signing the universal binary...');
 

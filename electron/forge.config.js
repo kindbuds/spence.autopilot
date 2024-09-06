@@ -4,6 +4,7 @@ const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const path = require('path');
 const fs = require('fs');
+const electronUniversal = require('electron-universal');
 
 const p12Path = path.join(__dirname, 'developerID_application.p12');
 const entitlementsPath = path.join(__dirname, "entitlements.plist");
@@ -32,7 +33,25 @@ module.exports = {
   hooks: {
     packageAfterCopy: async (forgeConfig, build_path) => {
       console.log(`\nBuild Path: ${build_path}`);
-      // await minify(build_path + '/src');
+      const x64Path = path.join(buildPath, '../Spence-AI-Career-Autopilot-darwin-x64');
+      const arm64Path = path.join(buildPath, '../Spence-AI-Career-Autopilot-darwin-arm64');
+      const universalPath = path.join(buildPath, '../Spence-AI-Career-Autopilot-darwin-universal');
+
+      // Ensure both architecture builds exist
+      if (fs.existsSync(x64Path) && fs.existsSync(arm64Path)) {
+        console.log('Combining x64 and arm64 builds into a Universal binary...');
+
+        // Use electron-universal to combine x64 and arm64 into a Universal binary
+        await electronUniversal.makeUniversal({
+          x64AppPath: path.join(x64Path, 'Spence-AI-Career-Autopilot.app'),
+          arm64AppPath: path.join(arm64Path, 'Spence-AI-Career-Autopilot.app'),
+          outAppPath: path.join(universalPath, 'Spence-AI-Career-Autopilot.app')
+        });
+
+        console.log('Universal binary created at:', universalPath);
+      } else {
+        console.error('Could not find both x64 and arm64 builds to combine.');
+      }
     },
   },
   packagerConfig: {

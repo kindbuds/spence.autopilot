@@ -86,7 +86,7 @@ jobs:
           cd electron
           npm run package
 
-      - name: List contents of dist directory
+      - name: List contents of out directory
         run: |
           echo "Listing contents of out:"
           ls -la electron/out

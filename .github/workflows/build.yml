@@ -84,7 +84,8 @@ jobs:
       - name: Build the App for macOS
         run: |
           cd electron
-          npm run package
+          # npm run package
+          npm run package -- --arch=x64,arm64
 
       - name: Sign the individual binaries
         run: |

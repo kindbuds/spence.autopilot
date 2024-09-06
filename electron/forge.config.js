@@ -87,7 +87,8 @@ module.exports = {
         icon: path.join(__dirname, 'assets', 'spence-face.icns'), // Ensure you have an .icns icon for macOS
         overwrite: true,
         debug: false,
-        format: 'ULFO'
+        format: 'ULFO',
+        arch: ['x64', 'arm64']
       },
     },
   ],
@@ -135,6 +136,14 @@ module.exports = {
     ],
     win: {
       target: ["squirrel"],
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ]
     }
   }
 }

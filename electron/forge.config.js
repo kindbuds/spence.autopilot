@@ -83,7 +83,7 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
 
 module.exports = {
   hooks: {
-    packageAfterCopy: async (forgeConfig, buildPath) => {
+    postPackage: async (forgeConfig, buildPath) => {
       let rootDir = path.resolve(__dirname, '..');  // Use the project root
       let electronDir = path.join(rootDir, 'electron');
       let outDir = path.join(electronDir, 'out');

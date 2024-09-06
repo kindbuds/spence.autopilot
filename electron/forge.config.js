@@ -19,7 +19,7 @@ function listDirectoryContentsRecursive(dirPath, level = 0) {
       let fullPath = path.join(dirPath, file);
       let stats = fs.lstatSync(fullPath); // Get file stats
 
-      if (file === 'node_modules' || file === '.git') {
+      if (file === 'node_modules' || file === '.git' || file === 'vue-app') {
         console.log(`${prefix}${file}/ (ignored)`);
         return;
       }
@@ -81,9 +81,18 @@ module.exports = {
       let rootDir = path.resolve(__dirname, '..');  // Use the project root
       let electronDir = path.join(rootDir, 'electron');
       let outDir = path.join(electronDir, 'out');
+      let test1 = '/Users/runner/work/spence.autopilot'
+      let test2 = '/Users/runner/work/spence.autopilot/spence.autopilot'
 
+      console.log('> listing variable test1')
+      listDirectoryContentsRecursive(test1);       // Root directory
+      console.log('> listing variable test2')
+      listDirectoryContentsRecursive(test2);       // Root directory
+      console.log('> listing variable rootDir')
       listDirectoryContentsRecursive(rootDir);       // Root directory
+      console.log('> listing variable electronDir')
       listDirectoryContentsRecursive(electronDir);   // Electron directory
+      console.log('> listing variable outDir')
       listDirectoryContentsRecursive(outDir);
 
       // outDir = outDir.replace('spence.autopilot/spence.autopilot', 'spence.autopilot')

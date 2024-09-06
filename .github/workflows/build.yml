@@ -107,11 +107,13 @@ jobs:
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
           ENTITLEMENTS="electron/entitlements.plist"
 
+          # codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
           codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
 
       - name: Verify the Main App Signature
         run: |
           APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          # codesign -vvv --deep --strict "$APP_PATH"
           codesign -vvv --deep --strict "$APP_PATH"
 
       - name: Package the App as a DMG

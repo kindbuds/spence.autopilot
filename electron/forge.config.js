@@ -47,22 +47,7 @@ module.exports = {
       'node_modules/fs-xattr'
     ],
     osxSign: {},
-    // {
-    //   identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
-    //   hardenedRuntime: true,
-    //   entitlements: entitlementsPath, // Path to your entitlements file
-    //   entitlementsInherit: entitlementsPath, // Path to your entitlements file
-    //   gatekeeperAssess: false,
-    //   'gatekeeper-assess': false,
-    //   'deep': true,
-    //   'keychain': 'build.keychain-db'
-    //   // 'keychain-profile': p12Path // Path to your p12 file
-    // },
     osxNotarize: false,
-    // osxNotarize: {
-    //   appleId: "jeff.borden@kindbuds.us", // Replace with your Apple ID
-    //   appleIdPassword: "lhua-eecg-lvgg-tshh" // Replace with your app-specific password
-    // }
   },
   rebuildConfig: {},
   makers: [
@@ -87,9 +72,9 @@ module.exports = {
         icon: path.join(__dirname, 'assets', 'spence-face.icns'), // Ensure you have an .icns icon for macOS
         overwrite: true,
         debug: false,
-        format: 'ULFO',
-        arch: ['x64', 'arm64']
+        format: 'ULFO'
       },
+      platforms: ['darwin'],
     },
   ],
   publishers: [
@@ -137,13 +122,15 @@ module.exports = {
     win: {
       target: ["squirrel"],
     },
-    "mac": {
-      "target": [
+    mac: {
+      target: [
         {
-          "target": "dmg",
-          "arch": ["x64", "arm64"]
+          target: "dmg",
+          arch: ["x64", "arm64"]
         }
       ]
     }
   }
 }
+
+

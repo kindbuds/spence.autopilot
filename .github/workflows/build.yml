@@ -84,13 +84,12 @@ jobs:
       - name: Build the App for macOS
         run: |
           cd electron
-          # npm run package
-          npm run package -- --arch=x64,arm64
+          npm run package
 
       - name: Sign the individual binaries
         run: |
           SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
           ENTITLEMENTS="electron/entitlements.plist"
 
           # Sign the main binary
@@ -105,7 +104,7 @@ jobs:
       - name: Sign the entire App bundle
         run: |
           SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
           ENTITLEMENTS="electron/entitlements.plist"
 
           # codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
@@ -113,13 +112,13 @@ jobs:
 
       - name: Verify the Main App Signature
         run: |
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
           # codesign -vvv --deep --strict "$APP_PATH"
           codesign -vvv --deep --strict "$APP_PATH"
 
       - name: Package the App as a DMG
         run: |
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
           DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
 
           hdiutil create "$DMG_PATH" -volname "Spence-AI-Career-Autopilot" -srcfolder "$APP_PATH" -ov -format UDZO

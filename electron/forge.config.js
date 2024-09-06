@@ -136,7 +136,7 @@ module.exports = {
     },
   },
   packagerConfig: {
-    outDir: 'electron/out',
+    outDir: path.resolve(__dirname, 'electron/out'),
     // outDir: 'out/make',
     asar: true,
     icon: path.join(__dirname, "assets", "spence-face.ico"),

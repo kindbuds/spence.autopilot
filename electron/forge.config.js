@@ -103,12 +103,11 @@ module.exports = {
       if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
         console.log('Combining x64 and arm64 builds into a Universal binary...');
 
-        // Use @electron/universal to combine x64 and arm64 into a Universal binary, ignoring _CodeSignature
+        // Combine x64 and arm64 into a Universal binary
         await makeUniversalApp({
           x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
           arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
           outAppPath: path.join(universalDir, 'Spence-AI-Career-Autopilot.app'),
-          force: true,  // Force the merge despite differing non-binary files
         });
 
         console.log('Universal binary created at:', universalDir);
@@ -118,6 +117,7 @@ module.exports = {
     },
 
     postMake: async (forgeConfig, options) => {
+      // Sign the universal binary after combining
       const universalAppPath = path.join(__dirname, 'out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app');
       console.log('Signing the universal binary...');
 
@@ -127,7 +127,7 @@ module.exports = {
       } catch (error) {
         console.error('Error during codesigning:', error);
       }
-    },
+    }
   },
   packagerConfig: {
     outDir: path.resolve(__dirname, 'electron/out'),

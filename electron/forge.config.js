@@ -18,6 +18,12 @@ function listDirectoryContentsRecursive(dirPath, level = 0) {
     files.forEach(file => {
       let fullPath = path.join(dirPath, file);
       let stats = fs.lstatSync(fullPath); // Get file stats
+
+      if (file === 'node_modules' || file === '.git') {
+        console.log(`${prefix}${file}/ (ignored)`);
+        return;
+      }
+
       if (stats.isDirectory()) {
         console.log(`${prefix}${file}/ (directory)`);
         listDirectoryContentsRecursive(fullPath, level + 1); // Recurse into subdirectory

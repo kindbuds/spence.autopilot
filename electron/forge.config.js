@@ -101,7 +101,7 @@ module.exports = {
         console.log('Combining x64 and arm64 builds into a Universal binary...');
 
         // Use @electron/universal to combine x64 and arm64 into a Universal binary
-        await electronUniversal.makeUniversalApp({
+        await makeUniversalApp({
           x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
           arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
           outAppPath: path.join(universalDir, 'Spence-AI-Career-Autopilot.app'),

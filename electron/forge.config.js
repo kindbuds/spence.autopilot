@@ -52,7 +52,8 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
 module.exports = {
   hooks: {
     packageAfterCopy: async (forgeConfig, buildPath) => {
-      const outDir = path.resolve(__dirname, 'out');
+      const rootDir = path.resolve(__dirname, '..');  // Use the project root
+      const outDir = path.join(rootDir, 'electron', 'out');  // Electron out directory
       console.log(`Running packageAfterCopy hook with outDir: ${outDir}`);
 
       const x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');

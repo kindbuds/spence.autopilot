@@ -32,17 +32,21 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
 module.exports = {
   hooks: {
     packageAfterCopy: async (forgeConfig, buildPath) => {
-      console.log(`Running packageAfterCopy hook with buildPath: ${buildPath}`);
+      const outDir = path.resolve(__dirname, 'electron', 'out');
+      const x64Path = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
+      const arm64Path = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
+      const universalPath = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
 
-      const x64Path = path.join(buildPath, '../Spence-AI-Career-Autopilot-darwin-x64');
-      const arm64Path = path.join(buildPath, '../Spence-AI-Career-Autopilot-darwin-arm64');
-      const universalPath = path.join(buildPath, '../Spence-AI-Career-Autopilot-darwin-universal');
+      console.log(`Running packageAfterCopy hook with outDir: ${outDir}`);
+      console.log(`x64Path: ${x64Path}`);
+      console.log(`arm64Path: ${arm64Path}`);
+      console.log(`universalPath: ${universalPath}`);
 
-      // List everything in buildPath to help debug the current directory contents
-      console.log('Listing contents of buildPath:');
-      const files = fs.readdirSync(buildPath);
+      // List everything in outDir to help debug the current directory contents
+      console.log('Listing contents of outDir:');
+      const files = fs.readdirSync(outDir);
       files.forEach(file => {
-        const fullPath = path.join(buildPath, file);
+        const fullPath = path.join(outDir, file);
         const stats = fs.lstatSync(fullPath);
         if (stats.isDirectory()) {
           console.log(`${file}/ (directory)`);
@@ -50,10 +54,6 @@ module.exports = {
           console.log(`${file}/ (file)`);
         }
       });
-
-      console.log(`x64Path: ${x64Path}`);
-      console.log(`arm64Path: ${arm64Path}`);
-      console.log(`universalPath: ${universalPath}`);
 
       // Ensure both architecture builds exist
       if (fs.existsSync(x64Path) && fs.existsSync(arm64Path)) {

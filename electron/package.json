@@ -33,7 +33,7 @@
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron/asar": "^3.2.0",
     "@electron/fuses": "^1.8.0",
-    "@electron/universal": "^2.0.1",
+    "@electron/universal": "^1.2.1",
     "concurrently": "^8.2.2",
     "electron": "^29.3.0",
     "html-webpack-plugin": "^5.6.0",
@@ -62,6 +62,9 @@
     "update-electron-app": "^3.0.0",
     "vue-chartkick": "^1.1.0",
     "vuex": "^4.1.0"
+  },
+  "resolutions": {
+    "@electron/universal": "^1.2.1"
   },
   "optionalDependencies": {
     "appdmg": "^0.6.0"

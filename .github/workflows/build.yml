@@ -91,29 +91,29 @@ jobs:
           echo "Listing contents of out:"
           ls -la electron/out
 
-      - name: Sign the individual binaries
-        run: |
-          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
-          ENTITLEMENTS="electron/entitlements.plist"
+      # - name: Sign the individual binaries
+      #   run: |
+      #     SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+      #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
+      #     ENTITLEMENTS="electron/entitlements.plist"
 
-          # Sign the main binary
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
+      #     # Sign the main binary
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
 
-          # Sign each framework individually
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
+      #     # Sign each framework individually
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
 
-      - name: Sign the entire App bundle
-        run: |
-          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
-          ENTITLEMENTS="electron/entitlements.plist"
+      # - name: Sign the entire App bundle
+      #   run: |
+      #     SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+      #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
+      #     ENTITLEMENTS="electron/entitlements.plist"
 
-          # codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
-          codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
+      #     # codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
+      #     codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
 
       - name: Verify the Main App Signature
         run: |

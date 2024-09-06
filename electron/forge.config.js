@@ -86,47 +86,22 @@ module.exports = {
     prePackage: async (forgeConfig, platform, arch) => {
       console.log(`Packaging for ${platform} on ${arch}`);
     },
-    postPackage: async (forgeConfig, buildPath) => {
-      let rootDir = path.resolve(__dirname, '..');  // Use the project root
-      let electronDir = path.join(rootDir, 'electron');
-      let outDir = path.join(electronDir, 'out');
-      // let test1 = '/Users/runner/work/spence.autopilot'
-      // let test2 = '/Users/runner/work/spence.autopilot/spence.autopilot'
-
-      // console.log('> listing variable test1')
-      // listDirectoryContentsRecursive(test1);       // Root directory
-      // console.log('> listing variable test2')
-      // listDirectoryContentsRecursive(test2);       // Root directory
-      // console.log('> listing variable rootDir')
-      // listDirectoryContentsRecursive(rootDir);       // Root directory
-      // console.log('> listing variable electronDir')
-      // listDirectoryContentsRecursive(electronDir);   // Electron directory
-      // console.log('> listing variable outDir')
-      // listDirectoryContentsRecursive(outDir);
-
-      // // outDir = outDir.replace('spence.autopilot/spence.autopilot', 'spence.autopilot')
-      // console.log(`Running packageAfterCopy hook with outDir: ${outDir}`);
-      let x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
-      let arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
-      console.log(`x64Path: ${x64Dir}`);
-      console.log(`arm64Path: ${arm64Dir}`);
-
-
-
-      // listDirectoryContents(outDir);
-      // listDirectoryContents(x64Dir);
-      // listDirectoryContents(arm64Dir);
-
+    postPackage: async (forgeConfig, options) => {
+      const outDir = path.join(__dirname, 'electron/out');
+      const x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
+      const arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
       const universalDir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
-      console.log(`universalDir: ${universalDir}`);
-      // listDirectoryContents(universalDir);
 
-      // // Ensure both architecture builds exist
+      console.log(`x64Dir: ${x64Dir}`);
+      console.log(`arm64Dir: ${arm64Dir}`);
+      console.log(`universalDir: ${universalDir}`);
+
+      // Ensure both architecture builds exist
       if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
         console.log('Combining x64 and arm64 builds into a Universal binary...');
 
         // Use @electron/universal to combine x64 and arm64 into a Universal binary
-        await makeUniversalApp({
+        await electronUniversal.makeUniversalApp({
           x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
           arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
           outAppPath: path.join(universalDir, 'Spence-AI-Career-Autopilot.app'),
@@ -135,6 +110,19 @@ module.exports = {
         console.log('Universal binary created at:', universalDir);
       } else {
         console.error('Could not find both x64 and arm64 builds to combine.');
+      }
+    },
+
+    postMake: async (forgeConfig, options) => {
+      // Sign the universal binary after combining
+      const universalAppPath = path.join(__dirname, 'electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app');
+      console.log('Signing the universal binary...');
+
+      try {
+        await exec(`codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" ${universalAppPath}`);
+        console.log('Universal binary signed successfully.');
+      } catch (error) {
+        console.error('Error during codesigning:', error);
       }
     },
   },

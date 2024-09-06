@@ -59,8 +59,8 @@ module.exports = {
       const arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
 
 
-      console.log(`x64Path: ${x64Path}`);
-      console.log(`arm64Path: ${arm64Path}`);
+      console.log(`x64Path: ${x64Dir}`);
+      console.log(`arm64Path: ${arm64Dir}`);
 
       listDirectoryContents(outDir);
       listDirectoryContents(x64Dir);

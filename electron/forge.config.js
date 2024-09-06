@@ -87,7 +87,7 @@ module.exports = {
       console.log(`Packaging for ${platform} on ${arch}`);
     },
     postPackage: async (forgeConfig, options) => {
-      const outDir = path.join(__dirname, 'electron/out');
+      const outDir = path.join(__dirname, 'out');
       const x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
       const arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
       const universalDir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');

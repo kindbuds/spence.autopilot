@@ -83,6 +83,9 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
 
 module.exports = {
   hooks: {
+    prePackage: async (forgeConfig, platform, arch) => {
+      console.log(`Packaging for ${platform} on ${arch}`);
+    },
     postPackage: async (forgeConfig, buildPath) => {
       let rootDir = path.resolve(__dirname, '..');  // Use the project root
       let electronDir = path.join(rootDir, 'electron');

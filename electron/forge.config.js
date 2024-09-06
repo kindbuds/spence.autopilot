@@ -90,11 +90,11 @@ module.exports = {
       let rootDir = path.resolve(__dirname, '..');  // Use the project root
       let electronDir = path.join(rootDir, 'electron');
       let outDir = path.join(electronDir, 'out');
-      let test1 = '/Users/runner/work/spence.autopilot'
-      let test2 = '/Users/runner/work/spence.autopilot/spence.autopilot'
+      // let test1 = '/Users/runner/work/spence.autopilot'
+      // let test2 = '/Users/runner/work/spence.autopilot/spence.autopilot'
 
-      console.log('> listing variable test1')
-      listDirectoryContentsRecursive(test1);       // Root directory
+      // console.log('> listing variable test1')
+      // listDirectoryContentsRecursive(test1);       // Root directory
       // console.log('> listing variable test2')
       // listDirectoryContentsRecursive(test2);       // Root directory
       // console.log('> listing variable rootDir')
@@ -106,10 +106,10 @@ module.exports = {
 
       // // outDir = outDir.replace('spence.autopilot/spence.autopilot', 'spence.autopilot')
       // console.log(`Running packageAfterCopy hook with outDir: ${outDir}`);
-      // let x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
-      // let arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
-      // console.log(`x64Path: ${x64Dir}`);
-      // console.log(`arm64Path: ${arm64Dir}`);
+      let x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
+      let arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
+      console.log(`x64Path: ${x64Dir}`);
+      console.log(`arm64Path: ${arm64Dir}`);
 
 
 
@@ -117,25 +117,25 @@ module.exports = {
       // listDirectoryContents(x64Dir);
       // listDirectoryContents(arm64Dir);
 
-      // const universalDir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
-      // console.log(`universalPath: ${universalDir}`);
+      const universalDir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
+      console.log(`universalPath: ${universalDir}`);
       // listDirectoryContents(universalDir);
 
       // // Ensure both architecture builds exist
-      // if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
-      //   console.log('Combining x64 and arm64 builds into a Universal binary...');
+      if (fs.existsSync(x64Dir) && fs.existsSync(arm64Dir)) {
+        console.log('Combining x64 and arm64 builds into a Universal binary...');
 
-      //   // Use @electron/universal to combine x64 and arm64 into a Universal binary
-      //   await makeUniversalApp({
-      //     x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
-      //     arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
-      //     outAppPath: path.join(universalPath, 'Spence-AI-Career-Autopilot.app'),
-      //   });
+        // Use @electron/universal to combine x64 and arm64 into a Universal binary
+        await makeUniversalApp({
+          x64AppPath: path.join(x64Dir, 'Spence-AI-Career-Autopilot.app'),
+          arm64AppPath: path.join(arm64Dir, 'Spence-AI-Career-Autopilot.app'),
+          outAppPath: path.join(universalPath, 'Spence-AI-Career-Autopilot.app'),
+        });
 
-      //   console.log('Universal binary created at:', universalPath);
-      // } else {
-      //   console.error('Could not find both x64 and arm64 builds to combine.');
-      // }
+        console.log('Universal binary created at:', universalPath);
+      } else {
+        console.error('Could not find both x64 and arm64 builds to combine.');
+      }
     },
   },
   packagerConfig: {

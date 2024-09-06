@@ -9,6 +9,26 @@ const { makeUniversalApp } = require('@electron/universal');
 const p12Path = path.join(__dirname, 'developerID_application.p12');
 const entitlementsPath = path.join(__dirname, "entitlements.plist");
 
+function listDirectoryContentsRecursive(dirPath, level = 0) {
+  const prefix = ' '.repeat(level * 2); // Indentation for nested directories
+  console.log(`\n${prefix}Listing contents of: ${dirPath}`);
+
+  try {
+    const files = fs.readdirSync(dirPath); // Read directory contents
+    files.forEach(file => {
+      const fullPath = path.join(dirPath, file);
+      const stats = fs.lstatSync(fullPath); // Get file stats
+      if (stats.isDirectory()) {
+        console.log(`${prefix}${file}/ (directory)`);
+        listDirectoryContentsRecursive(fullPath, level + 1); // Recurse into subdirectory
+      } else {
+        console.log(`${prefix}${file} (file)`);
+      }
+    });
+  } catch (err) {
+    console.error(`${prefix}Error reading directory ${dirPath}: ${err.message}`);
+  }
+}
 
 function listDirectoryContents(dirPath) {
   console.log(`\nListing contents of: ${dirPath}`);
@@ -53,17 +73,21 @@ module.exports = {
   hooks: {
     packageAfterCopy: async (forgeConfig, buildPath) => {
       const rootDir = path.resolve(__dirname, '..');  // Use the project root
-      const outDir = path.join(rootDir, 'electron', 'out');  // Electron out directory
-      outDir = outDir.replace('spence.autopilot/spence.autopilot', 'spence.autopilot')
+      const electronDir = path.join(rootDir, 'electron');
+      const outDir = path.join(electronDir, 'out');
 
+      listDirectoryContentsRecursive(rootDir);       // Root directory
+      listDirectoryContentsRecursive(electronDir);   // Electron directory
+      listDirectoryContentsRecursive(outDir);
+
+      // outDir = outDir.replace('spence.autopilot/spence.autopilot', 'spence.autopilot')
       console.log(`Running packageAfterCopy hook with outDir: ${outDir}`);
-
       const x64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-x64');
       const arm64Dir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-arm64');
-
-
       console.log(`x64Path: ${x64Dir}`);
       console.log(`arm64Path: ${arm64Dir}`);
+
+
 
       listDirectoryContents(outDir);
       listDirectoryContents(x64Dir);

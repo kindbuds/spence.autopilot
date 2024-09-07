@@ -4,6 +4,7 @@ const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const { makeUniversalApp } = require('@electron/universal');
 const { exec } = require('child_process');
 const util = require('util');
@@ -102,16 +103,20 @@ module.exports = {
     },
 
     postMake: async (forgeConfig, options) => {
-      const universalAppPath = path.join(__dirname, 'out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app');
-      console.log('Signing the universal binary...');
+      const universalAppPath = path.join(__dirname, 'electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app');
 
-      try {
-        await execPromise(`codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" ${universalAppPath}`);
-        console.log('Universal binary signed successfully.');
-      } catch (error) {
-        console.error('Error during codesigning:', error);
+      if (os.platform() === 'darwin') {  // Only sign on macOS
+        console.log('Signing the universal binary on macOS...');
+        try {
+          await execPromise(`codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" ${universalAppPath}`);
+          console.log('Universal binary signed successfully.');
+        } catch (error) {
+          console.error('Error during codesigning:', error);
+        }
+      } else {
+        console.log('Skipping signing as this is not running on macOS.');
       }
-    },
+    }
   },
   packagerConfig: {
     outDir: path.resolve(__dirname, 'electron/out'),

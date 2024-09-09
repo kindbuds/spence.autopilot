@@ -19,7 +19,8 @@ const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
 
 
-if (require('electron-squirrel-startup')) return;
+// if (require('electron-squirrel-startup')) return;
+
 const { updateElectronApp } = require('update-electron-app')
 updateElectronApp({
     logger: require('electron-log')
@@ -161,6 +162,8 @@ async function createWindow(loggedin = null) {
             nativeWindowOpen: true,
         }
     });
+
+    mainWindow.webContents.openDevTools();
 
     // mainWindow.loadURL(`file://${path.join(__dirname, '/vue-app/dist/index.html')}`);
 

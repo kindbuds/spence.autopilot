@@ -85,6 +85,15 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Inject environment variables
+        run: |
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
+          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> .env
+          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> .env
+          echo "API_BASE=${{ secrets.API_BASE }}" >> .env
+          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> .env
+          echo "API_API2=${{ secrets.API_API2 }}" >> .env
+
       - name: Install dependencies
         run: |
           cd electron

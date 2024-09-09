@@ -168,8 +168,8 @@ async function createWindow(loggedin = null) {
         title: "Spence - AI Career Autopilot",
         icon: path.join(__dirname, 'assets', 'spence-face.ico'),
         webPreferences: {
-            nodeIntegration: false,
-            // nodeIntegration: true,
+            // nodeIntegration: false,
+            nodeIntegration: true,
             contextIsolation: true,
             enableRemoteModule: false,
             webviewTag: true,

@@ -9,10 +9,14 @@ const appData = app.getPath('appData');
 const { AuthenticationClient } = require('auth0');
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')
-eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
+// eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
 storage.setDataPath(path.join(appData, build.productName));
-eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
-// require('dotenv').config();
+// eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
+
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 let loaderWindow, mainWindow, authWindow;
 const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
@@ -23,7 +27,9 @@ eShared.logtofile(`starting application2`)
 eShared.logtofile(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
 eShared.logtofile(`process.env.AMPLIFY_DOMAIN: ${process.env.AMPLIFY_DOMAIN}`)
 eShared.logtofile(`process.env.SPENCE_DOMAIN: ${process.env.SPENCE_DOMAIN}`)
-
+Object.keys(process.env).forEach(key => {
+    eShared.logtofile(`${key}: ${process.env[key]}`);
+});
 // if (require('electron-squirrel-startup')) return;
 
 const { updateElectronApp } = require('update-electron-app')

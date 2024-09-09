@@ -15,6 +15,11 @@ jobs:
     env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      TEAM_ID: ${{ secrets.TEAM_ID }}
+      AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
 
     steps:
       - name: Checkout code
@@ -24,15 +29,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
-
-      - name: Inject environment variables
-        run: |
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
-          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> .env
-          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> .env
-          echo "API_BASE=${{ secrets.API_BASE }}" >> .env
-          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> .env
-          echo "API_API2=${{ secrets.API_API2 }}" >> .env
 
       - name: Install dependencies and build the app for Windows
         run: |
@@ -58,6 +54,7 @@ jobs:
       APPLE_ID: ${{ secrets.APPLE_ID }}
       APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
       TEAM_ID: ${{ secrets.TEAM_ID }}
+      AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
 
     steps:
       - name: Checkout code
@@ -84,15 +81,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
-
-      - name: Inject environment variables
-        run: |
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env
-          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> .env
-          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> .env
-          echo "API_BASE=${{ secrets.API_BASE }}" >> .env
-          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> .env
-          echo "API_API2=${{ secrets.API_API2 }}" >> .env
 
       - name: Install dependencies
         run: |

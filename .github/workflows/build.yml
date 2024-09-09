@@ -30,6 +30,14 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Set up environment variables
+        run: |
+          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> $GITHUB_ENV
+          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> $GITHUB_ENV
+          echo "API_BASE=${{ secrets.API_BASE }}" >> $GITHUB_ENV
+          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> $GITHUB_ENV
+          echo "API_API2=${{ secrets.API_API2 }}" >> $GITHUB_ENV
+
       - name: Install dependencies and build the app for Windows
         run: |
           cd electron
@@ -57,9 +65,6 @@ jobs:
       AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
 
     steps:
-      - name: Print environment variables
-        run: echo "AMPLIFY_DOMAIN is $AMPLIFY_DOMAIN"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -84,6 +89,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16'
+
+      - name: Set up environment variables
+        run: |
+          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> $GITHUB_ENV
+          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> $GITHUB_ENV
+          echo "API_BASE=${{ secrets.API_BASE }}" >> $GITHUB_ENV
+          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> $GITHUB_ENV
+          echo "API_API2=${{ secrets.API_API2 }}" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |

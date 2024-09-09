@@ -57,6 +57,9 @@ jobs:
       AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
 
     steps:
+      - name: Print environment variables
+        run: echo "AMPLIFY_DOMAIN is $AMPLIFY_DOMAIN"
+
       - name: Checkout code
         uses: actions/checkout@v4
 

@@ -162,8 +162,26 @@ async function createWindow(loggedin = null) {
             nativeWindowOpen: true,
         }
     });
+    mainWindow.openDevTools();
 
-    mainWindow.webContents.openDevTools();
+    console.log("Window created");
+
+    mainWindow.webContents.on('did-finish-load', () => {
+        console.log("Web content loaded");
+    });
+
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+        console.log(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`);
+    });
+
+    mainWindow.webContents.on('dom-ready', () => {
+        console.log("DOM is ready");
+    });
+
+    mainWindow.webContents.on('crashed', () => {
+        console.log("WebContents crashed");
+    });
+
 
     // mainWindow.loadURL(`file://${path.join(__dirname, '/vue-app/dist/index.html')}`);
 

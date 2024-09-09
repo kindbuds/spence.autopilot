@@ -12,14 +12,14 @@ const eShared = require('./helpers/shared.js')
 eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
 storage.setDataPath(path.join(appData, build.productName));
 eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
-require('dotenv').config();
+// require('dotenv').config();
 let loaderWindow, mainWindow, authWindow;
 const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
 
 
-eShared.logtofile(`starting application`)
+eShared.logtofile(`starting application2`)
 eShared.logtofile(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
 eShared.logtofile(`process.env.AMPLIFY_DOMAIN: ${process.env.AMPLIFY_DOMAIN}`)
 eShared.logtofile(`process.env.SPENCE_DOMAIN: ${process.env.SPENCE_DOMAIN}`)

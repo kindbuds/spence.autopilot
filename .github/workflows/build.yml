@@ -30,13 +30,14 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Set up environment variables
+      - name: Create .env file with secrets
         run: |
-          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> $GITHUB_ENV
-          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> $GITHUB_ENV
-          echo "API_BASE=${{ secrets.API_BASE }}" >> $GITHUB_ENV
-          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> $GITHUB_ENV
-          echo "API_API2=${{ secrets.API_API2 }}" >> $GITHUB_ENV
+          echo "NODE_ENV=production" >> .env
+          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> .env
+          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> .env
+          echo "API_BASE=${{ secrets.API_BASE }}" >> .env
+          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> .env
+          echo "API_API2=${{ secrets.API_API2 }}" >> .env
 
       - name: Install dependencies and build the app for Windows
         run: |
@@ -90,13 +91,14 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Set up environment variables
+      - name: Create .env file with secrets
         run: |
-          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> $GITHUB_ENV
-          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> $GITHUB_ENV
-          echo "API_BASE=${{ secrets.API_BASE }}" >> $GITHUB_ENV
-          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> $GITHUB_ENV
-          echo "API_API2=${{ secrets.API_API2 }}" >> $GITHUB_ENV
+          echo "NODE_ENV=production" >> .env
+          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> .env
+          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> .env
+          echo "API_BASE=${{ secrets.API_BASE }}" >> .env
+          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> .env
+          echo "API_API2=${{ secrets.API_API2 }}" >> .env
 
       - name: Install dependencies
         run: |

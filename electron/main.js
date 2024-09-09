@@ -13,10 +13,15 @@ const eShared = require('./helpers/shared.js')
 storage.setDataPath(path.join(appData, build.productName));
 // eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
 
-
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
+const envPath = path.resolve(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    eShared.logtofile('.env file loaded');
+} else {
+    eShared.logtofile('No .env file found');
 }
+
+
 let loaderWindow, mainWindow, authWindow;
 const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN

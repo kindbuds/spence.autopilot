@@ -32,12 +32,12 @@ jobs:
 
       - name: Create .env file with secrets
         run: |
-          echo "NODE_ENV=production" >> .env
-          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> .env
-          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> .env
-          echo "API_BASE=${{ secrets.API_BASE }}" >> .env
-          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> .env
-          echo "API_API2=${{ secrets.API_API2 }}" >> .env
+          echo "NODE_ENV=production" >> electron/.env
+          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> electron/.env
+          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> electron/.env
+          echo "API_BASE=${{ secrets.API_BASE }}" >> electron/.env
+          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> electron/.env
+          echo "API_API2=${{ secrets.API_API2 }}" >> electron/.env
 
       - name: Install dependencies and build the app for Windows
         run: |
@@ -93,12 +93,13 @@ jobs:
 
       - name: Create .env file with secrets
         run: |
-          echo "NODE_ENV=production" >> .env
-          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> .env
-          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> .env
-          echo "API_BASE=${{ secrets.API_BASE }}" >> .env
-          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> .env
-          echo "API_API2=${{ secrets.API_API2 }}" >> .env
+          echo "NODE_ENV=production" >> electron/.env
+          echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> electron/.env
+          echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> electron/.env
+          echo "API_BASE=${{ secrets.API_BASE }}" >> electron/.env
+          echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> electron/.env
+          echo "API_API2=${{ secrets.API_API2 }}" >> electron/.env
+
 
       - name: Install dependencies
         run: |

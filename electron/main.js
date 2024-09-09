@@ -20,6 +20,9 @@ const spenceDomain = process.env.SPENCE_DOMAIN
 
 
 eShared.logtofile(`starting application`)
+eShared.logtofile(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
+eShared.logtofile(`process.env.AMPLIFY_DOMAIN: ${process.env.AMPLIFY_DOMAIN}`)
+eShared.logtofile(`process.env.SPENCE_DOMAIN: ${process.env.SPENCE_DOMAIN}`)
 
 // if (require('electron-squirrel-startup')) return;
 

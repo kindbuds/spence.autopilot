@@ -34,6 +34,8 @@ console.log(gotTheLock, 'gotTheLock')
 eShared.logtofile(`gotTheLock: ${gotTheLock}`)
 
 if (!gotTheLock) {
+
+    eShared.logtofile(`Quitting application, instance already running.`)
     console.log("Quitting application, instance already running.");
     app.quit();
 } else {
@@ -52,6 +54,7 @@ if (!gotTheLock) {
 
     app.whenReady().then(async () => {
         console.log('running app.whenReady()')
+        eShared.logtofile(`running app.whenReady()`)
 
         await createWindow();
         ipcMain.on('search-cycle-completed', async (event, dte) => {
@@ -59,6 +62,7 @@ if (!gotTheLock) {
         });
 
         async function loadUserData(userid) {
+            eShared.logtofile(`loadUserData`)
             let checkObj = await sendToApi(`${api.api2Url}autopilot/check`, {
                 userid: userid,
                 sessionid: -1
@@ -72,6 +76,7 @@ if (!gotTheLock) {
         }
 
         ipcMain.on('reload-user', async (event, token) => {
+            eShared.logtofile(`reload-user`)
             const payload = {
                 access_token: token,
                 autopilot: true,
@@ -91,6 +96,7 @@ if (!gotTheLock) {
         });
 
         ipcMain.on('load-user', async (event) => {
+            eShared.logtofile(`load-user`)
             let user = await eShared.loadUserData()
 
             const userData = await loadUserData(user.userid);
@@ -100,9 +106,11 @@ if (!gotTheLock) {
         });
 
         ipcMain.on('check-login-status', async (event) => {
+            eShared.logtofile(`check-login-status`)
             await createWindow(isLoggedIn);
         });
         ipcMain.on('setup-saved', async (event, setupData) => {
+            eShared.logtofile(`setup-saved`)
             console.log(setupData, 'Received setup-saved data');
             const newSetup = await sendToApi(`${api.api2Url}autopilot/setup`, setupData, 'json');
             console.log(newSetup, 'newSetup')
@@ -115,6 +123,7 @@ if (!gotTheLock) {
         });
 
         ipcMain.on('save-settings', async (event, config) => {
+            eShared.logtofile(`main.save-settings`)
             console.log('main.save-settings', config);
             // let settingsSaved =
             await sendToApi(`${api.api2Url}autopilot/save_config`, config);
@@ -127,9 +136,11 @@ if (!gotTheLock) {
             // await eShared.setAuth(user, eShared.logtofile);
         });
         ipcMain.handle('is-logged-in', async (event) => {
+            eShared.logtofile(`main.is-logged-in`)
             return await eShared.isLoggedIn();
         });
         ipcMain.handle('is-logged-in-setup', async (event) => {
+            eShared.logtofile(`main.is-logged-in-setup`)
             return await eShared.isLoggedInAndSetup();
         });
 
@@ -137,6 +148,7 @@ if (!gotTheLock) {
 }
 
 async function createWindow(loggedin = null) {
+    eShared.logtofile(`running createWindow`)
 
     if (!loggedin) {
         loggedin = await eShared.isLoggedIn();
@@ -166,22 +178,26 @@ async function createWindow(loggedin = null) {
         }
     });
     mainWindow.openDevTools();
-
+    eShared.logtofile(`Window created`)
     console.log("Window created");
 
     mainWindow.webContents.on('did-finish-load', () => {
+        eShared.logtofile(`did-finish-load`)
         console.log("Web content loaded");
     });
 
     mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+        eShared.logtofile(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`)
         console.log(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`);
     });
 
     mainWindow.webContents.on('dom-ready', () => {
+        eShared.logtofile(`dom-ready`)
         console.log("DOM is ready");
     });
 
     mainWindow.webContents.on('crashed', () => {
+        eShared.logtofile(`WebContents crashed`)
         console.log("WebContents crashed");
     });
 
@@ -192,39 +208,49 @@ async function createWindow(loggedin = null) {
     mainWindow.maximize();
 
     console.log(amplifyUri, 'amplifyUri')
+    eShared.logtofile(`calling mainWindow.loadURL ${amplifyUri}`)
     mainWindow.loadURL(amplifyUri);
+    eShared.logtofile(`called mainWindow.loadURL ${amplifyUri}`)
 
     // Log URL changes
     mainWindow.webContents.on('did-navigate', (event, url) => {
+        eShared.logtofile(`Navigated to: ${url}`)
         console.log('Navigated to:', url);
         mainWindow.webContents.executeJavaScript(`console.log('Navigated to:', '${url}');`);
     });
 
     mainWindow.webContents.on('did-navigate-in-page', (event, url) => {
+        eShared.logtofile(`Navigated within page to: ${url}`)
         console.log('Navigated within page to:', url);
         mainWindow.webContents.executeJavaScript(`console.log('Navigated within page to:', '${url}');`);
     });
 
     mainWindow.on('page-title-updated', (event) => {
+        eShared.logtofile(`page-title-updated`)
         event.preventDefault();
     });
 
     mainWindow.webContents.on('did-finish-load', () => {
+        eShared.logtofile(`did-finish-load`)
         mainWindow.webContents.insertCSS('html, body { overflow: hidden !important; }');
         mainWindow.setTitle("Spence - AI Career Autopilot");
     });
 
     mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+        eShared.logtofile(`did-fail-load ${errorDescription}`)
         console.error('Failed to load:', errorDescription);
     });
     mainWindow.webContents.on('crashed', () => {
+        eShared.logtofile(`The web content has crashed`)
         console.error('The web content has crashed');
     });
     mainWindow.webContents.on('unresponsive', () => {
+        eShared.logtofile(`The web content is unresponsive`)
         console.error('The web content is unresponsive');
     });
 
     mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+        eShared.logtofile(`mainWindow.webContents.on('new-window'`)
         console.log(` mainWindow.webContents.on('new-window'`)
         event.preventDefault();
         mainWindow.webContents.send('open-url-in-webview', url);
@@ -357,6 +383,8 @@ async function createWindow(loggedin = null) {
     });
 
     mainWindow.once('ready-to-show', () => {
+        eShared.logtofile(`mainWindow.ready-to-show`)
+
         mainWindow.show();
         try {
             //  if (isDev)
@@ -373,6 +401,8 @@ async function createWindow(loggedin = null) {
 
 
 async function handleAuthCallback(fullUrl) {
+    eShared.logtofile(`handleAuthCallback: ${fullUrl}`)
+
     const urlObject = new URL(fullUrl);
     const token = urlObject.searchParams.get('token');
     const userid = urlObject.searchParams.get('id');
@@ -414,7 +444,10 @@ async function handleAuthCallback(fullUrl) {
 
 
 app.on('will-finish-launching', () => {
+    eShared.logtofile(`will-finish-launching`)
+
     app.on('open-url', (event, url) => {
+        eShared.logtofile(`open-url`)
         event.preventDefault();
         // dialog.showErrorBox('Welcome Back', `You arrived from 2: ${url}`);
         // Additional handling code...
@@ -423,11 +456,13 @@ app.on('will-finish-launching', () => {
 
 
 app.on('window-all-closed', () => {
+    eShared.logtofile(`in window-all-closed`)
     console.log('in window-all-closed')
     if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('activate', async () => {
+    eShared.logtofile(`activate`)
     if (BrowserWindow.getAllWindows().length === 0) await createWindow();
 });
 
@@ -438,10 +473,12 @@ ipcMain.on('job-details', (event, jobDetails) => {
 });
 
 ipcMain.handle('get-app-path', () => {
+    eShared.logtofile(`get-app-path`)
     return app.getAppPath();
 });
 
 ipcMain.handle('get-dirname', async (event) => {
+    eShared.logtofile(`get-dirname`)
     return __dirname;
 });
 

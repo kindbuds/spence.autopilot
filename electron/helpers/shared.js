@@ -3,9 +3,9 @@ const path = require('path');
 const storage = require('electron-json-storage');
 
 module.exports.logtofile = (message) => {
-    // const logFile = path.join(__dirname, 'log.txt');
-    // const timestamp = new Date().toISOString();
-    // fs.appendFileSync(logFile, `[${timestamp}] ${message}\n`);
+    const logFile = path.join(__dirname, 'log.txt');
+    const timestamp = new Date().toISOString();
+    fs.appendFileSync(logFile, `[${timestamp}] ${message}\n`);
 }
 
 module.exports.getGuid = () => {

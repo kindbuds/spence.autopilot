@@ -19,6 +19,8 @@ const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
 
 
+eShared.logtofile(`starting application`)
+
 // if (require('electron-squirrel-startup')) return;
 
 const { updateElectronApp } = require('update-electron-app')
@@ -154,7 +156,8 @@ async function createWindow(loggedin = null) {
         title: "Spence - AI Career Autopilot",
         icon: path.join(__dirname, 'assets', 'spence-face.ico'),
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
+            // nodeIntegration: true,
             contextIsolation: true,
             enableRemoteModule: false,
             webviewTag: true,
@@ -359,7 +362,7 @@ async function createWindow(loggedin = null) {
             //  if (isDev)
             setTimeout(() => {
                 console.log('openDevTools');
-                mainWindow.webContents.openDevTools();
+                // mainWindow.webContents.openDevTools();
             }, 1000);
         } catch {
             console.log('openDevTools failed')

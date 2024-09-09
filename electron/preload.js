@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer, shell } = require('electron');
 const auth0 = require('auth0-js');
 const spenceDomain = process.env.SPENCE_DOMAIN
 const redirectUri = `${spenceDomain}oauth_token/?autopilot=true&state=none`
+console.log("Preload script is running");
 
 contextBridge.exposeInMainWorld(
     'electron',

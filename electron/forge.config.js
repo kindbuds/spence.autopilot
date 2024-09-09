@@ -4,9 +4,66 @@ const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+const { makeUniversalApp } = require('@electron/universal');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 const p12Path = path.join(__dirname, 'developerID_application.p12');
 const entitlementsPath = path.join(__dirname, "entitlements.plist");
+
+function listDirectoryContentsRecursive(dirPath, level = 0) {
+  let prefix = ' '.repeat(level * 2); // Indentation for nested directories
+  console.log(`\n${prefix}Listing contents of: ${dirPath}`);
+
+  try {
+    let files = fs.readdirSync(dirPath); // Read directory contents
+    if (files.length === 0) {
+      console.log(`${prefix}(empty directory)`);
+      return;
+    }
+    files.forEach(file => {
+      let fullPath = path.join(dirPath, file);
+      let stats = fs.lstatSync(fullPath); // Get file stats
+
+      // Ignore specific directories
+      if (file === 'node_modules' || file === '.git' || file === '.github' || file === 'vue-app') {
+        console.log(`${prefix}${file}/ (ignored)`);
+        return;
+      }
+
+      if (stats.isDirectory()) {
+        console.log(`${prefix}${file}/ (directory)`);
+        listDirectoryContentsRecursive(fullPath, level + 1); // Recurse into subdirectory
+      } else {
+        // Log files as well
+        // console.log(`${prefix}${file} (file)`);
+      }
+    });
+  } catch (err) {
+    console.error(`${prefix}Error reading directory ${dirPath}: ${err.message}`);
+  }
+}
+
+function listDirectoryContents(dirPath) {
+  console.log(`\nListing contents of: ${dirPath}`);
+
+  try {
+    const files = fs.readdirSync(dirPath); // Read directory contents
+    files.forEach(file => {
+      const fullPath = path.join(dirPath, file);
+      const stats = fs.lstatSync(fullPath); // Get file stats
+      if (stats.isDirectory()) {
+        console.log(`${file}/ (directory)`);
+      } else {
+        console.log(`${file}/ (file)`);
+      }
+    });
+  } catch (err) {
+    console.error(`Error reading directory ${dirPath}: ${err.message}`);
+  }
+}
 
 
 console.log(`Checking .p12 file at: ${p12Path}`);
@@ -30,13 +87,40 @@ fs.access(entitlementsPath, fs.constants.F_OK, (err) => {
 
 module.exports = {
   hooks: {
-    packageAfterCopy: async (forgeConfig, build_path) => {
-      console.log(`\nBuild Path: ${build_path}`);
-      // await minify(build_path + '/src');
+    prePackage: async (forgeConfig, platform, arch) => {
+      console.log(`Packaging for ${platform} on ${arch}`);
     },
+    postPackage: async (forgeConfig, options) => {
+      const outDir = path.join(__dirname, 'out');
+      const universalDir = path.join(outDir, 'Spence-AI-Career-Autopilot-darwin-universal');
+      console.log(`universalDir: ${universalDir}`);
+
+      if (fs.existsSync(universalDir)) {
+        console.log('Universal binary found, proceeding with signing...');
+      } else {
+        console.error('Universal binary not found.');
+      }
+    },
+
+    postMake: async (forgeConfig, options) => {
+      const universalAppPath = path.join(__dirname, 'electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app');
+
+      if (os.platform() === 'darwin') {  // Only sign on macOS
+        console.log('Signing the universal binary on macOS...');
+        try {
+          await execPromise(`codesign --force --deep --options runtime --timestamp --entitlements entitlements.plist --sign "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)" ${universalAppPath}`);
+          console.log('Universal binary signed successfully.');
+        } catch (error) {
+          console.error('Error during codesigning:', error);
+        }
+      } else {
+        console.log('Skipping signing as this is not running on macOS.');
+      }
+    }
   },
   packagerConfig: {
-    outDir: 'out/make',
+    outDir: path.resolve(__dirname, 'electron/out'),
+    // outDir: 'out/make',
     asar: true,
     icon: path.join(__dirname, "assets", "spence-face.ico"),
     extraResource: [
@@ -47,22 +131,7 @@ module.exports = {
       'node_modules/fs-xattr'
     ],
     osxSign: {},
-    // {
-    //   identity: "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)", // Replace with your actual identity
-    //   hardenedRuntime: true,
-    //   entitlements: entitlementsPath, // Path to your entitlements file
-    //   entitlementsInherit: entitlementsPath, // Path to your entitlements file
-    //   gatekeeperAssess: false,
-    //   'gatekeeper-assess': false,
-    //   'deep': true,
-    //   'keychain': 'build.keychain-db'
-    //   // 'keychain-profile': p12Path // Path to your p12 file
-    // },
     osxNotarize: false,
-    // osxNotarize: {
-    //   appleId: "jeff.borden@kindbuds.us", // Replace with your Apple ID
-    //   appleIdPassword: "lhua-eecg-lvgg-tshh" // Replace with your app-specific password
-    // }
   },
   rebuildConfig: {},
   makers: [
@@ -88,7 +157,7 @@ module.exports = {
         overwrite: true,
         debug: false,
         format: 'ULFO'
-      },
+      }
     },
   ],
   publishers: [
@@ -135,6 +204,16 @@ module.exports = {
     ],
     win: {
       target: ["squirrel"],
+    },
+    mac: {
+      target: [
+        {
+          target: "dmg",
+          arch: ["x64", "arm64"]
+        }
+      ]
     }
   }
 }
+
+

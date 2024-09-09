@@ -86,37 +86,44 @@ jobs:
           cd electron
           npm run package
 
-      - name: Sign the individual binaries
+      - name: List contents of out directory
         run: |
-          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-          ENTITLEMENTS="electron/entitlements.plist"
+          echo "Listing contents of out:"
+          ls -la electron/out
 
-          # Sign the main binary
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
+      # - name: Sign the individual binaries
+      #   run: |
+      #     SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+      #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
+      #     ENTITLEMENTS="electron/entitlements.plist"
 
-          # Sign each framework individually
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
-          codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
+      #     # Sign the main binary
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/MacOS/Spence-AI-Career-Autopilot"
 
-      - name: Sign the entire App bundle
-        run: |
-          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
-          ENTITLEMENTS="electron/entitlements.plist"
+      #     # Sign each framework individually
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/ReactiveObjC.framework/Versions/A/ReactiveObjC"
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Squirrel.framework/Versions/A/Squirrel"
+      #     codesign --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH/Contents/Frameworks/Mantle.framework/Versions/A/Mantle"
 
-          codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
+      # - name: Sign the entire App bundle
+      #   run: |
+      #     SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+      #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
+      #     ENTITLEMENTS="electron/entitlements.plist"
+
+      #     # codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
+      #     codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
 
       - name: Verify the Main App Signature
         run: |
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
+          # codesign -vvv --deep --strict "$APP_PATH"
           codesign -vvv --deep --strict "$APP_PATH"
 
       - name: Package the App as a DMG
         run: |
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-arm64/Spence-AI-Career-Autopilot.app"
+          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
           DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
 
           hdiutil create "$DMG_PATH" -volname "Spence-AI-Career-Autopilot" -srcfolder "$APP_PATH" -ov -format UDZO

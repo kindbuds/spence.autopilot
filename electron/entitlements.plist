@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
+    <key>com.apple.security.device.location</key>
+    <true/>
+    <key>com.apple.locationd.Core</key>
+    <true/>
     <key>com.apple.security.app-sandbox</key>
     <true/>
     <key>com.apple.security.network.client</key>
@@ -28,5 +32,15 @@
     <true/>
     <key>com.apple.security.cs.allow-dyld-environment-variables</key>
     <true/>  
+    <key>com.apple.security.personal-information.location</key>
+    <true/>
+    <key>com.apple.security.files.system.read-write</key>
+    <true/>
+    <key>com.apple.security.files.full-disk-access</key>
+    <true/>
+    <key>com.apple.security.temporary-exception.files.home-relative-path.read-write</key>
+    <string>Library/Preferences/</string>
+    <key>com.apple.security.temporary-exception.files.home-relative-path.read-write</key>
+    <string>Library/Caches/</string>
   </dict>
 </plist>

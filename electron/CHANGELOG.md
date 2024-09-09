@@ -2,6 +2,84 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.262](https://github.com/kindbuds/spence.autopilot/compare/v0.0.261...v0.0.262) (2024-09-07)
+
+### [0.0.261](https://github.com/kindbuds/spence.autopilot/compare/v0.0.260...v0.0.261) (2024-09-07)
+
+### [0.0.260](https://github.com/kindbuds/spence.autopilot/compare/v0.0.259...v0.0.260) (2024-09-07)
+
+### [0.0.259](https://github.com/kindbuds/spence.autopilot/compare/v0.0.258...v0.0.259) (2024-09-06)
+
+### [0.0.258](https://github.com/kindbuds/spence.autopilot/compare/v0.0.257...v0.0.258) (2024-09-06)
+
+### [0.0.257](https://github.com/kindbuds/spence.autopilot/compare/v0.0.256...v0.0.257) (2024-09-06)
+
+### [0.0.256](https://github.com/kindbuds/spence.autopilot/compare/v0.0.255...v0.0.256) (2024-09-06)
+
+### [0.0.255](https://github.com/kindbuds/spence.autopilot/compare/v0.0.254...v0.0.255) (2024-09-06)
+
+### [0.0.254](https://github.com/kindbuds/spence.autopilot/compare/v0.0.253...v0.0.254) (2024-09-06)
+
+### [0.0.253](https://github.com/kindbuds/spence.autopilot/compare/v0.0.252...v0.0.253) (2024-09-06)
+
+### [0.0.252](https://github.com/kindbuds/spence.autopilot/compare/v0.0.251...v0.0.252) (2024-09-06)
+
+### [0.0.251](https://github.com/kindbuds/spence.autopilot/compare/v0.0.250...v0.0.251) (2024-09-06)
+
+### [0.0.250](https://github.com/kindbuds/spence.autopilot/compare/v0.0.249...v0.0.250) (2024-09-06)
+
+### [0.0.249](https://github.com/kindbuds/spence.autopilot/compare/v0.0.248...v0.0.249) (2024-09-06)
+
+### [0.0.248](https://github.com/kindbuds/spence.autopilot/compare/v0.0.247...v0.0.248) (2024-09-06)
+
+### [0.0.247](https://github.com/kindbuds/spence.autopilot/compare/v0.0.246...v0.0.247) (2024-09-06)
+
+### [0.0.246](https://github.com/kindbuds/spence.autopilot/compare/v0.0.245...v0.0.246) (2024-09-06)
+
+### [0.0.245](https://github.com/kindbuds/spence.autopilot/compare/v0.0.244...v0.0.245) (2024-09-06)
+
+### [0.0.244](https://github.com/kindbuds/spence.autopilot/compare/v0.0.243...v0.0.244) (2024-09-06)
+
+### [0.0.243](https://github.com/kindbuds/spence.autopilot/compare/v0.0.242...v0.0.243) (2024-09-06)
+
+### [0.0.242](https://github.com/kindbuds/spence.autopilot/compare/v0.0.241...v0.0.242) (2024-09-06)
+
+### [0.0.241](https://github.com/kindbuds/spence.autopilot/compare/v0.0.240...v0.0.241) (2024-09-06)
+
+### [0.0.240](https://github.com/kindbuds/spence.autopilot/compare/v0.0.239...v0.0.240) (2024-09-06)
+
+### [0.0.239](https://github.com/kindbuds/spence.autopilot/compare/v0.0.238...v0.0.239) (2024-09-06)
+
+### [0.0.238](https://github.com/kindbuds/spence.autopilot/compare/v0.0.237...v0.0.238) (2024-09-06)
+
+### [0.0.237](https://github.com/kindbuds/spence.autopilot/compare/v0.0.236...v0.0.237) (2024-09-06)
+
+### [0.0.236](https://github.com/kindbuds/spence.autopilot/compare/v0.0.235...v0.0.236) (2024-09-06)
+
+### [0.0.235](https://github.com/kindbuds/spence.autopilot/compare/v0.0.234...v0.0.235) (2024-09-06)
+
+### [0.0.234](https://github.com/kindbuds/spence.autopilot/compare/v0.0.233...v0.0.234) (2024-09-06)
+
+### [0.0.233](https://github.com/kindbuds/spence.autopilot/compare/v0.0.232...v0.0.233) (2024-09-06)
+
+### [0.0.232](https://github.com/kindbuds/spence.autopilot/compare/v0.0.231...v0.0.232) (2024-09-06)
+
+### [0.0.231](https://github.com/kindbuds/spence.autopilot/compare/v0.0.230...v0.0.231) (2024-09-06)
+
+### [0.0.230](https://github.com/kindbuds/spence.autopilot/compare/v0.0.229...v0.0.230) (2024-09-06)
+
+### [0.0.229](https://github.com/kindbuds/spence.autopilot/compare/v0.0.228...v0.0.229) (2024-09-06)
+
+### [0.0.228](https://github.com/kindbuds/spence.autopilot/compare/v0.0.227...v0.0.228) (2024-09-06)
+
+### [0.0.227](https://github.com/kindbuds/spence.autopilot/compare/v0.0.226...v0.0.227) (2024-09-06)
+
+### [0.0.226](https://github.com/kindbuds/spence.autopilot/compare/v0.0.225...v0.0.226) (2024-09-06)
+
+### [0.0.225](https://github.com/kindbuds/spence.autopilot/compare/v0.0.224...v0.0.225) (2024-09-06)
+
+### [0.0.224](https://github.com/kindbuds/spence.autopilot/compare/v0.0.223...v0.0.224) (2024-09-06)
+
 ### [0.0.223](https://github.com/kindbuds/spence.autopilot/compare/v0.0.222...v0.0.223) (2024-08-28)
 
 ### [0.0.222](https://github.com/kindbuds/spence.autopilot/compare/v0.0.220...v0.0.222) (2024-08-28)

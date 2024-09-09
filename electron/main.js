@@ -11,6 +11,7 @@ const { AuthenticationClient } = require('auth0');
 const eShared = require('./helpers/shared.js')
 // eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
 storage.setDataPath(path.join(appData, build.productName));
+const dotenv = require('dotenv');
 // eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
 
 const envPath = path.resolve(__dirname, '.env');

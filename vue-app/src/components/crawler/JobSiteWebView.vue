@@ -364,7 +364,7 @@ export default {
         if (!webview) return;
         setTimeout(() => {
           try {
-            webview.openDevTools();
+           // webview.openDevTools();
           } catch {
             console.log("openDevTools failed");
           }
@@ -1012,7 +1012,7 @@ export default {
     const isFiltered = window.autopilotConfig.companyFilters.some(companyFilter => {
         // Check if the job's employer (lowercased) matches any lowercased company names in the filters
         const employerMatches = jobData.employer.toLowerCase() === companyFilter.company_name_lower;
-       
+
         // console.log('Checking employer: ', jobData.employer, ' against filtered company: ', companyFilter.company_name,'. Match found: ',employerMatches);
 
         if (employerMatches) {
@@ -1131,25 +1131,25 @@ async function clickLinksSequentially(jobCards) {
           resolve(true);
           return;
         }
-      }     
+      }
 
       let isFilteredCompany = false;
       if(!stopDupe) {
         isFilteredCompany = stopFilteredCompany(jobData);
         // console.log(isFilteredCompany, 'isFilteredCompany');
         if (isFilteredCompany) {
-          skipped = true;        
+          skipped = true;
         }
       }
 
-      if(!isFilteredCompany) {      
+      if(!isFilteredCompany) {
           let isFiltered = stopFiltered(jobData);
           console.log(isFiltered, 'isFiltered');
           if (isFiltered) {
-            skipped = true;        
+            skipped = true;
           }
       }
-    
+
       const url = 'https://www.linkedin.com/jobs/search/?currentJobId=' + siteId;
       const jobDetails = {
         domain: '${this.domain}',
@@ -1180,11 +1180,11 @@ async function clickLinksSequentially(jobCards) {
         jobDetails.description = getJobDescription();
         jobDetails.applicantCount = getApplicantCount();
       //   console.log(jobDetails.applicantCount, 'jobDetails.applicantCount');
-      
+
         isFiltered = stopFiltered(jobDetails);
         // console.log(isFiltered, 'isFiltered2');
         if (isFiltered) {
-          jobDetails.skipped = true;        
+          jobDetails.skipped = true;
         }
       }
     //   console.log(jobDetails, 'jobDetails');

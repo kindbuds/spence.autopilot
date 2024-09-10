@@ -45,11 +45,15 @@ jobs:
           npm install
           npm run make
 
+      - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
+        run: |
+          move electron\out\make\squirrel.windows\x64\Spence-Setup.exe electron\out\make\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
+
       - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
-          name: Spence-Setup.exe
-          path: electron/out/Spence-AI-Career-Autopilot-win32-x64/Spence-AI-Career-Autopilot.exe
+          name: Spence-AI-Career-Autopilot.exe
+          path: electron/out/make/squirrel.windows/x64/Spence-AI-Career-Autopilot.exe
           if-no-files-found: warn
 
   build-macos:
@@ -189,7 +193,7 @@ jobs:
       - name: Download Windows Installer
         uses: actions/download-artifact@v4
         with:
-          name: Spence-Setup.exe
+          name: Spence-AI-Career-Autopilot.exe  # <- Update to match the renamed installer
           path: ./dist
 
       - name: Download macOS DMG

@@ -193,7 +193,7 @@ jobs:
       - name: Download Windows Installer
         uses: actions/download-artifact@v4
         with:
-          name: Spence-AI-Career-Autopilot.exe  # <- Update to match the renamed installer
+          name: Spence-AI-Career-Autopilot.exe
           path: ./dist
 
       - name: Download macOS DMG

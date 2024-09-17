@@ -192,7 +192,8 @@ async function createWindow(loggedin = null) {
             nativeWindowOpen: true,
         }
     });
-    // mainWindow.openDevTools();
+
+    mainWindow.openDevTools();
     // eShared.logtofile(`Window created`)
     console.log("Window created");
 

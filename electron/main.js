@@ -405,7 +405,7 @@ async function createWindow(loggedin = null) {
             //  if (isDev)
             setTimeout(() => {
                 console.log('openDevTools');
-                // mainWindow.webContents.openDevTools();
+                mainWindow.webContents.openDevTools();
             }, 1000);
         } catch {
             console.log('openDevTools failed')

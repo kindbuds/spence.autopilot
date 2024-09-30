@@ -23,7 +23,7 @@ contextBridge.exposeInMainWorld(
             return response;
         },
         getNodeEnv: () => process.env.NODE_ENV,
-
+        getWorkAreaSize: () => ipcRenderer.invoke('get-work-area-size'),
         onNewWindowRequest: (callback) => {
             ipcRenderer.on('open-url-in-webview', (event, newUrl) => {
                 callback(newUrl);

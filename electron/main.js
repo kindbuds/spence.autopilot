@@ -315,6 +315,21 @@ async function createWindow(loggedin = null) {
         }
     });
 
+    ipcMain.handle('get-work-area-size', async () => {
+        const { width: workAreaWidth, height: workAreaHeight } = screen.getPrimaryDisplay().workAreaSize;
+        const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().size;
+
+        // Get the current window size
+        const [windowWidth, windowHeight] = mainWindow.getSize();
+
+        // Return both the window size and work area size
+        return {
+            windowSize: { width: windowWidth, height: windowHeight },
+            workAreaSize: { width: workAreaWidth, height: workAreaHeight },
+            screenSize: { width: screenWidth, height: screenHeight },
+        };
+    })
+
     ipcMain.handle('get-job-content', async (event, { content_type, job }) => {
         const user = await eShared.loadUserData();
         delete user.token;

@@ -199,9 +199,28 @@ async function createWindow(loggedin = null) {
 
     mainWindow.webContents.on('did-finish-load', () => {
         // eShared.logtofile(`did-finish-load`)
-        console.log("Web content loaded");
+        addScroll();
     });
 
+    const addScroll = () => {
+        if (!mainWindow) return;
+
+        const currentURL = mainWindow.webContents.getURL();
+        console.log("Web content loaded", currentURL);
+        const scrolls = ['auth0', 'get-started', '/setup']
+        if (scrolls.some(sc => currentURL.includes(sc))) {
+            // Inject CSS to enforce scrolling
+            setTimeout(() => {
+                mainWindow.webContents.insertCSS(`
+                html {
+                    overflow-y: scroll !important;
+                }
+            `);
+                console.log("Injected CSS for scrolling.");
+            }, 1000);
+        }
+
+    }
     mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
         // eShared.logtofile(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`)
         console.log(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`);
@@ -239,6 +258,7 @@ async function createWindow(loggedin = null) {
         // eShared.logtofile(`Navigated within page to: ${url}`)
         console.log('Navigated within page to:', url);
         mainWindow.webContents.executeJavaScript(`console.log('Navigated within page to:', '${url}');`);
+        addScroll();
     });
 
     mainWindow.on('page-title-updated', (event) => {

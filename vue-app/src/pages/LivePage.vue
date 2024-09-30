@@ -1,5 +1,6 @@
 <template>
   <div>
+    auth: {{ auth }}
     <JobListLayout
       v-if="!auth"
       ref="jobListLayout"
@@ -20,6 +21,7 @@
     <MainLayout v-else>
       <template v-slot:default>
         <v-main class="pa-0">
+          login-helper
           <login-helper
             :url="urls.login"
             domainFriendly="LinkedIn"
@@ -50,7 +52,7 @@ export default {
   emits: ["displayJob"],
   data() {
     return {
-      auth: false,
+      auth: true,
       urls: {
         search: null,
         login: "https://www.linkedin.com/login",
@@ -88,7 +90,7 @@ export default {
       //   console.log(this.urls.search, "this.urls.search");
 
       //   console.log(newVal, "watch.user");
-      // alert("watch.user");
+      alert("watch.user");
     },
   },
   methods: {
@@ -182,7 +184,7 @@ export default {
       return encodeURIComponent(experienceLevels.join(","));
     },
     async onLoginSuccess() {
-      //  console.log("onLoginSuccess");
+      console.log("onLoginSuccess");
       // this.auth = false;
       setTimeout(() => {
         this.auth = false;
@@ -190,7 +192,7 @@ export default {
       // await shared.delay(10000);
     },
     onAuthRequired() {
-      //  console.log("onAuthRequired");
+      console.log("onAuthRequired");
       // alert("onAuthRequired");
       // this.$nextTick(() => {
       //   this.auth = true;

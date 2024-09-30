@@ -30,6 +30,7 @@
       }"
       fluid
     >
+      jobs.length: {{ jobs.length }} | initialized: {{ initialized }} |
       <v-row
         v-if="jobs.length > 0"
         ref="jobRow"
@@ -58,6 +59,7 @@
               :size="70"
               :width="7"
               color="grey-darken-4"
+              class="circular-1"
             ></v-progress-circular>
             <h2 class="loading-message text-grey-darken-1">
               Finding your perfect job matches
@@ -76,6 +78,7 @@
               :size="70"
               :width="7"
               color="grey"
+              class="circular-2"
             ></v-progress-circular>
           </v-col>
         </v-row>
@@ -750,7 +753,7 @@ export default {
       //  console.log(this.preload, "fetchPreloadPath");
     },
     async startAutopilot() {
-      //   console.log("autopilot initialized");
+      console.log("autopilot initialized");
 
       const webview = this.$refs.linkedinWebView;
       if (!webview) {

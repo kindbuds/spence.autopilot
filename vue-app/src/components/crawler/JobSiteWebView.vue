@@ -13,8 +13,6 @@
       @did-navigate="onDidNavigate"
       :webpreferences="'nodeIntegration=yes'"
       :style="{
-        height: !can_generate_percents ? '83vh' : '87vh',
-        'min-height': !can_generate_percents ? '80vh' : '88vh',
         width: !isMdAndUp ? '100vw' : '100%',
         opacity: webviewOpacity === 1 || hideOverlay ? 1 : 0,
       }"
@@ -29,8 +27,6 @@
       ]"
       :style="{
         opacity: webviewOpacity === 1 ? 0.7 : 1,
-        height: !can_generate_percents ? '83vh' : '87vh',
-        'min-height': !can_generate_percents ? '80vh' : '88vh',
       }"
       fluid
     >

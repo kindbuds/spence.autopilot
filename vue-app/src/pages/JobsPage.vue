@@ -478,7 +478,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 93vh;
+  height: calc(100vh - 64px);
 }
 .go-live {
   text-decoration: none;

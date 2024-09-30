@@ -3,8 +3,12 @@ body {
     font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-.webview {
+.webview.login {
     min-height: 88vh;
+}
+
+.webview.live {
+    min-height: calc(100vh - 124px);
 }
 
 .hidden {

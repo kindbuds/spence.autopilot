@@ -5,7 +5,7 @@
       :preload="preload"
       id="linkedin-webview"
       ref="linkedinWebView"
-      class="webview"
+      class="webview live"
       :src="testPageUrl"
       useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0"
       @dom-ready="onDomReady"
@@ -27,7 +27,11 @@
         isMdAndUp ? 'pb-0 pt-3' : 'pa-2 pb-0',
         { 'limit-warn': !can_generate_percents },
       ]"
-      :style="{ opacity: webviewOpacity === 1 ? 0.7 : 1 }"
+      :style="{
+        opacity: webviewOpacity === 1 ? 0.7 : 1,
+        height: !can_generate_percents ? '83vh' : '87vh',
+        'min-height': !can_generate_percents ? '80vh' : '88vh',
+      }"
       fluid
     >
       <v-row
@@ -120,7 +124,7 @@
         </v-col>
       </v-row>
     </v-alert>
-    <h3 v-if="this.user_loaded" class="h2-controls px-3">
+    <h3 v-if="this.user_loaded" class="footer-controls px-3">
       <v-btn
         icon="mdi-close"
         elevation="0"
@@ -364,7 +368,7 @@ export default {
         if (!webview) return;
         setTimeout(() => {
           try {
-           // webview.openDevTools();
+            // webview.openDevTools();
           } catch {
             console.log("openDevTools failed");
           }
@@ -1337,9 +1341,10 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   margin-top: 20px;
   margin-bottom: 150px;
 }
-.h2-controls {
+.footer-controls {
   border-top: 1px solid #4f4f4f;
   padding-top: 12px;
+  height: 60px;
 }
 .running-status {
   color: #7b7b7b;
@@ -1353,14 +1358,14 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   right: 0;
   bottom: 0;
   display: flex;
+  height: calc(100vh - 124px);
   flex-direction: column;
-  height: calc(100vh - 115px);
 }
 .job-master {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 93vh;
+  height: calc(100vh - 64px);
 }
 .job-row.reverse-column {
   padding-top: 10px !important;

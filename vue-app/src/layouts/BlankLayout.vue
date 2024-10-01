@@ -1,12 +1,9 @@
 <template>
   <v-container
-    class="fill-height ma-0 pa-0 w-100"
-    style="
-      background: linear-gradient(135deg, #1a202c 0%, #4dc2a5 100%);
-      min-width: 100%;
-    "
+    class="fill-height ma-0 pa-0 w-100 blank-container"
+    style="min-width: 100%"
   >
-    <router-view class="scrollable"></router-view>
+    <router-view class="router-view"></router-view>
   </v-container>
 </template>
 
@@ -38,8 +35,8 @@ export default {
 </script>
 
 <style scoped>
-.scrollable {
-  overflow-y: auto;
+.router-view {
+  /* overflow-y: auto; */
   height: calc(100vh - 64px);
 }
 </style>

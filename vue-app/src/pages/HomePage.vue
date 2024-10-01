@@ -43,7 +43,7 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-container v-if="user && user.existing_jobs.length > 0" class="ma-0 pa-0">
+    <v-container v-if="user && user.existing_jobs.length > 0" class="ma-0 pa-0" style="margin-bottom: 100px !important;">
       <v-row>
         <v-col cols="12" md="6" :class="{ 'pa-6': isMdAndUp }">
           <BaseChart

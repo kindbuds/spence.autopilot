@@ -129,6 +129,21 @@ if (!gotTheLock) {
             console.log(setupData, 'Received setup-saved data');
             const newSetup = await sendToApi(`${api.api2Url}autopilot/setup`, setupData, 'json');
             console.log(newSetup, 'newSetup')
+
+            if (typeof newSetup.is_remote === 'undefined'
+                && typeof newSetup.is_hybrid === 'undefined'
+                && typeof newSetup.is_onsite === 'undefined') {
+                // first time setup
+                newSetup.is_remote = true;
+                newSetup.is_hybrid = false;
+                newSetup.is_onsite = false;
+                newSetup.location = "";
+                newSetup.disable_salary = false;
+                newSetup.negative_keywords = [];
+                newSetup.company_filters = [];
+            }
+
+
             let user = await eShared.loadUserData();
             console.log(user, 'user')
             newSetup.usage = user.usage

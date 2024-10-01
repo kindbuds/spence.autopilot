@@ -6,14 +6,14 @@
       class="mb-4"
       icon="$success"
       variant="tonal"
-      text="Based on your input below are your suggested settings. Feel free to adjust
+      text="Based on your input, below are your suggested settings. Feel free to adjust
       as needed."
       title="You're Setup!"
     >
-      <div>
+      <!-- <div>
         <v-btn
           color="orange-accent-2"
-          variant="tonal"
+          variant="elevated"
           class="mt-4"
           size="small"
           @click="$router.push('/live')"
@@ -21,7 +21,7 @@
           <v-icon class="mr-1">mdi-play</v-icon>
           Go Live</v-btn
         >
-      </div>
+      </div> -->
     </v-alert>
     <v-row>
       <v-col cols="12">
@@ -429,8 +429,9 @@
                     :loading="loading"
                     @click="submitForm"
                     :disabled="!isFormValid"
-                    >Save</v-btn
+                    :text="context === 'setup' ? 'Get Started' : 'Save'"
                   >
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-form>

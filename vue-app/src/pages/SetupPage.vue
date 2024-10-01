@@ -3,11 +3,15 @@
     class="setup fill-height"
     :class="{ 'pa-3': step === 3 && !isMdAndUp }"
   >
-    <v-row justify="center" :class="{ 'align-self-start': step === 1 }">
+    <v-row
+      justify="center"
+      :class="{ 'align-self-start': step === 1 }"
+      class="fill-height"
+    >
       <v-col cols="12" md="10">
-        <v-card elevation="0" color="transparent">
-          <v-card-text class="pa-0">
-            <div v-if="step === 1" style="margin-top: 10vh">
+        <v-card elevation="0" color="transparent" class="fill-height">
+          <v-card-text class="pa-0 fill-height">
+            <!-- <div v-if="step === 1" style="margin-top: 10vh">
               <h1 class="text-left">✈️ Autopilot Setup</h1>
               <v-form>
                 <p class="text-body-1 text-white mt-6 mb-10">
@@ -33,10 +37,10 @@
                   >Submit</v-btn
                 >
               </v-form>
-            </div>
+            </div> -->
             <div
-              v-if="step === 2"
-              class="text-center d-flex flex-column justify-center align-center mb-16"
+              v-if="step === 1 || step === 2"
+              class="text-center d-flex flex-column justify-center align-center mb-16 fill-height"
             >
               <v-progress-circular
                 :size="70"
@@ -95,6 +99,11 @@ export default {
     };
   },
   watch: {
+    user(newU) {
+      if (newU) {
+        this.submitJobSearchDetail();
+      }
+    },
     step(newStep) {
       if (newStep === 2) {
         // setTimeout(() => {
@@ -131,6 +140,12 @@ export default {
         detail: this.jobSearchInput,
         about_search: this.jobSearchInput,
         max_applicants: 100,
+        is_remote: true,
+        is_hybrid: false,
+        is_onsite: false,
+        disable_salary: false,
+        negative_keywords: [],
+        company_filters: [],
       };
       //   console.log(payload, "payload");
       this.nextStep();

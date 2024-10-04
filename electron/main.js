@@ -222,7 +222,7 @@ async function createWindow(loggedin = null) {
 
         const currentURL = mainWindow.webContents.getURL();
         console.log("Web content loaded", currentURL);
-        const scrolls = ['auth0', 'get-started', '/setup']
+        const scrolls = ['auth0', 'get-started', 'setup']
         if (scrolls.some(sc => currentURL.includes(sc))) {
             // Inject CSS to enforce scrolling
             setTimeout(() => {

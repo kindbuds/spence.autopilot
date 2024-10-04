@@ -1,6 +1,5 @@
 <template>
   <div>
-    auth: {{ auth }}
     <JobListLayout
       v-if="!auth"
       ref="jobListLayout"
@@ -21,7 +20,6 @@
     <MainLayout v-else>
       <template v-slot:default>
         <v-main class="pa-0">
-          login-helper
           <login-helper
             :url="urls.login"
             domainFriendly="LinkedIn"
@@ -90,7 +88,7 @@ export default {
       //   console.log(this.urls.search, "this.urls.search");
 
       //   console.log(newVal, "watch.user");
-      alert("watch.user");
+      // alert("watch.user");
     },
   },
   methods: {

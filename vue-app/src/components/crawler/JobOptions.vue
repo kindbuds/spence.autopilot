@@ -26,12 +26,15 @@
           text
           block
           elevation="0"
-          @click="show_company_detail = false"
+          @click="managePanels(false)"
           prepend-icon="mdi-minus"
         >
           Negative Keyword
         </v-btn>
-        <v-container v-if="!show_company_detail" class="ma-0 pa-0 py-3">
+        <v-container
+          v-if="!show_company_detail && show_company_detail !== null"
+          class="ma-0 pa-0 py-3"
+        >
           <v-form ref="kw_form">
             <v-row>
               <v-col cols="9" class="pr-0 pl-3">
@@ -102,7 +105,7 @@
           text
           block
           elevation="0"
-          @click="show_company_detail = true"
+          @click="managePanels(true)"
           :class="{ filtered: isCompanyFiltered }"
           :prepend-icon="isCompanyFiltered ? 'mdi-check' : 'mdi-filter'"
         >
@@ -204,7 +207,7 @@ export default {
       applies_to: "both",
       saving_kw: false,
       saving_company_filter: false,
-      show_company_detail: false,
+      show_company_detail: null,
       showFlagReason: false,
       isCompanyFiltered: false,
       isCompanyFlagged: false,
@@ -273,6 +276,16 @@ export default {
     },
   },
   methods: {
+    managePanels(val) {
+      if (this.show_company_detail === null) this.show_company_detail = val;
+      else if (
+        this.show_company_detail !== null &&
+        this.show_company_detail !== val
+      )
+        this.show_company_detail = val;
+      else if (this.show_company_detail === val)
+        this.show_company_detail = null;
+    },
     submitFlag() {
       if (this.valid) {
         console.log(this.job, this.flagReason, "submitFlag");

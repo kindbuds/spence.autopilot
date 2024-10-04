@@ -30,7 +30,6 @@
       }"
       fluid
     >
-      jobs.length: {{ jobs.length }} | initialized: {{ initialized }} |
       <v-row
         v-if="jobs.length > 0"
         ref="jobRow"

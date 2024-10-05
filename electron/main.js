@@ -211,17 +211,23 @@ async function createWindow(loggedin = null) {
     mainWindow.openDevTools();
     // eShared.logtofile(`Window created`)
     console.log("Window created");
+    mainWindow.webContents.executeJavaScript(`console.log('Window created: version ${app.getVersion()}')`);
+
 
     mainWindow.webContents.on('did-finish-load', () => {
         // eShared.logtofile(`did-finish-load`)
+        mainWindow.webContents.executeJavaScript(`console.log('did-finish-load')`);
         addScroll();
     });
 
     const addScroll = () => {
         if (!mainWindow) return;
 
+        mainWindow.webContents.executeJavaScript(`console.log('addScroll');`);
+
         const currentURL = mainWindow.webContents.getURL();
         console.log("Web content loaded", currentURL);
+        mainWindow.webContents.executeJavaScript(`console.log("Web content loaded", ${currentURL})');`);
         eShared.logtofile(`Web content loaded ${currentURL}`)
         const scrolls = ['auth0', 'get-started', 'setup']
         if (scrolls.some(sc => currentURL.includes(sc))) {
@@ -232,6 +238,7 @@ async function createWindow(loggedin = null) {
                     overflow-y: scroll !important;
                 }
             `);
+
                 console.log("Injected CSS for scrolling.");
                 eShared.logtofile(`Injected CSS for scrolling.`)
             }, 1000);
@@ -246,6 +253,8 @@ async function createWindow(loggedin = null) {
     mainWindow.webContents.on('dom-ready', () => {
         // eShared.logtofile(`dom-ready`)
         console.log("DOM is ready");
+        mainWindow.webContents.executeJavaScript(`console.log('DOM is ready')`);
+        addScroll();
     });
 
     mainWindow.webContents.on('crashed', () => {
@@ -269,6 +278,7 @@ async function createWindow(loggedin = null) {
         // eShared.logtofile(`Navigated to: ${url}`)
         console.log('Navigated to:', url);
         mainWindow.webContents.executeJavaScript(`console.log('Navigated to:', '${url}');`);
+
     });
 
     mainWindow.webContents.on('did-navigate-in-page', (event, url) => {

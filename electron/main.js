@@ -227,7 +227,7 @@ async function createWindow(loggedin = null) {
             // Inject CSS to enforce scrolling
             setTimeout(() => {
                 mainWindow.webContents.insertCSS(`
-                html {
+                html, body {
                     overflow-y: scroll !important;
                 }
             `);

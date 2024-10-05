@@ -222,6 +222,7 @@ async function createWindow(loggedin = null) {
 
         const currentURL = mainWindow.webContents.getURL();
         console.log("Web content loaded", currentURL);
+        eShared.logtofile(`Web content loaded ${currentURL}`)
         const scrolls = ['auth0', 'get-started', 'setup']
         if (scrolls.some(sc => currentURL.includes(sc))) {
             // Inject CSS to enforce scrolling
@@ -232,6 +233,7 @@ async function createWindow(loggedin = null) {
                 }
             `);
                 console.log("Injected CSS for scrolling.");
+                eShared.logtofile(`Injected CSS for scrolling.`)
             }, 1000);
         }
 

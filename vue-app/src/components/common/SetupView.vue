@@ -153,7 +153,7 @@
                         :rules="[
                           (v) => {
                             // Trim the input and check if it's not empty
-                            const trimmed = v.trim();
+                            const trimmed = v ? v.trim() : null;
                             const isValid = !isLocationRequired || !!trimmed;
                             console.log(
                               `Validating: '${trimmed}', isValid: ${isValid}`

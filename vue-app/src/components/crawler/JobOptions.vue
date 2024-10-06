@@ -214,26 +214,42 @@ export default {
       isCompanyFilterSaved: false,
       flagReason: "",
       flagReasonRules: [
-        (v) => !!v.trim() || "A reason is required", // Checks for non-empty input after trimming spaces
         (v) =>
-          (v && v.trim().length >= 25) ||
-          "Reason must be at least 25 characters",
+          v && typeof v === "string" && v.trim()
+            ? true
+            : "A reason is required", // Checks for non-empty input after trimming spaces
         (v) =>
-          (v && v.trim().length <= 500) ||
+          (v && typeof v === "string" && v.trim().length >= 25) ||
+          "Reason must be at least 25 characters", // Ensure minimum length
+        (v) =>
+          (v && typeof v === "string" && v.trim().length <= 500) ||
           "Reason must be less than 500 characters", // Ensure length is within limit
-        (v) => /\w/.test(v) || "Reason must include alphabetic characters", // Checks for at least one word character (letter or number)
-        (v) => !/^[0-9]+$/.test(v.trim()) || "Reason cannot be only numbers", // Ensures it's not just numbers
         (v) =>
-          !/^[^a-zA-Z0-9]+$/.test(v.trim()) ||
+          (v && typeof v === "string" && /\w/.test(v)) ||
+          "Reason must include alphabetic characters", // Checks for at least one word character (letter or number)
+        (v) =>
+          (v && typeof v === "string" && !/^[0-9]+$/.test(v.trim())) ||
+          "Reason cannot be only numbers", // Ensures it's not just numbers
+        (v) =>
+          (v && typeof v === "string" && !/^[^a-zA-Z0-9]+$/.test(v.trim())) ||
           "Reason cannot be only special characters", // Ensures it's not just special characters
       ],
       negativeKeywordRules: [
-        (v) => !!v.trim() || "A keyword is required.", // Checks for non-empty input after trimming spaces
-        (v) => v.trim().length >= 3 || "Keyword must be at least 3 characters.", // Ensures input length is at least 3 characters
         (v) =>
-          v.trim().length <= 50 || "Keyword must not exceed 50 characters.", // Ensures input length does not exceed 50 characters
+          v && typeof v === "string" && v.trim()
+            ? true
+            : "A keyword is required.", // Checks for non-empty input after trimming spaces
         (v) =>
-          (/^[a-zA-Z0-9\s]*$/.test(v) && /[a-zA-Z]/.test(v)) ||
+          (v && typeof v === "string" && v.trim().length >= 3) ||
+          "Keyword must be at least 3 characters.", // Ensures input length is at least 3 characters
+        (v) =>
+          (v && typeof v === "string" && v.trim().length <= 50) ||
+          "Keyword must not exceed 50 characters.", // Ensures input length does not exceed 50 characters
+        (v) =>
+          (v &&
+            typeof v === "string" &&
+            /^[a-zA-Z0-9\s]*$/.test(v) &&
+            /[a-zA-Z]/.test(v)) ||
           "Keyword cannot be just special characters or numbers.", // Ensures input is not just numbers or special characters and includes alphabetic characters
       ],
       companyFilter: null,

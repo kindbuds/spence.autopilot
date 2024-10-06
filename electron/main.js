@@ -7,6 +7,7 @@ const fs = require('fs');
 const storage = require('electron-json-storage');
 const appData = app.getPath('appData');
 const { AuthenticationClient } = require('auth0');
+const os = require('os')
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')
 // eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
@@ -24,6 +25,8 @@ if (fs.existsSync(envPath)) {
 
 
 let loaderWindow, mainWindow, authWindow;
+const mainPlatform = os.platform() === 'win32' ? 'win' : os.platform() === 'darwin' ? 'mac' : 'other';
+
 const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
@@ -143,8 +146,12 @@ if (!gotTheLock) {
                 newSetup.company_filters = [];
             }
 
-
             let user = await eShared.loadUserData();
+            if (!user.usage) {
+                const usageData = await loadUserData(newSetup.userid);
+                // console.log(usageData, 'usageData')
+                user.usage = usageData.usage;
+            }
             console.log(user, 'user')
             newSetup.usage = user.usage
             user.autopilot = newSetup
@@ -211,7 +218,8 @@ async function createWindow(loggedin = null) {
     mainWindow.openDevTools();
     // eShared.logtofile(`Window created`)
     console.log("Window created");
-    mainWindow.webContents.executeJavaScript(`console.log('Window created: version ${app.getVersion()}')`);
+
+    mainWindow.webContents.executeJavaScript(`console.log('Window created: version ${app.getVersion()} on ${mainPlatform}')`);
 
 
     mainWindow.webContents.on('did-finish-load', () => {
@@ -227,14 +235,16 @@ async function createWindow(loggedin = null) {
 
         const currentURL = mainWindow.webContents.getURL();
         console.log("Web content loaded", currentURL);
-        mainWindow.webContents.executeJavaScript(`console.log("Web content loaded", ${currentURL})');`);
+        mainWindow.webContents.executeJavaScript(`console.log('Web content loaded ${currentURL}');`);
         eShared.logtofile(`Web content loaded ${currentURL}`)
         const scrolls = ['auth0', 'get-started', 'setup']
         if (scrolls.some(sc => currentURL.includes(sc))) {
             // Inject CSS to enforce scrolling
+
+            const element = mainPlatform === 'mac' ? 'body' : 'html';
             setTimeout(() => {
                 mainWindow.webContents.insertCSS(`
-                html, body {
+                ${element} {
                     overflow-y: scroll !important;
                 }
             `);
@@ -465,11 +475,12 @@ async function createWindow(loggedin = null) {
 
         mainWindow.show();
         try {
-            //  if (isDev)
-            setTimeout(() => {
-                console.log('openDevTools');
-                mainWindow.webContents.openDevTools();
-            }, 1000);
+            if (isDev) {
+                setTimeout(() => {
+                    console.log('openDevTools');
+                    mainWindow.webContents.openDevTools();
+                }, 1000);
+            }
         } catch {
             console.log('openDevTools failed')
         }

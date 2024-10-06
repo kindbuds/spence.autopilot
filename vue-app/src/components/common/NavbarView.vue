@@ -46,10 +46,22 @@ export default {
     };
   },
   mounted() {
-    // setInterval(() => {
-    //   console.log(this.$user(), "navbar.this.$user()");
-    // }, 500);
-    // this.$store.dispatch("loadUser");
+    console.log(this.user2, "this.user2");
+    const disabled =
+      this.user2 &&
+      this.user2.existing_jobs &&
+      this.user2.existing_jobs.length === 0;
+
+    this.navItems[2].disabled = disabled;
+
+    if (disabled && window.electron) {
+      if (window.electron.onJobNew) {
+        window.electron.onJobNew(async () => {
+          // jobData
+          this.navItems[2].disabled = false;
+        });
+      }
+    }
   },
   methods: {
     async logout() {

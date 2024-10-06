@@ -215,7 +215,7 @@ async function createWindow(loggedin = null) {
         }
     });
 
-    mainWindow.openDevTools();
+    // mainWindow.openDevTools();
     // eShared.logtofile(`Window created`)
     console.log("Window created");
 
@@ -478,6 +478,7 @@ async function createWindow(loggedin = null) {
             if (isDev) {
                 setTimeout(() => {
                     console.log('openDevTools');
+                    mainWindow.openDevTools();
                     mainWindow.webContents.openDevTools();
                 }, 1000);
             }

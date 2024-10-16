@@ -140,7 +140,7 @@ module.exports = {
       config: {
         name: "Spence",
         description: 'Spence AI Career Autopilot',
-        authors: "Jeff Borden",
+        authors: "getspence.ai", // Jeff Borden
         exe: "Spence-AI-Career-Autopilot.exe",
         setupExe: "Spence-Setup.exe",
         setupIcon: path.join(__dirname, 'assets', 'spence-face.ico'), // Path to your icon

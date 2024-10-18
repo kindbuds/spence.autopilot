@@ -6,7 +6,7 @@
       id="linkedin-webview"
       ref="linkedinWebView"
       class="webview live"
-      :class="[{ 'limit-warn': !can_generate_percents }]"
+      :class="[{ 'limit-warn': dailyLimitAlertShown }]"
       :src="testPageUrl"
       useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0"
       @dom-ready="onDomReady"
@@ -24,7 +24,7 @@
       class="overlay-container"
       :class="[
         isMdAndUp ? 'pb-0 pt-3' : 'pa-2 pb-0',
-        { 'limit-warn': !can_generate_percents },
+        { 'limit-warn': dailyLimitAlertShown },
       ]"
       :style="{
         opacity: webviewOpacity === 1 ? 0.7 : 1,
@@ -86,14 +86,114 @@
     </v-container>
 
     <v-alert
+      v-if="dailyLimitAlertShown"
+      :value="true"
+      style="
+        border-radius: 0px;
+        display: flex;
+        align-items: center;
+        background-color: #3a3a3a;
+        color: #fff;
+        width: 100%;
+      "
+      id="limit_reached"
+      border="start"
+      border-color="rgb(158 158 158)"
+      dark
+    >
+      <v-row no-gutters>
+        <!-- Only show the text in Desktop mode -->
+        <!-- <v-col v-if="isMdAndUp" class="pt-2" cols="8">
+          <span style="font-weight: bold"
+            >You've reached your daily job match limit!</span
+          >
+        </v-col> -->
+
+        <!-- Info Icon with Tooltip -->
+        <v-col
+          :cols="isMdAndUp ? 6 : 3"
+          class="d-flex align-items-left justify-start"
+        >
+          <v-row no-gutters>
+            <v-col sm="12" md="1">
+              <v-btn
+                icon
+                elevation="0"
+                color="transparent"
+                style="cursor: pointer"
+              >
+                <v-icon color="rgb(255 234 135)">mdi-alert</v-icon>
+                <v-tooltip
+                  max-width="200px"
+                  opacity="1"
+                  activator="parent"
+                  location="top"
+                  id="limit_reached_alert"
+                >
+                  <p style="font-size: 0.9em">
+                    I've reached the daily limit of jobs I can review for you.
+                    I'll keep showing you the freshest jobs, but I won't include
+                    how you match up.
+                  </p>
+                  <p
+                    v-if="upgrade_launched"
+                    style="font-size: 0.9em"
+                    class="pt-4"
+                  >
+                    Please upgrade if you'd like me to keep reviewing jobs as I
+                    find them.
+                  </p>
+                </v-tooltip>
+              </v-btn>
+            </v-col>
+            <v-col v-if="isMdAndUp" id="daily_limit_reached">
+              Daily limit reached
+            </v-col>
+          </v-row>
+        </v-col>
+
+        <!-- Close/Dismiss Button for Both Mobile and Desktop -->
+        <v-col :cols="isMdAndUp ? 6 : 9">
+          <v-row no-gutters>
+            <v-col cols="9" class="text-right pt-2">
+              <v-btn
+                v-if="upgrade_launched"
+                color="rgb(255 234 135)"
+                class="ml-auto"
+                size="x-small"
+                @click="handleUpgrade"
+                elevation="2"
+                variant="outlined"
+                prepend-icon="mdi-arrow-up"
+              >
+                Upgrade
+              </v-btn>
+            </v-col>
+
+            <v-col cols="3" class="text-right">
+              <v-btn
+                icon
+                @click="handleDismiss"
+                color="transparent"
+                elevation="0"
+              >
+                <v-icon color="#121212">mdi-close-circle</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-alert>
+
+    <!-- <v-alert
       v-if="!can_generate_percents"
       style="border-radius: 0px; display: flex; align-items: center"
       border="start"
-      border-color="rgb(255 234 135)"
+      border-color="rgb(162 78 255)"
       color="#2d2d2d"
     >
       <v-row no-gutters>
-        <v-col
+       <v-col
           class="pt-2"
           cols="11"
           style="
@@ -103,8 +203,8 @@
             text-overflow: ellipsis;
           "
         >
-          We've reached your daily job review limit.
-        </v-col>
+          We've reached your daily job review limit. 
+         </v-col> 
         <v-col cols="1">
           <v-btn color="transparent" elevation="0" icon size="small">
             <v-icon color="rgb(190 182 145)"> mdi-information </v-icon>
@@ -122,7 +222,7 @@
           </v-btn>
         </v-col>
       </v-row>
-    </v-alert>
+    </v-alert> -->
     <h3 v-if="this.user_loaded" class="footer-controls px-3">
       <v-btn
         icon="mdi-close"
@@ -200,6 +300,7 @@ export default {
   },
   data() {
     return {
+      upgrade_launched: false,
       companyFilters: [],
       getJobStatusClass: shared.getJobStatusClass,
       hideOverlay: false,
@@ -239,6 +340,7 @@ export default {
       user_loaded: false,
       working_job_count: 0,
       selectors,
+      limit_reached_alert_dismissed: false,
     };
   },
   async mounted() {
@@ -275,9 +377,9 @@ export default {
           this.can_generate_percents =
             userdata.autopilot.usage.generate_percents;
 
-          /* REMOVE THIS!!!!
+          /* REMOVE THIS!!!! 
           this.can_generate_percents = false;
-          */
+ */
           await this.startQueueProcessing();
         }, 1000);
       });
@@ -312,7 +414,16 @@ export default {
       }
     },
   },
+  computed: {
+    dailyLimitAlertShown() {
+      return !this.can_generate_percents && !this.limit_reached_alert_dismissed;
+    },
+  },
   methods: {
+    handleDismiss() {
+      this.limit_reached_alert_dismissed = true;
+    },
+    handleUpgrade() {},
     async adjustLayout() {
       // Call the Electron API to get work area size
       const { windowSize, workAreaSize, screenSize } =
@@ -1370,6 +1481,24 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   },
 };
 </script>
+
+<style>
+#daily_limit_reached {
+  padding-top: 14px;
+  padding-left: 7px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #9f9f9f;
+}
+#limit_reached_alert > div {
+  background-color: rgb(49 49 49);
+  color: rgb(236 236 236);
+}
+
+#limit_reached .v-alert__content {
+  width: 100%;
+}
+</style>
 
 <style scoped>
 .tooltip-text {

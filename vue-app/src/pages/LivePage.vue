@@ -50,7 +50,7 @@ export default {
   emits: ["displayJob"],
   data() {
     return {
-      auth: true,
+      auth: false,
       urls: {
         search: null,
         login: "https://www.linkedin.com/login",

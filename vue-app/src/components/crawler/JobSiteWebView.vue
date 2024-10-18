@@ -6,6 +6,7 @@
       id="linkedin-webview"
       ref="linkedinWebView"
       class="webview live"
+      :class="[{ 'limit-warn': !can_generate_percents }]"
       :src="testPageUrl"
       useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0"
       @dom-ready="onDomReady"
@@ -274,6 +275,9 @@ export default {
           this.can_generate_percents =
             userdata.autopilot.usage.generate_percents;
 
+          /* REMOVE THIS!!!!
+          this.can_generate_percents = false;
+          */
           await this.startQueueProcessing();
         }, 1000);
       });
@@ -1375,9 +1379,9 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   padding: 0px;
   white-space: normal;
 }
-.limit-warn {
+/* .limit-warn {
   margin-bottom: 100px !important;
-}
+} */
 .loading-message {
   font-size: 24px;
   font-weight: bold;
@@ -1403,6 +1407,13 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   display: flex;
   height: calc(100vh - 124px);
   flex-direction: column;
+}
+.overlay-container.limit-warn {
+  height: calc(100vh - 156px);
+}
+
+.webview.live.limit-warn {
+  min-height: calc(100vh - 156px);
 }
 .job-master {
   position: relative;

@@ -3,6 +3,10 @@ body {
     font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+html.mac body {
+    overflow-y: auto !important;
+}
+
 .webview.login {
     min-height: 88vh;
 }

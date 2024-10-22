@@ -62,9 +62,9 @@ export default {
 }
 </style>
 
+
 <style>
-html,
-body {
-  overflow-y: scroll !important;
+html.win.login {
+  overflow-y: auto !important;
 }
 </style>

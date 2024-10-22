@@ -66,6 +66,12 @@ contextBridge.exposeInMainWorld(
                 callback(jobData);
             });
         },
+        onSubscriptionUpdated: (callback) => {
+            ipcRenderer.on('subscription-updated', (event, jobData) => {
+                // console.log('preload.js.onJobNew', jobData)
+                callback(jobData);
+            });
+        },
         addNegativeKeyword: (keyword) => {
             ipcRenderer.send('add-negative-keyword', keyword);
         },
@@ -120,6 +126,8 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.send('logout')
             // shell.openExternal('https://app.getspence.ai/logout/');
         },
+        checkCheckoutCompletion: () =>
+            ipcRenderer.invoke('check-checkout-completion',),
         loginWithRedirect: async () => {
             try {
                 const auth0Client = new auth0.WebAuth({
@@ -139,6 +147,9 @@ contextBridge.exposeInMainWorld(
             } catch (error) {
                 console.error('Login failed:', error);
             }
+        },
+        openUrl: (url) => {
+            shell.openExternal(url);
         },
         authenticateLinkedIn: () => {
             ipcRenderer.send('authenticate-linkedin');

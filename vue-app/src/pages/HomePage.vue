@@ -1,5 +1,5 @@
 <template>
-  <v-main class="home">
+  <v-main class="home scrollable">
     <v-row class="welcome-section" align="center" justify="space-between">
       <v-col
         :class="{ 'pl-6': isMdAndUp, 'pa-0': !isMdAndUp }"
@@ -43,7 +43,11 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-container v-if="user && user.existing_jobs.length > 0" class="ma-0 pa-0" style="margin-bottom: 100px !important;">
+    <v-container
+      v-if="user && user.existing_jobs.length > 0"
+      class="ma-0 pa-0"
+      style="margin-bottom: 100px !important"
+    >
       <v-row>
         <v-col cols="12" md="6" :class="{ 'pa-6': isMdAndUp }">
           <BaseChart
@@ -302,6 +306,7 @@ export default {
 }
 .home {
   padding: 2px;
+  padding-bottom: 75px;
 }
 .test {
   color: rgba(141, 28, 141, 0.347);

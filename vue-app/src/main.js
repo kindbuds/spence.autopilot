@@ -8,6 +8,7 @@ import BlankLayout from './layouts/BlankLayout.vue';
 import HomePage from './pages/HomePage.vue';
 import SetupPage from './pages/SetupPage.vue';
 import SettingsPage from './pages/SettingsPage.vue';
+import UpgradePage from './pages/UpgradePage.vue';
 import LivePage from './pages/LivePage.vue';
 import JobsPage from './pages/JobsPage.vue';
 import DashboardPage from './pages/DashboardPage.vue';
@@ -48,6 +49,18 @@ const routes = [
             {
                 path: '',
                 component: HomePage,
+                meta: { requiresAuth: true, requiresSetup: true } // Protect this route
+
+            }
+        ]
+    },
+    {
+        path: '/upgrade',
+        component: MainLayout,
+        children: [
+            {
+                path: '',
+                component: UpgradePage,
                 meta: { requiresAuth: true, requiresSetup: true } // Protect this route
 
             }

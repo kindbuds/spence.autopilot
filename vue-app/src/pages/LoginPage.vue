@@ -1,7 +1,7 @@
 <template>
   <main
-    class="login d-flex align-center justify-center flex-column"
-    style="margin-bottom: 200px"
+    class="login d-flex align-center justify-center flex-column fill-height"
+    style="height: calc(100vh - 124px) !important; min-height: 300px"
   >
     <v-btn
       class="login-button"

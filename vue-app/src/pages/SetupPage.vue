@@ -135,6 +135,7 @@ export default {
     submitJobSearchDetail() {
       const payload = {
         userid: this.user.userid,
+        email: this.user.email,
         resume: this.user.resume.content,
         about: this.user.about,
         detail: this.jobSearchInput,

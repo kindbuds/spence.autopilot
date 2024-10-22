@@ -41,10 +41,12 @@ Object.keys(process.env).forEach(key => {
 });
 if (require('electron-squirrel-startup')) return;
 
-const { updateElectronApp } = require('update-electron-app')
+const { updateElectronApp } = require('update-electron-app');
+const { Console } = require('console');
 updateElectronApp({
     logger: require('electron-log')
 })
+
 
 // This makes sure the app is single-instance
 const gotTheLock = app.requestSingleInstanceLock();
@@ -72,6 +74,14 @@ if (!gotTheLock) {
 
     app.whenReady().then(async () => {
         console.log('running app.whenReady()')
+
+        if (process.defaultApp) {
+            if (process.argv.length >= 2) {
+                app.setAsDefaultProtocolClient('spence', process.execPath, [path.resolve(process.argv[1])]);
+            }
+        } else {
+            app.setAsDefaultProtocolClient('spence');
+        }
         // eShared.logtofile(`running app.whenReady()`)
 
         await createWindow();
@@ -241,7 +251,12 @@ async function createWindow(loggedin = null) {
         if (scrolls.some(sc => currentURL.includes(sc))) {
             // Inject CSS to enforce scrolling
 
-            const element = mainPlatform === 'mac' ? 'body' : 'html';
+            let element = mainPlatform === 'mac' ? 'body' : 'html';
+
+            if (currentURL.includes('auth0')) {
+                element = 'body';
+            }
+
             setTimeout(() => {
                 mainWindow.webContents.insertCSS(`
                 ${element} {
@@ -611,6 +626,25 @@ ipcMain.on('auth-callback', async (event, { token, userid }) => {
         });
 
     await createWindow(true);
+});
+
+ipcMain.handle('check-checkout-completion', async (event, args) => {
+    try {
+        const user = await eShared.loadUserData();
+        // const { sessionID } = args;
+
+        console.log(`in check-checkout-completion ${user}`)
+        // Your API call to check checkout completion
+        //   let checkResponse = await sendToApi(`${api.api2Url}checkout/status`, {
+        //     userid: user.userid,
+        //     sessionID: sessionID
+        //   }, 'json');
+
+        //   return checkResponse; // Return the API response
+    } catch (error) {
+        console.error("Error checking checkout completion:", error);
+        throw error;
+    }
 });
 
 ipcMain.handle('check-job-completion', async (event, args) => {

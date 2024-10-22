@@ -130,18 +130,19 @@
                   location="top"
                   id="limit_reached_alert"
                 >
+                  <h4 class="py-2">Daily limit reached</h4>
+
                   <p style="font-size: 0.9em">
-                    I've reached the daily limit of jobs I can review for you.
-                    I'll keep showing you the freshest jobs, but I won't include
-                    how you match up.
+                    You've hit your daily limit, I'll keep showing you the
+                    freshest jobs, but not how you match up against each.
                   </p>
                   <p
                     v-if="upgrade_launched"
                     style="font-size: 0.9em"
-                    class="pt-4"
+                    class="py-4"
                   >
-                    Please upgrade if you'd like me to keep reviewing jobs as I
-                    find them.
+                    Upgrade if you'd like me to keep showing how you stack up
+                    against each opportunity.
                   </p>
                 </v-tooltip>
               </v-btn>
@@ -158,13 +159,15 @@
             <v-col cols="9" class="text-right pt-2">
               <v-btn
                 v-if="upgrade_launched"
-                color="rgb(255 234 135)"
+                color="rgb(153 255 184)"
                 class="ml-auto"
-                size="x-small"
+                size="small"
                 @click="handleUpgrade"
                 elevation="2"
                 variant="outlined"
                 prepend-icon="mdi-arrow-up"
+                style="margin-top: 2px"
+                to="/upgrade"
               >
                 Upgrade
               </v-btn>
@@ -377,8 +380,9 @@ export default {
           this.can_generate_percents =
             userdata.autopilot.usage.generate_percents;
 
-          /* REMOVE THIS!!!! 
+          /* REMOVE THIS!!!!
           this.can_generate_percents = false;
+          this.upgrade_launched = true;
  */
           await this.startQueueProcessing();
         }, 1000);
@@ -1488,7 +1492,7 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   padding-left: 7px;
   font-size: 13px;
   font-weight: bold;
-  color: #9f9f9f;
+  color: #ffffff;
 }
 #limit_reached_alert > div {
   background-color: rgb(49 49 49);
@@ -1538,11 +1542,11 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
   flex-direction: column;
 }
 .overlay-container.limit-warn {
-  height: calc(100vh - 156px);
+  height: calc(100vh - 166px);
 }
 
 .webview.live.limit-warn {
-  min-height: calc(100vh - 156px);
+  min-height: calc(100vh - 166px);
 }
 .job-master {
   position: relative;

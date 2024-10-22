@@ -60,7 +60,10 @@
         </v-btn>
       </v-app-bar>
 
-      <v-main class="main-container" style="background-color: #212121">
+      <v-main
+        class="main-container fill-height"
+        style="background-color: #212121"
+      >
         <template v-if="authRequired && !user2">
           <v-container class="fill-height" fluid>
             <v-row class="fill-height" align="center" justify="center">
@@ -197,7 +200,7 @@ export default {
 }
 
 .scrollable {
-  overflow-y: auto;
+  overflow-y: auto !important;
   height: 100vh !important;
 }
 

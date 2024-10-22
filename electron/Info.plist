@@ -16,5 +16,18 @@
     <string>APPL</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    
+    <!-- Registering spence:// custom URL scheme -->    
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>Spence Protocol</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>spence</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

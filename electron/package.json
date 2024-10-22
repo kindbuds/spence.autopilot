@@ -75,6 +75,12 @@
     "files": [
       "**/*",
       "vue-app/dist/**/*"
-    ]
+    ],
+    "protocols": {
+      "name": "Spence Protocol",
+      "schemes": [
+        "spence"
+      ]
+    }
   }
 }

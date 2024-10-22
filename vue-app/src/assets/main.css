@@ -16,6 +16,26 @@ body {
 }
 
 
+.stripe-card {
+    border-color: grey !important;
+    background-color: #161616;
+    border-radius: 8px;
+}
+
+.stripe-card .text-h5 {
+    font-family: inherit !important;
+    font-weight: bold;
+}
+
+.stripe-card .v-card-title {
+    border-bottom: 1px solid #4e4e4e;
+    padding-bottom: 15px;
+}
+
+.stripe-card .v-card-actions {
+    margin-top: 20px;
+}
+
 .card-div {
     padding: 13px;
     margin: 10px 10px 0px 10px;

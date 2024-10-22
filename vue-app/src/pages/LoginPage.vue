@@ -64,7 +64,7 @@ export default {
 
 
 <style>
-html.win.login {
+html.login {
   overflow-y: auto !important;
 }
 </style>

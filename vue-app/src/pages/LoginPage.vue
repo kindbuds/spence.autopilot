@@ -3,6 +3,11 @@
     class="login d-flex align-center justify-center flex-column fill-height"
     style="height: calc(100vh - 124px) !important; min-height: 300px"
   >
+    <div style="color: #2d2d2d">
+      <p v-if="isMac">This is macOS.</p>
+      <p v-if="isWindows">This is Windows.</p>
+    </div>
+
     <v-btn
       class="login-button"
       variant="outlined"
@@ -59,5 +64,12 @@ export default {
 }
 .d-flex.flex-column {
   flex-direction: column;
+}
+</style>
+
+<style>
+html,
+body {
+  overflow-y: scroll !important;
 }
 </style>

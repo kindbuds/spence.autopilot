@@ -18,6 +18,7 @@ import LogoutPage from './pages/LogoutPage.vue';
 import AuthenticatedPage from './pages/AuthenticatedPage.vue';
 import vuetify from './plugins/vuetify'
 import userMixin from './mixins/userMixin';
+import osMixin from './mixins/osMixin';
 import globalMixin from './plugins/globalMixin';
 import VueChartkick from 'vue-chartkick'
 import 'chartkick/chart.js'
@@ -201,6 +202,7 @@ try {
     app.use(router);
     app.use(vuetify);
     app.mixin(userMixin);
+    app.mixin(osMixin);
     app.use(globalMixin);
     app.use(VueChartkick);
     // app.config.globalProperties.$user = () => store.state.user;

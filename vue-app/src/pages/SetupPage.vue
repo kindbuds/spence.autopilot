@@ -180,4 +180,8 @@ export default {
 }
 </style>
 
-
+<style>
+html.mac.setup #app {
+  overflow-y: scroll !important;
+}
+</style>

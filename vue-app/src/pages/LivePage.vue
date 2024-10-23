@@ -204,3 +204,8 @@ export default {
 };
 </script>
 
+<style >
+html.mac.live body {
+  overflow-y: hidden !important;
+}
+</style>

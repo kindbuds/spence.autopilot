@@ -4,7 +4,7 @@ import App from './App.vue';
 import store from './store';
 import { createRouter, createWebHistory } from 'vue-router';
 import MainLayout from './layouts/MainLayout.vue';
-import BlankLayout from './layouts/BlankLayout.vue';
+// import BlankLayout from './layouts/BlankLayout.vue';
 import HomePage from './pages/HomePage.vue';
 import SetupPage from './pages/SetupPage.vue';
 import SettingsPage from './pages/SettingsPage.vue';
@@ -69,7 +69,7 @@ const routes = [
     },
     {
         path: '/setup',
-        component: BlankLayout,
+        component: MainLayout,
         children: [
             {
                 path: '',

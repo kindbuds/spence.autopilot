@@ -76,3 +76,9 @@ export default {
   max-width: 100vw !important;
 }
 </style>
+
+<style>
+html.mac.settings #app {
+  overflow-y: scroll !important;
+}
+</style>

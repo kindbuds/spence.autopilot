@@ -99,12 +99,14 @@ module.exports.loadUserData = async () => {
                 reject(error); // Reject the promise on error
             }
 
+            console.log(data, 'data2')
             if (!data) {
                 console.log('Auth data not found.');
                 reject('Auth data not found.');  // Resolve as false if no auth data is found
             }
 
             if (typeof data == 'string') {
+                console.log(data, 'data2')
                 data = JSON.parse(data);
             }
 

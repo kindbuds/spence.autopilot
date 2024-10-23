@@ -422,7 +422,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="12" class="text-right">
+                <v-col cols="12" class="text-right mb-12">
                   <v-btn
                     color="orange"
                     light

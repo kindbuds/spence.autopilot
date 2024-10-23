@@ -170,6 +170,22 @@ export default {
       window.location.href = "/";
     },
   },
+  created() {
+    this.$store.dispatch("loadUser");
+
+    this.$store.watch(
+      function (state) {
+        return state.user;
+      },
+      (value) => {
+        console.log(value, " setting this.user");
+        //   this.user2 = value;
+      },
+      {
+        deep: true, //add this if u need to watch object properties change etc.
+      }
+    );
+  },
 };
 </script>
 
@@ -183,5 +199,8 @@ export default {
 <style>
 html.mac.setup #app {
   overflow-y: scroll !important;
+}
+html.win.setup {
+  overflow-y: hidden !important;
 }
 </style>

@@ -247,7 +247,7 @@ async function createWindow(loggedin = null) {
         console.log("Web content loaded", currentURL);
         mainWindow.webContents.executeJavaScript(`console.log('Web content loaded ${currentURL}');`);
         eShared.logtofile(`Web content loaded ${currentURL}`)
-        const scrolls = ['auth0', 'get-started', 'setup']
+        const scrolls = ['auth0', 'get-started']
         if (scrolls.some(sc => currentURL.includes(sc))) {
             // Inject CSS to enforce scrolling
 

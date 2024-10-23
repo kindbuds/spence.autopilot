@@ -8,7 +8,7 @@
       :class="{ 'align-self-start': step === 1 }"
       class="fill-height"
     >
-      <v-col cols="12" md="10">
+      <v-col cols="12" md="10" class="scrollable">
         <v-card elevation="0" color="transparent" class="fill-height">
           <v-card-text class="pa-0 fill-height">
             <!-- <div v-if="step === 1" style="margin-top: 10vh">
@@ -179,3 +179,5 @@ export default {
   max-width: 100vw !important;
 }
 </style>
+
+

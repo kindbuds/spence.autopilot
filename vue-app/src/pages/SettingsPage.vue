@@ -1,7 +1,7 @@
 <template>
   <v-container class="settings fill-height" :class="{ 'ma-0': isMdAndUp }">
     <v-row justify="center">
-      <v-col cols="12" md="10">
+      <v-col cols="12" md="10" class="scrollable">
         <v-container class="ma-0 pa-0" v-if="user_loaded && settings">
           <h1 class="text-left">Settings</h1>
           <v-card elevation="0">

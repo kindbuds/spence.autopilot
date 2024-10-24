@@ -122,6 +122,13 @@ export default {
           this.user.autopilot = setupData;
           this.$store.commit("setUser", this.user);
           this.nextStep();
+
+          // window.electron.reloadUser(this.user.token);
+          // window.electron.onUserReloaded(async (event, userdata) => {
+          //   console.log("Received user reloaded!:", userdata);
+          //   this.user = userdata;
+
+          // });
         });
       }
     }

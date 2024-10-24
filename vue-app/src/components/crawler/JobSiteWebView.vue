@@ -380,11 +380,10 @@ export default {
           this.can_generate_percents =
             userdata.autopilot.usage.generate_percents;
 
-          /* REMOVE THIS!!!!
+          /* REMOVE THIS!!!! 
           this.can_generate_percents = false;
           this.upgrade_launched = true;
- */
-
+*/
           await this.startQueueProcessing();
         }, 1000);
       });

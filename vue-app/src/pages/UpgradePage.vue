@@ -196,11 +196,12 @@ export default {
         );
       } else {
         // open stripe checkout url for subscription
+        console.log(this.user, "this.user");
         const payload = {
-          customerId: "cus_R51r9jQ7mXBEGq",
+          customerId: this.user.stripe_customer_id,
           priceId: upgrade.priceId,
-          subscriptionId: "sub_1QCshfJUTfh95zTgq6XqZGz0",
-          subscriptionItemId: "si_R52nIYcOmCZq7T",
+          subscriptionId: this.user.subscription.stripe_subscription_id,
+          subscriptionItemId: this.user.subscription.subscription_item_id,
         };
         console.log(payload, "handleUpgrade");
         const checkResponse = await window.electron.createCheckoutLink(payload);

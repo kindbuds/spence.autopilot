@@ -113,6 +113,7 @@ if (!gotTheLock) {
             let gptUser = await sendToApi(`${api.spenceUrl}gpt/gpt_user`, payload, 'json');
             gptUser.token = token;
 
+            // console.log(gptUser, 'gptUser')
             const userData = await loadUserData(gptUser.userid);
             gptUser.existing_jobs = userData.existing_jobs;
             gptUser.autopilot.usage = userData.usage;

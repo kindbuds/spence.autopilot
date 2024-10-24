@@ -35,8 +35,9 @@
           rounded
           color="teal-accent-2"
           size="large"
+          :loading="loading"
           variant="elevated"
-          @click="$emit('upgrade', plan)"
+          @click="doUpgrade(plan)"
           class="mx-auto"
           >Subscribe</v-btn
         >
@@ -50,6 +51,21 @@ export default {
   name: "PlanCard",
   props: {
     plan: Object,
+  },
+  data() {
+    return {
+      loading: false,
+    };
+  },
+  methods: {
+    doUpgrade(pack) {
+      this.loading = true;
+      this.$emit("upgrade", pack);
+
+      setTimeout(() => {
+        this.loading = false;
+      }, 7500);
+    },
   },
 };
 </script>

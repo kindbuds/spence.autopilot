@@ -166,7 +166,7 @@
                 elevation="2"
                 variant="outlined"
                 prepend-icon="mdi-arrow-up"
-                style="margin-top: 2px"
+                style="margin-top: 2px; background-color: rgb(43 62 49)"
                 to="/upgrade"
               >
                 Upgrade
@@ -384,6 +384,7 @@ export default {
           this.can_generate_percents = false;
           this.upgrade_launched = true;
  */
+
           await this.startQueueProcessing();
         }, 1000);
       });
@@ -878,13 +879,17 @@ export default {
         console.error("Webview is not initialized.");
         return;
       }
-      //   console.log(this.preload, "this.preload");
-      webview.preload = this.preload;
-      this.updateWebviewJobs();
       try {
-        await this.performSearch();
-      } catch (error) {
-        console.error("Failed to initiate autopilot:", error);
+        //   console.log(this.preload, "this.preload");
+        webview.preload = this.preload;
+        this.updateWebviewJobs();
+        try {
+          await this.performSearch();
+        } catch (error) {
+          console.error("Failed to initiate autopilot:", error);
+        }
+      } catch (e) {
+        console.log(e, "startAutopilot error");
       }
     },
     async performSearch() {

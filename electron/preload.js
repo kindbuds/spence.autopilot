@@ -126,8 +126,11 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.send('logout')
             // shell.openExternal('https://app.getspence.ai/logout/');
         },
+        createCheckoutLink: (payload) =>
+            ipcRenderer.invoke('create-checkout', payload),
+
         checkCheckoutCompletion: () =>
-            ipcRenderer.invoke('check-checkout-completion',),
+            ipcRenderer.invoke('check-checkout-completion'),
         loginWithRedirect: async () => {
             try {
                 const auth0Client = new auth0.WebAuth({

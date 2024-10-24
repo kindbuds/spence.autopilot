@@ -135,7 +135,7 @@ export default {
           price: 19.99,
           jobMatches: 100,
           billingCycle: "monthly",
-          link: "https://buy.stripe.com/eVa9BUaTb7W6abefZ0",
+          priceId: "price_1QCREvJUTfh95zTgRagihd0C",
           // features: [
           //   "Daily Job Recommendations",
           //   "Priority Application Insights",
@@ -146,7 +146,7 @@ export default {
           price: 39.99,
           jobMatches: 250,
           billingCycle: "monthly",
-          link: "https://buy.stripe.com/eVag0id1ja4e6Z27sv",
+          priceId: "price_1QCUW6JUTfh95zTggFYoFQnn",
           // features: [
           //   "Daily Job Recommendations",
           //   "Priority Application Insights",
@@ -188,15 +188,28 @@ export default {
   },
   methods: {
     async handleUpgrade(upgrade) {
-      if (upgrade.link) {
+      if (upgrade && upgrade.link) {
         window.electron.openUrl(
           `${upgrade.link}?client_reference_id=${encodeURIComponent(
             this.user.userid
           )}&prefilled_email=${encodeURIComponent(this.user.email)}`
         );
-        // Start polling after opening Stripe link
-        this.startPollingForCheckoutCompletion();
+      } else {
+        // open stripe checkout url for subscription
+        const payload = {
+          customerId: "cus_R51r9jQ7mXBEGq",
+          priceId: upgrade.priceId,
+          subscriptionId: "sub_1QCshfJUTfh95zTgq6XqZGz0",
+          subscriptionItemId: "si_R52nIYcOmCZq7T",
+        };
+        console.log(payload, "handleUpgrade");
+        const checkResponse = await window.electron.createCheckoutLink(payload);
+        console.log(checkResponse, "checkResponse");
+        if (checkResponse && checkResponse.checkout_url) {
+          window.electron.openUrl(checkResponse.checkout_url);
+        }
       }
+      this.startPollingForCheckoutCompletion();
     },
     // Polling function for checkout completion
     async pollForCheckoutCompletion() {

@@ -2,7 +2,7 @@
   <div>
     <v-app>
       <v-navigation-drawer
-        v-if="this.user2 && this.user2.autopilot"
+        v-if="this.user2 && this.user2.autopilot && !hideNav"
         app
         v-model="drawer"
         :clipped="isMdAndUp"
@@ -130,6 +130,7 @@ export default {
       this.$router.push("/home");
     });
 
+    // console.log("MainLayout calling loadUser");
     this.$store.dispatch("loadUser");
 
     this.$store.watch(
@@ -157,6 +158,9 @@ export default {
     // );
   },
   computed: {
+    hideNav() {
+      return this.$route && this.$route.path && this.$route.path === "/setup";
+    },
     showDrawer() {
       return this.isMdAndUp || (this.user2 && this.user2.autopilot);
     },

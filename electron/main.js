@@ -105,6 +105,7 @@ if (!gotTheLock) {
 
         ipcMain.on('reload-user', async (event, token) => {
             //  eShared.logtofile(`reload-user`)
+            console.log('reload-user')
             const payload = {
                 access_token: token,
                 autopilot: true,
@@ -125,12 +126,19 @@ if (!gotTheLock) {
 
         ipcMain.on('load-user', async (event) => {
             // eShared.logtofile(`load-user`)
-            let user = await eShared.loadUserData()
+            // try {
 
-            const userData = await loadUserData(user.userid);
-            user.existing_jobs = userData.existing_jobs;
-            console.log(userData, 'load-user.userData')
-            event.reply('userDataResponse', user);
+            let user = await eShared.loadUserData()
+            // console.log(user, 'load-user')
+            if (user) {
+                const userData = await loadUserData(user.userid);
+                user.existing_jobs = userData.existing_jobs;
+                console.log(userData, 'load-user.userData')
+                event.reply('userDataResponse', user);
+            }
+            // } catch (error) {
+            //     console.log(error, 'load-user error')
+            // }
         });
 
         ipcMain.on('check-login-status', async (event) => {
@@ -626,6 +634,18 @@ ipcMain.on('auth-callback', async (event, { token, userid }) => {
         });
 
     await createWindow(true);
+});
+
+ipcMain.handle('create-checkout', async (event, payload) => {
+    console.log(JSON.stringify(payload), 'create-checkout.args')
+    let checkoutResponse = await sendToApi(`${api.api2Url}autopilot/create_checkout`,
+        payload, 'json');
+
+    if (checkoutResponse && checkoutResponse.body) {
+        checkoutResponse = JSON.parse(checkoutResponse.body)
+    }
+    console.log(checkoutResponse, `checkoutResponse`)
+    return checkoutResponse;
 });
 
 ipcMain.handle('check-checkout-completion', async (event, args) => {

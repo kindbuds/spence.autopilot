@@ -95,6 +95,7 @@ import { computed } from "vue";
 import NavBar from "@/components/common/NavbarView.vue";
 import Footer from "@/components/common/FooterView.vue";
 import { useDisplay } from "vuetify";
+import * as shared from "@/helpers/shared.js";
 
 export default {
   components: {
@@ -116,10 +117,11 @@ export default {
       // authRequired: false,
     };
   },
-  mounted() {
+  async mounted() {
     // alert(this.isMdAndUp);
     this.drawer = this.isMdAndUp;
 
+    await shared.sendGA4ScreenView(this);
     // this.updateDrawerState();
   },
   created() {

@@ -11,6 +11,16 @@ module.exports.getGuid = () => {
 module.exports.delay = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
+module.exports.sendGA4ScreenView = (context) => {
+    console.log(context.user, 'sendGA4ScreenView.user')
+    let screen_name = context.$route.path.replace("/", "");
+    if (!screen_name) screen_name = "home";
+    context.$ga4Event(`screen_view`, {
+        screen_name: screen_name,
+        screen_class: screen_name,
+        userId: context.user ? context.user.userid : undefined,
+    });
+}
 module.exports.transformCompanyFilter = (payload) => {
     payload.company_name = payload.company;
     payload.company_name_lower = payload.company.toLowerCase();

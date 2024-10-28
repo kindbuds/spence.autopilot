@@ -1,5 +1,15 @@
 <template>
   <v-main class="home scrollable">
+    <v-alert
+      v-model="showAlert"
+      type="success"
+      class="ma-6"
+      dismissible
+      id="alertSubUpdated"
+    >
+      Your subscription has been updated!
+    </v-alert>
+
     <v-row class="welcome-section" align="center" justify="space-between">
       <v-col
         :class="{ 'pl-6': isMdAndUp, 'pa-0': !isMdAndUp }"
@@ -43,6 +53,7 @@
         </v-btn>
       </v-col>
     </v-row>
+
     <v-container
       v-if="user && user.existing_jobs.length > 0"
       class="ma-0 pa-0"
@@ -135,6 +146,7 @@ export default {
       job: {
         // job data
       },
+      showAlert: false,
       topMatches: [],
       newestMatches: [],
       chartData: {
@@ -216,8 +228,6 @@ export default {
     };
   },
   mounted() {
-    //   console.log("HomePage mounted");
-
     if (this.user) {
       this.chartData.data = this.chartDataTotalJobs();
       this.chartData.data2 = this.chartDataAveragePercentage();
@@ -231,7 +241,10 @@ export default {
       // this.newestMatches = this.getNewestMatches();
     }
 
-    //  console.log(this.chartData.data, "this.chartData.data");
+    if (this.$route.query.sub === "updated") {
+      this.showAlert = true;
+      this.$ga4Event(`subcription_updated`);
+    }
   },
   methods: {
     getTopMatches() {
@@ -298,6 +311,20 @@ export default {
 </script>
 
 <style scoped>
+#alertSubUpdated {
+  background-color: #1a6256 !important;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 15px 20px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .spence-image {
   width: 80px;
   height: 80px;

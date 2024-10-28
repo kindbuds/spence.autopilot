@@ -98,7 +98,7 @@
       "
       id="limit_reached"
       border="start"
-      border-color="rgb(158 158 158)"
+      border-color="rgb(255 238 146)"
       dark
     >
       <v-row no-gutters>
@@ -136,13 +136,9 @@
                     You've hit your daily limit, I'll keep showing you the
                     freshest jobs, but not how you match up against each.
                   </p>
-                  <p
-                    v-if="upgrade_launched"
-                    style="font-size: 0.9em"
-                    class="py-4"
-                  >
-                    Upgrade if you'd like me to keep showing how you stack up
-                    against each opportunity.
+                  <p style="font-size: 0.9em" class="py-4">
+                    Consider upgrading if you'd like me to keep showing how you
+                    stack up against each opportunity.
                   </p>
                 </v-tooltip>
               </v-btn>
@@ -156,17 +152,17 @@
         <!-- Close/Dismiss Button for Both Mobile and Desktop -->
         <v-col :cols="isMdAndUp ? 6 : 9">
           <v-row no-gutters>
-            <v-col cols="9" class="text-right pt-2">
+            <v-col cols="9" class="text-right">
               <v-btn
-                v-if="upgrade_launched"
                 color="rgb(153 255 184)"
                 class="ml-auto"
                 size="small"
                 @click="handleUpgrade"
+                rounded="xl"
                 elevation="2"
                 variant="outlined"
                 prepend-icon="mdi-arrow-up"
-                style="margin-top: 2px; background-color: rgb(43 62 49)"
+                style="margin-top: 11px; background-color: rgb(43 62 49)"
                 to="/upgrade"
               >
                 Upgrade
@@ -180,7 +176,7 @@
                 color="transparent"
                 elevation="0"
               >
-                <v-icon color="#121212">mdi-close-circle</v-icon>
+                <v-icon color="grey">mdi-close-circle</v-icon>
               </v-btn>
             </v-col>
           </v-row>
@@ -303,7 +299,6 @@ export default {
   },
   data() {
     return {
-      upgrade_launched: false,
       companyFilters: [],
       getJobStatusClass: shared.getJobStatusClass,
       hideOverlay: false,
@@ -382,8 +377,8 @@ export default {
 
           /* REMOVE THIS!!!! 
           this.can_generate_percents = false;
-          this.upgrade_launched = true;
-*/
+            */
+
           await this.startQueueProcessing();
         }, 1000);
       });
@@ -427,7 +422,9 @@ export default {
     handleDismiss() {
       this.limit_reached_alert_dismissed = true;
     },
-    handleUpgrade() {},
+    handleUpgrade() {
+      this.$ga4Event("upgrade_click", { button_name: "upgrade_autopilot" });
+    },
     async adjustLayout() {
       // Call the Electron API to get work area size
       const { windowSize, workAreaSize, screenSize } =
@@ -630,31 +627,29 @@ export default {
       console.error('Error executing continueProcessing script:', err);
     }
   `;
+      try {
+        webview
+          .executeJavaScript(setPausedScript)
+          .then(() => {
+            if (!this.isPaused) {
+              webview
+                .executeJavaScript(continueProcessingScript)
+                .catch((err) => {
+                  console.error(
+                    "Error executing continueProcessing script:",
+                    err
+                  );
+                });
 
-      webview
-        .executeJavaScript(setPausedScript)
-        .then(() => {
-          // console.log(
-          //   `System should be ${
-          //     !this.initialized
-          //       ? "initializing"
-          //       : this.isPaused
-          //       ? "paused"
-          //       : "running"
-          //   }`
-          // );
-
-          if (!this.isPaused) {
-            webview.executeJavaScript(continueProcessingScript).catch((err) => {
-              console.error("Error executing continueProcessing script:", err);
-            });
-
-            if (this.continueProcessing) this.continueProcessing();
-          }
-        })
-        .catch((err) => {
-          console.error("Error setting window.isPaused:", err);
-        });
+              if (this.continueProcessing) this.continueProcessing();
+            }
+          })
+          .catch((err) => {
+            console.error("Error setting window.isPaused:", err);
+          });
+      } catch (error) {
+        console.error("Error setting window.isPaused:", error);
+      }
     },
 
     async pollForJobCompletion() {
@@ -763,11 +758,13 @@ export default {
         // );
         jobData.nopercent =
           !this.can_generate_percents ||
-          this.working_job_count >= this.user.autopilot.usage.daily_limit;
+          (this.working_job_count >= this.user.autopilot.usage.daily_limit &&
+            this.user.autopilot.usage.upgrade_pack_count === 0);
 
         if (
           this.can_generate_percents &&
-          this.working_job_count >= this.user.autopilot.usage.daily_limit
+          this.working_job_count >= this.user.autopilot.usage.daily_limit &&
+          this.user.autopilot.usage.upgrade_pack_count === 0
         )
           this.can_generate_percents = false;
 
@@ -840,7 +837,7 @@ export default {
           this.jobs.push(jobData);
           console.log(this.jobs, "this.jobs");
           if (!jobData.dupe) {
-            // console.log(jobData, " > sending job to db");
+            console.log(jobData, " > sending job to db");
             window.electron.saveJob(JSON.parse(JSON.stringify(jobData)));
           }
           this.$nextTick(() => {
@@ -1491,7 +1488,7 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
 </script>
 
 <style>
-#daily_limit_reached {
+# _reached {
   padding-top: 14px;
   padding-left: 7px;
   font-size: 13px;
@@ -1509,6 +1506,14 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
 </style>
 
 <style scoped>
+#daily_limit_reached {
+  font-weight: bold;
+  font-size: 14px;
+  color: #a4a4a4;
+  padding-left: 7px;
+  padding-top: 13px;
+}
+
 .tooltip-text {
   color: black !important;
   text-align: left;

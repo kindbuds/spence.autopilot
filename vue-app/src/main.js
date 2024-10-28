@@ -19,6 +19,7 @@ import AuthenticatedPage from './pages/AuthenticatedPage.vue';
 import vuetify from './plugins/vuetify'
 import userMixin from './mixins/userMixin';
 import osMixin from './mixins/osMixin';
+import analyticsMixin from './mixins/analyticsMixin';
 import globalMixin from './plugins/globalMixin';
 import VueChartkick from 'vue-chartkick'
 import 'chartkick/chart.js'
@@ -194,6 +195,8 @@ router.beforeEach(async (to, from, next) => {
     }
 });
 
+
+
 // Create the Vue application and use the router
 console.log('Vue app is starting...');
 try {
@@ -203,9 +206,10 @@ try {
     app.use(vuetify);
     app.mixin(userMixin);
     app.mixin(osMixin);
+    app.mixin(analyticsMixin);
     app.use(globalMixin);
     app.use(VueChartkick);
-    // app.config.globalProperties.$user = () => store.state.user;
+
     app.mount('#app');
 } catch (error) {
     console.error('Error during Vue initialization:', error);

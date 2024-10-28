@@ -46,6 +46,7 @@ import MainLayout from "@/layouts/MainLayout.vue";
 import IndividualJobWebView from "@/components/crawler/IndividualJobWebView.vue";
 import LoginHelper from "@/components/crawler/LoginHelper.vue";
 
+import * as shared from "@/helpers/shared.js";
 export default {
   components: {
     MainLayout,
@@ -100,6 +101,10 @@ export default {
       this.selectedJob = this.selectedJob != job ? job : null;
       //   console.log("JobListLayout.selectedJob updated to:", this.selectedJob);
     },
+  },
+
+  async mounted() {
+    await shared.sendGA4ScreenView(this);
   },
 };
 </script>

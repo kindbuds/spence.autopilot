@@ -8,12 +8,24 @@
       <template v-slot:default>
         <v-main class="pa-0">
           <job-site-web-view
-            v-if="user"
+            v-if="user_reloaded"
             :url="urls.search"
             :selectedJob="selectedJob"
             @authRequired="onAuthRequired"
             @jobSelected="onJobSelected"
           ></job-site-web-view>
+          <!-- <v-container v-else class="fill-height" fluid>
+            <v-row class="fill-height" align="center" justify="center">
+              <v-col class="text-center">
+                <v-progress-circular
+                  indeterminate
+                  :size="70"
+                  :width="7"
+                  color="grey"
+                ></v-progress-circular>
+              </v-col>
+            </v-row>
+          </v-container> -->
         </v-main>
       </template>
     </JobListLayout>
@@ -57,14 +69,16 @@ export default {
       },
       experience_levels: [{}],
       selectedJob: null,
+      user_reloaded: null,
     };
   },
   mounted() {
-    if (window.electron) {
-      // window.electron.onJobDetails(() => {
-      //   // ("Job details received in Vue:", jobDetails);
-      //   // Handle the job details, e.g., store them in Vue data/component state
-      // });
+    if (window.electron && this.user) {
+      window.electron.reloadUser(this.user.token);
+      window.electron.onUserReloaded(async (event, userdata) => {
+        this.user_reloaded = userdata;
+        console.log(this.user_reloaded, "this.user_reloaded");
+      });
     }
 
     // testing week for paging

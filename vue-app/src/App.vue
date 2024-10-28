@@ -6,9 +6,7 @@
   </v-app>
 </template>
 <script>
-export default {
-  // No need to declare components here as they are in MainLayout.vue
-};
+export default {};
 </script>
 
 <style>

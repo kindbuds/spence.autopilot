@@ -20,6 +20,8 @@ jobs:
       APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
       TEAM_ID: ${{ secrets.TEAM_ID }}
       AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
+      GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+      GA_API_SECRET: ${{ secrets.GA_API_SECRET }}
 
     steps:
       - name: Checkout code
@@ -35,6 +37,8 @@ jobs:
           echo "NODE_ENV=production" >> electron/.env
           echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> electron/.env
           echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> electron/.env
+          echo "GA_MEASUREMENT_ID=${{ secrets.GA_MEASUREMENT_ID }}" >> electron/.env
+          echo "GA_API_SECRET=${{ secrets.GA_API_SECRET }}" >> electron/.env
           echo "API_BASE=${{ secrets.API_BASE }}" >> electron/.env
           echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> electron/.env
           echo "API_API2=${{ secrets.API_API2 }}" >> electron/.env
@@ -68,6 +72,8 @@ jobs:
       APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
       TEAM_ID: ${{ secrets.TEAM_ID }}
       AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
+      GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+      GA_API_SECRET: ${{ secrets.GA_API_SECRET }}
 
     steps:
       - name: Checkout code
@@ -100,6 +106,8 @@ jobs:
           echo "NODE_ENV=production" >> electron/.env
           echo "AMPLIFY_DOMAIN=${{ secrets.AMPLIFY_DOMAIN }}" >> electron/.env
           echo "SPENCE_DOMAIN=${{ secrets.SPENCE_DOMAIN }}" >> electron/.env
+          echo "GA_MEASUREMENT_ID=${{ secrets.GA_MEASUREMENT_ID }}" >> electron/.env
+          echo "GA_API_SECRET=${{ secrets.GA_API_SECRET }}" >> electron/.env
           echo "API_BASE=${{ secrets.API_BASE }}" >> electron/.env
           echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> electron/.env
           echo "API_API2=${{ secrets.API_API2 }}" >> electron/.env

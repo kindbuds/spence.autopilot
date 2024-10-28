@@ -24,13 +24,12 @@ if (fs.existsSync(envPath)) {
 }
 
 
-let loaderWindow, mainWindow, authWindow;
+let loaderWindow, mainWindow, authWindow, userIp, userId, versionNumber;
 const mainPlatform = os.platform() === 'win32' ? 'win' : os.platform() === 'darwin' ? 'mac' : 'other';
-
 const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
-
+const sessionId = Date.now();
 
 eShared.logtofile(`starting application2`)
 eShared.logtofile(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
@@ -52,6 +51,8 @@ updateElectronApp({
 const gotTheLock = app.requestSingleInstanceLock();
 console.log(gotTheLock, 'gotTheLock')
 // eShared.logtofile(`gotTheLock: ${gotTheLock}`)
+
+versionNumber = app.getVersion();
 
 if (!gotTheLock) {
 
@@ -113,6 +114,7 @@ if (!gotTheLock) {
             let gptUser = await sendToApi(`${api.spenceUrl}gpt/gpt_user`, payload, 'json');
             gptUser.token = token;
 
+
             // console.log(gptUser, 'gptUser')
             const userData = await loadUserData(gptUser.userid);
             gptUser.existing_jobs = userData.existing_jobs;
@@ -134,7 +136,7 @@ if (!gotTheLock) {
             if (user) {
                 const userData = await loadUserData(user.userid);
                 user.existing_jobs = userData.existing_jobs;
-                console.log(userData, 'load-user.userData')
+                // console.log(userData, 'load-user.userData')
                 event.reply('userDataResponse', user);
             }
             // } catch (error) {
@@ -203,11 +205,244 @@ if (!gotTheLock) {
     });
 }
 
+let listenersAdded = false;
+
+function addEventListeners() {
+    if (listenersAdded) return; // Exit if listeners are already added
+    listenersAdded = true;
+
+    // mainWindow
+    // mainWindow.webContents.on('did-finish-load', () => {
+    //     console.log('did-finish-load-2')
+    //     // eShared.logtofile(`did-finish-load`)
+    //     if (mainWindow) mainWindow.webContents.executeJavaScript(`console.log('did-finish-load')`);
+    //     addScroll();
+    // });
+    mainWindow.webContents.on('did-finish-load', () => {
+        console.log('did-finish-load-1')
+        //  eShared.logtofile(`did-finish-load`)
+        if (!mainWindow) return;
+
+        mainWindow.webContents.insertCSS('html, body { overflow: hidden !important; }');
+        mainWindow.setTitle("Spence - AI Career Autopilot");
+    });
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+        // eShared.logtofile(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`)
+        console.log(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`);
+    });
+    mainWindow.webContents.on('dom-ready', () => {
+        // eShared.logtofile(`dom-ready`)
+        console.log("DOM is ready");
+        if (mainWindow)
+            mainWindow.webContents.executeJavaScript(`console.log('DOM is ready')`);
+        addScroll();
+    });
+    mainWindow.webContents.on('did-navigate', (event, url) => {
+        // eShared.logtofile(`Navigated to: ${url}`)
+        console.log('Navigated to:', url);
+        if (mainWindow)
+            mainWindow.webContents.executeJavaScript(`console.log('Navigated to:', '${url}');`);
+
+    });
+    mainWindow.webContents.on('did-navigate-in-page', (event, url) => {
+        // eShared.logtofile(`Navigated within page to: ${url}`)
+        console.log('Navigated within page to:', url);
+        if (mainWindow)
+            mainWindow.webContents.executeJavaScript(`console.log('Navigated within page to:', '${url}');`);
+        addScroll();
+    });
+    mainWindow.on('page-title-updated', (event) => {
+        // eShared.logtofile(`page-title-updated`)
+        event.preventDefault();
+    });
+    mainWindow.webContents.on('crashed', () => {
+        // eShared.logtofile(`The web content has crashed`)
+        console.error('The web content has crashed');
+    });
+    mainWindow.webContents.on('unresponsive', () => {
+        // eShared.logtofile(`The web content is unresponsive`)
+        console.error('The web content is unresponsive');
+    });
+    mainWindow.webContents.on('new-window', async (event, url, frameName, disposition, options, additionalFeatures) => {
+        // eShared.logtofile(`mainWindow.webContents.on('new-window'`)
+        console.log(` mainWindow.webContents.on('new-window'`)
+        if (!mainWindow) return;
+
+        event.preventDefault();
+        mainWindow.webContents.send('open-url-in-webview', url);
+        const popupWindow = new BrowserWindow({
+            width: 500,
+            height: 600,
+            webPreferences: {
+                nodeIntegration: false,
+                contextIsolation: true,
+                enableRemoteModule: false,
+                webviewTag: false,
+                preload: path.join(__dirname, 'preload.js'),
+                nativeWindowOpen: true
+            }
+        });
+        popupWindow.loadURL(url);
+        event.newGuest = popupWindow;
+    });
+    mainWindow.on('closed', function () {
+        // eShared.logtofile('mainWindow has been closed');
+        console.log('mainWindow has been closed');
+        mainWindow = null;
+    });
+    mainWindow.once('ready-to-show', () => {
+        // eShared.logtofile(mainWindow.ready-to-show)
+
+        mainWindow.show();
+        try {
+            if (isDev) {
+                setTimeout(() => {
+
+                    if (mainWindow) {
+                        console.log('openDevTools');
+                        mainWindow.openDevTools();
+                        mainWindow.webContents.openDevTools();
+                    }
+                }, 1000);
+            }
+        } catch {
+            console.log('openDevTools failed')
+        }
+    });
+
+    // ipcMain
+    ipcMain.on('restart-app', () => {
+        // autoUpdater.quitAndInstall();
+    });
+    ipcMain.on('toggle-fullscreen', () => {
+        if (mainWindow.isMaximized()) {
+            mainWindow.unmaximize();
+        } else {
+            mainWindow.maximize();
+        }
+    });
+    ipcMain.on('toggle-narrow-width', () => {
+        const newWidth = 450;
+        const [width, height] = mainWindow.getSize();
+        // console.log(width, 'width')
+        if (width > newWidth) {
+            if (mainWindow.isMaximized()) {
+                mainWindow.unmaximize();
+            }
+            mainWindow.setSize(newWidth, height);
+        } else {
+            if (mainWindow.isMaximized()) {
+                mainWindow.unmaximize();
+            }
+            mainWindow.setSize(800, height); // or any default width you prefer
+        }
+    });
+    ipcMain.handle('get-work-area-size', async () => {
+        const { width: workAreaWidth, height: workAreaHeight } = screen.getPrimaryDisplay().workAreaSize;
+        const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().size;
+
+        // Get the current window size
+        const [windowWidth, windowHeight] = mainWindow.getSize();
+
+        // Return both the window size and work area size
+        return {
+            windowSize: { width: windowWidth, height: windowHeight },
+            workAreaSize: { width: workAreaWidth, height: workAreaHeight },
+            screenSize: { width: screenWidth, height: screenHeight },
+        };
+    });
+    ipcMain.handle('get-job-content', async (event, { content_type, job }) => {
+        const user = await eShared.loadUserData();
+        delete user.token;
+        delete user.existing_jobs;
+        delete user.subscription;
+
+        console.log(content_type, job, user, 'get-job-content')
+        try {
+            let jobContent = await sendToApi(`${api.api2Url}autopilot/composer/fetch`, { content_type, job, user }, 'json');
+            console.log(jobContent, 'jobContent')
+
+            return jobContent;
+        } catch (error) {
+            console.error('Error fetching job content:', error);
+            throw error;
+        }
+    });
+    ipcMain.on('add-negative-keyword', async (event, keyword) => {
+        console.log('in ipcMain.add-negative-keyword')
+        const user = await eShared.loadUserData();
+        const payload = {
+            userid: user.userid,
+            keyword,
+        }
+        await sendToApi(`${api.api2Url}autopilot/negative_kw`, payload);
+    });
+    ipcMain.on('add-company-filter', async (event, companyFilter) => {
+        console.log('in ipcMain.add-company-filter')
+        const user = await eShared.loadUserData();
+        const payload = {
+            userid: user.userid,
+            companyFilter,
+        }
+        await sendToApi(`${api.api2Url}autopilot/company_filter`, payload);
+    });
+    ipcMain.on('job-discovered', (event, arg) => {
+        // console.log(arg, 'in main.js.job-discovered')
+        if (!mainWindow) return;
+        mainWindow.webContents.send('new-job', arg);
+    });
+    ipcMain.on('authenticate-linkedin', (event, arg) => {
+        mainWindow.show();
+    });
+}
+
+const addScroll = () => {
+    if (!mainWindow) return;
+
+    mainWindow.webContents.executeJavaScript(`console.log('addScroll');`);
+
+    const currentURL = mainWindow.webContents.getURL();
+    console.log("Web content loaded", currentURL);
+    mainWindow.webContents.executeJavaScript(`console.log('Web content loaded ${currentURL}');`);
+    eShared.logtofile(`Web content loaded ${currentURL}`)
+    const scrolls = ['auth0', 'get-started']
+    if (scrolls.some(sc => currentURL.includes(sc))) {
+        // Inject CSS to enforce scrolling
+
+        let element = mainPlatform === 'mac' ? 'body' : 'html';
+
+        if (currentURL.includes('auth0')) {
+            element = 'body';
+        }
+
+        setTimeout(() => {
+            mainWindow.webContents.insertCSS(`
+            ${element} {
+                overflow-y: scroll !important;
+            }
+        `);
+
+            console.log("Injected CSS for scrolling.");
+            eShared.logtofile(`Injected CSS for scrolling.`)
+        }, 1000);
+    }
+
+}
+
 async function createWindow(loggedin = null) {
     // eShared.logtofile(`running createWindow`)
-
+    console.log('start createWindow')
     if (!loggedin) {
-        loggedin = await eShared.isLoggedIn();
+        try {
+            const userData = await eShared.loadUserData();
+            loggedin = !!userData && !!userData.token && !!userData.userid;
+            if (loggedin) {
+                userId = userData.userid
+                await sendEventToGA4('user_session_start', { userId: userId, session_id: sessionId }, null);
+            }
+        } catch (error) {
+
+        }
     }
 
     if (mainWindow) {
@@ -233,283 +468,22 @@ async function createWindow(loggedin = null) {
             nativeWindowOpen: true,
         }
     });
+    addEventListeners();
 
-    // mainWindow.openDevTools();
-    // eShared.logtofile(`Window created`)
     console.log("Window created");
-
-    mainWindow.webContents.executeJavaScript(`console.log('Window created: version ${app.getVersion()} on ${mainPlatform}')`);
-
-
-    mainWindow.webContents.on('did-finish-load', () => {
-        // eShared.logtofile(`did-finish-load`)
-        mainWindow.webContents.executeJavaScript(`console.log('did-finish-load')`);
-        addScroll();
-    });
-
-    const addScroll = () => {
-        if (!mainWindow) return;
-
-        mainWindow.webContents.executeJavaScript(`console.log('addScroll');`);
-
-        const currentURL = mainWindow.webContents.getURL();
-        console.log("Web content loaded", currentURL);
-        mainWindow.webContents.executeJavaScript(`console.log('Web content loaded ${currentURL}');`);
-        eShared.logtofile(`Web content loaded ${currentURL}`)
-        const scrolls = ['auth0', 'get-started']
-        if (scrolls.some(sc => currentURL.includes(sc))) {
-            // Inject CSS to enforce scrolling
-
-            let element = mainPlatform === 'mac' ? 'body' : 'html';
-
-            if (currentURL.includes('auth0')) {
-                element = 'body';
-            }
-
-            setTimeout(() => {
-                mainWindow.webContents.insertCSS(`
-                ${element} {
-                    overflow-y: scroll !important;
-                }
-            `);
-
-                console.log("Injected CSS for scrolling.");
-                eShared.logtofile(`Injected CSS for scrolling.`)
-            }, 1000);
-        }
-
-    }
-    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-        // eShared.logtofile(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`)
-        console.log(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`);
-    });
-
-    mainWindow.webContents.on('dom-ready', () => {
-        // eShared.logtofile(`dom-ready`)
-        console.log("DOM is ready");
-        mainWindow.webContents.executeJavaScript(`console.log('DOM is ready')`);
-        addScroll();
-    });
-
-    mainWindow.webContents.on('crashed', () => {
-        // eShared.logtofile(`WebContents crashed`)
-        console.log("WebContents crashed");
-    });
-
-
-    // mainWindow.loadURL(`file://${path.join(__dirname, '/vue-app/dist/index.html')}`);
+    mainWindow.webContents.executeJavaScript(`console.log('Window created: version ${versionNumber} on ${mainPlatform}')`);
 
     console.log(isDev, process.env.NODE_ENV, 'isDev')
     mainWindow.maximize();
 
     console.log(amplifyUri, 'amplifyUri')
-    // eShared.logtofile(`calling mainWindow.loadURL ${amplifyUri}`)
+    userIp = await getUserIpAddress();
+
     mainWindow.loadURL(amplifyUri);
     // eShared.logtofile(`called mainWindow.loadURL ${amplifyUri}`)
 
     // Log URL changes
-    mainWindow.webContents.on('did-navigate', (event, url) => {
-        // eShared.logtofile(`Navigated to: ${url}`)
-        console.log('Navigated to:', url);
-        mainWindow.webContents.executeJavaScript(`console.log('Navigated to:', '${url}');`);
 
-    });
-
-    mainWindow.webContents.on('did-navigate-in-page', (event, url) => {
-        // eShared.logtofile(`Navigated within page to: ${url}`)
-        console.log('Navigated within page to:', url);
-        mainWindow.webContents.executeJavaScript(`console.log('Navigated within page to:', '${url}');`);
-        addScroll();
-    });
-
-    mainWindow.on('page-title-updated', (event) => {
-        // eShared.logtofile(`page-title-updated`)
-        event.preventDefault();
-    });
-
-    mainWindow.webContents.on('did-finish-load', () => {
-        //  eShared.logtofile(`did-finish-load`)
-        mainWindow.webContents.insertCSS('html, body { overflow: hidden !important; }');
-        mainWindow.setTitle("Spence - AI Career Autopilot");
-    });
-
-    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
-        // eShared.logtofile(`did-fail-load ${errorDescription}`)
-        console.error('Failed to load:', errorDescription);
-    });
-    mainWindow.webContents.on('crashed', () => {
-        // eShared.logtofile(`The web content has crashed`)
-        console.error('The web content has crashed');
-    });
-    mainWindow.webContents.on('unresponsive', () => {
-        // eShared.logtofile(`The web content is unresponsive`)
-        console.error('The web content is unresponsive');
-    });
-
-    mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
-        // eShared.logtofile(`mainWindow.webContents.on('new-window'`)
-        console.log(` mainWindow.webContents.on('new-window'`)
-        event.preventDefault();
-        mainWindow.webContents.send('open-url-in-webview', url);
-        const popupWindow = new BrowserWindow({
-            width: 500,
-            height: 600,
-            webPreferences: {
-                nodeIntegration: false,
-                contextIsolation: true,
-                enableRemoteModule: false,
-                webviewTag: false,
-                preload: path.join(__dirname, 'preload.js'),
-                nativeWindowOpen: true
-            }
-        });
-        popupWindow.loadURL(url);
-        event.newGuest = popupWindow;
-    });
-
-
-    ipcMain.on('restart-app', () => {
-        // autoUpdater.quitAndInstall();
-    });
-    ipcMain.on('toggle-fullscreen', () => {
-        if (mainWindow.isMaximized()) {
-            mainWindow.unmaximize();
-        } else {
-            mainWindow.maximize();
-        }
-    });
-
-    ipcMain.on('toggle-narrow-width', () => {
-        const newWidth = 450;
-        const [width, height] = mainWindow.getSize();
-        // console.log(width, 'width')
-        if (width > newWidth) {
-            if (mainWindow.isMaximized()) {
-                mainWindow.unmaximize();
-            }
-            mainWindow.setSize(newWidth, height);
-        } else {
-            if (mainWindow.isMaximized()) {
-                mainWindow.unmaximize();
-            }
-            mainWindow.setSize(800, height); // or any default width you prefer
-        }
-    });
-
-    ipcMain.handle('get-work-area-size', async () => {
-        const { width: workAreaWidth, height: workAreaHeight } = screen.getPrimaryDisplay().workAreaSize;
-        const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().size;
-
-        // Get the current window size
-        const [windowWidth, windowHeight] = mainWindow.getSize();
-
-        // Return both the window size and work area size
-        return {
-            windowSize: { width: windowWidth, height: windowHeight },
-            workAreaSize: { width: workAreaWidth, height: workAreaHeight },
-            screenSize: { width: screenWidth, height: screenHeight },
-        };
-    })
-
-    ipcMain.handle('get-job-content', async (event, { content_type, job }) => {
-        const user = await eShared.loadUserData();
-        delete user.token;
-        delete user.existing_jobs;
-        delete user.subscription;
-
-        console.log(content_type, job, user, 'get-job-content')
-        try {
-
-
-            let jobContent = await sendToApi(`${api.api2Url}autopilot/composer/fetch`, { content_type, job, user }, 'json');
-            console.log(jobContent, 'jobContent')
-
-
-            // const response = await fetch('https://api.example.com/getJobContent', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ content_type, job, user })
-            // });
-
-            // if (!response.ok) {
-            //     throw new Error(`HTTP error! Status: ${response.status}`);
-            // }
-
-            // const data = await response.json();
-            return jobContent;
-        } catch (error) {
-            console.error('Error fetching job content:', error);
-            throw error;
-        }
-    });
-
-    ipcMain.on('add-negative-keyword', async (event, keyword) => {
-        console.log('in ipcMain.add-negative-keyword')
-        const user = await eShared.loadUserData();
-        const payload = {
-            userid: user.userid,
-            keyword,
-        }
-        await sendToApi(`${api.api2Url}autopilot/negative_kw`, payload);
-    });
-
-    ipcMain.on('add-company-filter', async (event, companyFilter) => {
-        console.log('in ipcMain.add-company-filter')
-        const user = await eShared.loadUserData();
-        const payload = {
-            userid: user.userid,
-            companyFilter,
-        }
-        await sendToApi(`${api.api2Url}autopilot/company_filter`, payload);
-    });
-
-
-
-
-
-    // if (isDev)
-    ipcMain.on('job-discovered', (event, arg) => {
-        // console.log(arg, 'in main.js.job-discovered')
-        mainWindow.webContents.send('new-job', arg);
-    });
-
-    ipcMain.on('authenticate-linkedin', (event, arg) => {
-        console.log(arg, 'in main.js.authenticate-linkedin')
-        // eShared.logtofile('in main.js.authenticate-linkedin');
-        //  mainWindow.show();
-        // createWindow();
-
-        mainWindow.show();
-
-        // mainWindow.loadURL('https://www.linkedin.com/jobs', {
-        //     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0'
-        // });
-    });
-
-    mainWindow.on('closed', function () {
-        // eShared.logtofile('mainWindow has been closed');
-        console.log('mainWindow has been closed');
-        mainWindow = null;
-    });
-
-    mainWindow.once('ready-to-show', () => {
-        // eShared.logtofile(`mainWindow.ready-to-show`)
-
-        mainWindow.show();
-        try {
-            if (isDev) {
-                setTimeout(() => {
-                    console.log('openDevTools');
-                    mainWindow.openDevTools();
-                    mainWindow.webContents.openDevTools();
-                }, 1000);
-            }
-        } catch {
-            console.log('openDevTools failed')
-        }
-    });
     Menu.setApplicationMenu(null);
 }
 
@@ -580,10 +554,62 @@ app.on('activate', async () => {
     if (BrowserWindow.getAllWindows().length === 0) await createWindow();
 });
 
+async function getUserIpAddress() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip; // Returns the user's IP address
+    } catch (error) {
+        console.error('Error fetching IP address:', error);
+        return null;
+    }
+}
+async function sendEventToGA4(eventName, params, userAgent) {
+    const clientId = userId ? userId : params.userId; // Implement this function as needed
+
+    if (params.userId)
+        delete params.userId;
+
+    params.app_name = 'Spence AI Career Autopilot';
+    params.app_version = versionNumber,
+
+        console.log(params, 'params')
+
+    const eventData = {
+        client_id: clientId,
+        events: [
+            {
+                name: eventName,
+                params: params || {},
+            },
+        ]
+    };
+
+    console.log(JSON.stringify(eventData), 'sendEventToGA4')
+    const MEASUREMENT_ID = process.env.GA_MEASUREMENT_ID;
+    const API_SECRET = process.env.GA_API_SECRET;
+    const ipOverride = userIp ? `&ip_override=${userIp}` : ``;
+    const url = `https://www.google-analytics.com/mp/collect?measurement_id=${MEASUREMENT_ID}&api_secret=${API_SECRET}`;
+    console.log(url, 'url')
+    try {
+        const response = await sendToApi(url, eventData, 'text', { 'User-Agent': userAgent });
+        console.log('Event sent to GA4:', response);
+    } catch (error) {
+        console.error('Error sending event to GA4:', error);
+    }
+}
+
+ipcMain.on('ga4-event', async (event, data) => {
+    const { eventName, params, userAgent } = data;
+    // console.log(data, userId, params.userId, 'ga4-event')
+    await sendEventToGA4(eventName, params, userAgent);
+});
+
 ipcMain.on('job-details', (event, jobDetails) => {
     console.log('Received job details:', jobDetails);
     // Process jobDetails as needed, e.g., send them to your Vue component
-    mainWindow.webContents.send('job-details', jobDetails); // assuming `mainWindow` is your primary BrowserWindow
+    if (mainWindow)
+        mainWindow.webContents.send('job-details', jobDetails); // assuming `mainWindow` is your primary BrowserWindow
 });
 
 ipcMain.handle('get-app-path', () => {
@@ -626,12 +652,9 @@ ipcMain.on('auth-callback', async (event, { token, userid }) => {
 
     eShared.setAuth(gptUser, eShared.logtofile)
         .then(() => {
-            // eShared.logtofile('Auth data was successfully saved.');
-            //mainWindow.webContents.send('auth-complete'); // Notify the renderer process
             mainWindow.loadURL(amplifyUri);
         })
         .catch(error => {
-            //  eShared.logtofile('Error when setting auth data:' + error);
         });
 
     await createWindow(true);
@@ -647,25 +670,6 @@ ipcMain.handle('create-checkout', async (event, payload) => {
     }
     console.log(checkoutResponse, `checkoutResponse`)
     return checkoutResponse;
-});
-
-ipcMain.handle('check-checkout-completion', async (event, args) => {
-    try {
-        const user = await eShared.loadUserData();
-        // const { sessionID } = args;
-
-        console.log(`in check-checkout-completion ${user}`)
-        // Your API call to check checkout completion
-        //   let checkResponse = await sendToApi(`${api.api2Url}checkout/status`, {
-        //     userid: user.userid,
-        //     sessionID: sessionID
-        //   }, 'json');
-
-        //   return checkResponse; // Return the API response
-    } catch (error) {
-        console.error("Error checking checkout completion:", error);
-        throw error;
-    }
 });
 
 ipcMain.handle('check-job-completion', async (event, args) => {
@@ -737,6 +741,8 @@ ipcMain.on('save-job', async (event, jobData) => {
         language: userdata.language,
         resume: userdata.resume.optimized_text
     }
+    jobData.os = mainPlatform;
+
     let jobUploaded = await sendToApi(`${api.api2Url}autopilot/upload_job`, jobData);
     // console.log(jobUploaded, 'jobUploaded');
 });
@@ -756,15 +762,19 @@ const api = {
     api2Url: process.env.API_API2,
 };
 
-const sendToApi = async (url, data, response_type = 'text') => {
+const sendToApi = async (url, data, response_type = 'text', additionalHeaders = {}) => {
     // eShared.logtofile(`sendToApi: ${url} ${JSON.stringify(data)}`);
     try {
+        // Merge default headers with additional headers
+        const headers = {
+            'Content-Type': 'application/json',
+            ...additionalHeaders,
+        };
+
         const response = await fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
+            headers: headers,
+            body: JSON.stringify(data),
         });
 
         if (!response.ok) {
@@ -772,6 +782,8 @@ const sendToApi = async (url, data, response_type = 'text') => {
         }
 
         let response_data;
+
+        // console.log(response, 'sendToApi.response')
 
         switch (response_type) {
             case 'text':
@@ -781,7 +793,7 @@ const sendToApi = async (url, data, response_type = 'text') => {
                 response_data = await response.json();
                 break;
             default:
-                response_data = response.arrayBuffer()
+                response_data = await response.arrayBuffer();
                 break;
         }
 
@@ -789,6 +801,6 @@ const sendToApi = async (url, data, response_type = 'text') => {
         return response_data;
     } catch (error) {
         // console.error('Error:', error);
-        throw error;  // If you want the error to be propagated to the caller
+        throw error; // Propagate the error to the caller
     }
 };

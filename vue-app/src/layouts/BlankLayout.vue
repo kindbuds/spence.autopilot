@@ -15,6 +15,9 @@ export default {
       //  user2: null,
     };
   },
+  async mounted() {
+    await shared.sendGA4ScreenView(this);
+  },
   created() {
     this.$store.dispatch("loadUser");
 

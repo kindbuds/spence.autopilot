@@ -128,25 +128,29 @@ export default {
       sessionID: null, // Store session ID if needed
       isPolling: false, // Control polling state
       pollingInterval: null, // To store interval reference for cleanup
-
+      subscription_last_updated: null,
       plans: [
         {
+          id: "essential",
           name: "Essential Plan",
           price: 19.99,
           jobMatches: 100,
           billingCycle: "monthly",
           priceId: "price_1QCREvJUTfh95zTgRagihd0C",
+          type: "subscription",
           // features: [
           //   "Daily Job Recommendations",
           //   "Priority Application Insights",
           // ],
         },
         {
+          id: "pro",
           name: "Pro Plan",
           price: 39.99,
           jobMatches: 250,
           billingCycle: "monthly",
           priceId: "price_1QCUW6JUTfh95zTggFYoFQnn",
+          type: "subscription",
           // features: [
           //   "Daily Job Recommendations",
           //   "Priority Application Insights",
@@ -156,16 +160,20 @@ export default {
       ],
       upgradePacks: [
         {
+          id: "boost250",
           name: "Boost 250",
           price: 4.99,
           jobMatches: 250,
-          link: "https://buy.stripe.com/bIY4hA9P7ccm3MQ8ww",
+          link: "https://buy.stripe.com/fZeeWeaTb5NYabefZ2",
+          type: "upgrade_pack",
         },
         {
+          id: "boost500",
           name: "Boost 500",
           price: 9.99,
           jobMatches: 500,
-          link: "https://buy.stripe.com/eVa9BU3qJfoy4QUfYZ",
+          link: "https://buy.stripe.com/5kAaFY4uN90aabecMR",
+          type: "upgrade_pack",
         },
       ],
     };
@@ -173,21 +181,39 @@ export default {
 
   async mounted() {
     if (window.electron) {
-      if (window.electron.onSubscriptionUpdated) {
-        window.electron.onSubscriptionUpdated(async (jobData) => {
-          // console.log("Received new job data in component!:", jobData);
-          await this.processData(jobData);
-        });
+      const userdata = await this.reloadUserAndWait(this.user.token);
+      console.log(userdata, "UpgradePage.mounted");
+      if (userdata) {
+        this.user = userdata;
+        this.subscription_last_updated = userdata.subscription
+          ? userdata.subscription.last_updated
+          : null;
       }
-
-      window.electron.reloadUser(this.user.token);
-      window.electron.onUserReloaded(async (event, userdata) => {
-        console.log(event, userdata, "onUserReloaded");
-      });
     }
   },
   methods: {
+    async reloadUserAndWait(token) {
+      return new Promise((resolve) => {
+        // Define the handler
+        const handler = (userdata) => {
+          resolve(userdata);
+          // Remove the listener after it's called once
+          window.electron.ipcRenderer.removeListener(
+            "reloadUserResponse",
+            handler
+          );
+        };
+        // Register the event listener
+        window.electron.ipcRenderer.on("reloadUserResponse", handler);
+        // Send the reloadUser message
+        window.electron.reloadUser(token);
+      });
+    },
     async handleUpgrade(upgrade) {
+      this.$ga4Event(`upgrade_click_${upgrade.type}`, {
+        button_name: upgrade.id,
+      });
+
       if (upgrade && upgrade.link) {
         window.electron.openUrl(
           `${upgrade.link}?client_reference_id=${encodeURIComponent(
@@ -217,11 +243,23 @@ export default {
       console.log("pollForCheckoutCompletion");
 
       try {
-        const checkResponse = await window.electron.checkCheckoutCompletion();
-        if (checkResponse && checkResponse.completed) {
-          console.log("Checkout completed!");
-          this.stopPolling(); // Stop polling after completion
-          // Handle successful checkout here (e.g., update UI, show confirmation)
+        const userdata = await this.reloadUserAndWait(this.user.token);
+        if (userdata) {
+          const new_last_updated = userdata.subscription
+            ? userdata.subscription.last_updated
+            : null;
+
+          if (new_last_updated !== this.subscription_last_updated) {
+            // Update the user data and subscription timestamp
+            //  this.user = userdata;
+            this.subscription_last_updated = new_last_updated;
+            this.stopPolling(); // Stop polling after completion
+            console.log("Subscription updated!");
+            window.location.href = "/?sub=updated";
+            // Handle successful checkout here (e.g., update UI, show confirmation)
+          } else {
+            console.log("Subscription last_updated has not changed.");
+          }
         } else {
           console.log("Polling for checkout completion...");
         }

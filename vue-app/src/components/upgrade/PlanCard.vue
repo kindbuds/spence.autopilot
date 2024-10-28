@@ -18,7 +18,7 @@
       <v-card-text class="pt-3 ml-3 text-body-1" style="line-height: 3">
         <p><strong>Job Matches per Day:</strong> {{ plan.jobMatches }}</p>
         <p>
-          <strong>Job Matches per Month:</strong> {{ plan.jobMatches * 30 }}
+          <strong>Job Matches per Month:</strong> ~{{ plan.jobMatches * 30 }}
         </p>
         <ul>
           <li v-for="(feature, index) in plan.features" :key="index">

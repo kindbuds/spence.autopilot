@@ -15,7 +15,13 @@ contextBridge.exposeInMainWorld(
             },
             on: (channel, func) => {
                 ipcRenderer.on(channel, (event, ...args) => func(...args));
-            }
+            },
+            once: (channel, func) => {
+                ipcRenderer.once(channel, (event, ...args) => func(...args));
+            },
+            removeListener: (channel, func) => {
+                ipcRenderer.removeListener(channel, func);
+            },
         },
         getJobContent: async (content_type, job) => {
             console.log(job, 'window.electron.getJobContent');
@@ -66,12 +72,6 @@ contextBridge.exposeInMainWorld(
                 callback(jobData);
             });
         },
-        onSubscriptionUpdated: (callback) => {
-            ipcRenderer.on('subscription-updated', (event, jobData) => {
-                // console.log('preload.js.onJobNew', jobData)
-                callback(jobData);
-            });
-        },
         addNegativeKeyword: (keyword) => {
             ipcRenderer.send('add-negative-keyword', keyword);
         },
@@ -97,7 +97,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.send('search-cycle-completed', dte);
         },
         reloadUser: (token) => {
-            console.log('preload.js.reloadUser', token);
+            // console.log('preload.js.reloadUser', token);
             ipcRenderer.send('reload-user', token);
         },
         onUserReloaded: (callback) => ipcRenderer.on('reloadUserResponse', callback),
@@ -128,9 +128,6 @@ contextBridge.exposeInMainWorld(
         },
         createCheckoutLink: (payload) =>
             ipcRenderer.invoke('create-checkout', payload),
-
-        checkCheckoutCompletion: () =>
-            ipcRenderer.invoke('check-checkout-completion'),
         loginWithRedirect: async () => {
             try {
                 const auth0Client = new auth0.WebAuth({

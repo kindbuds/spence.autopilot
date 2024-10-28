@@ -1317,7 +1317,7 @@ async function clickLinksSequentially(jobCards) {
           }
       }
 
-      const url = 'https://www.linkedin.com/jobs/view/' + siteId + '/';
+      const url = 'https://www.linkedin.com/jobs/search/?currentJobId=' + siteId;
       const jobDetails = {
         domain: '${this.domain}',
         siteId: siteId,

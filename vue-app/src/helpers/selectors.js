@@ -3,6 +3,7 @@ export const selectors = {
     applyButton: "button.jobs-apply-button",
     scaffoldToolbar: ".scaffold-layout-toolbar",
     scaffoldList: ".scaffold-layout__list .jobs-search-results-list .jobs-search-results__list-item .job-card-container",
+    scaffoldList2: ".scaffold-layout__list",
     scaffoldDetailBackButton: ".scaffold-layout__detail-back-button",
     msgOverlay: "#msg-overlay",
     siteIdSelector: "data-job-id",

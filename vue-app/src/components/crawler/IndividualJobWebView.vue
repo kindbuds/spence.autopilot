@@ -374,6 +374,7 @@ export default {
         const removeElementsScript = `
             document.querySelector('${this.selectors.scaffoldToolbar}')?.remove();
             document.querySelector('${this.selectors.scaffoldList}')?.remove();
+            document.querySelector('${this.selectors.scaffoldList2}')?.remove();
             document.querySelector('${this.selectors.scaffoldDetailBackButton}')?.remove();
             document.querySelector('${this.selectors.msgOverlay}')?.remove();
             document.querySelector('button${this.selectors.scaffoldDetailBackButton}')?.remove();

@@ -270,11 +270,16 @@
         @click="toggleWebviewOpacity"
       ></v-btn>
     </h3>
+
+    <!-- <div v-if="!isPremiumUser">
+      <propeller-ad :shouldShowAd="true" />
+    </div> -->
   </div>
 </template>
 
 <script>
 import JobCard from "@/components/crawler/JobCard.vue";
+// import PropellerAd from "@/components/advertising/PropellerAd.vue";
 import { computed } from "vue";
 import * as shared from "@/helpers/shared.js";
 import { selectors } from "@/helpers/selectors.js";
@@ -287,6 +292,7 @@ export default {
   },
   components: {
     JobCard,
+    // PropellerAd,
   },
   emits: ["auth-required", "auth-not-required", "job-data", "jobSelected"],
   setup() {
@@ -299,6 +305,7 @@ export default {
   },
   data() {
     return {
+      isPremiumUser: false,
       companyFilters: [],
       getJobStatusClass: shared.getJobStatusClass,
       hideOverlay: false,

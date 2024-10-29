@@ -1495,6 +1495,24 @@ window.autopilotConfig.searchType = window.autopilotConfig.isPaging ? "full" : "
 </script>
 
 <style>
+#p_8439341 > div > div {
+  background-color: red;
+  width: 50vw !important;
+  height: 50vh !important;
+  position: fixed !important; /* Keeps it centered even on scroll */
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(
+    -50%,
+    -50%
+  ) !important; /* Center horizontally and vertically */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important; /* Clips any overflowing content */
+  box-sizing: border-box !important; /* Ensures it respects set dimensions */
+}
+
 # _reached {
   padding-top: 14px;
   padding-left: 7px;

@@ -2,6 +2,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import store from './store';
+import { createHead } from '@vueuse/head';
 import { createRouter, createWebHistory } from 'vue-router';
 import MainLayout from './layouts/MainLayout.vue';
 // import BlankLayout from './layouts/BlankLayout.vue';
@@ -29,6 +30,8 @@ import '@mdi/font/css/materialdesignicons.css';
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 Chart.register(...registerables);
+
+const head = createHead();
 
 
 // Check if the app is running inside Electron
@@ -209,7 +212,7 @@ try {
     app.mixin(analyticsMixin);
     app.use(globalMixin);
     app.use(VueChartkick);
-
+    app.use(head);
     app.mount('#app');
 } catch (error) {
     console.error('Error during Vue initialization:', error);

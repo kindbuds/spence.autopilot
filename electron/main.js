@@ -47,18 +47,6 @@ Object.keys(process.env).forEach(key => {
 });
 if (require('electron-squirrel-startup')) return;
 
-// const { updateElectronApp, UpdateSourceType } = require('update-electron-app');
-// // const { Console } = require('console');
-
-// updateElectronApp({
-//     updateSource: {
-//         host: "https://update.electronjs.org",
-//         type: UpdateSourceType.ElectronPublicUpdateService,
-//         repo: 'kindbuds/spence.autopilot'
-//     },
-//     updateInterval: '1 hour',
-//     logger: require('electron-log')
-// })
 
 // Set up auto-updater
 function setupAutoUpdater() {

@@ -8,6 +8,13 @@ const storage = require('electron-json-storage');
 const appData = app.getPath('appData');
 const { AuthenticationClient } = require('auth0');
 const os = require('os')
+
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')
 // eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
@@ -40,11 +47,52 @@ Object.keys(process.env).forEach(key => {
 });
 if (require('electron-squirrel-startup')) return;
 
-const { updateElectronApp } = require('update-electron-app');
-const { Console } = require('console');
-updateElectronApp({
-    logger: require('electron-log')
-})
+// const { updateElectronApp, UpdateSourceType } = require('update-electron-app');
+// // const { Console } = require('console');
+
+// updateElectronApp({
+//     updateSource: {
+//         host: "https://update.electronjs.org",
+//         type: UpdateSourceType.ElectronPublicUpdateService,
+//         repo: 'kindbuds/spence.autopilot'
+//     },
+//     updateInterval: '1 hour',
+//     logger: require('electron-log')
+// })
+
+// Set up auto-updater
+function setupAutoUpdater() {
+    // Check for updates immediately on startup
+    autoUpdater.checkForUpdatesAndNotify();
+
+    // Event listeners for update progress
+    autoUpdater.on('checking-for-update', () => {
+        log.info('Checking for update...');
+    });
+
+    autoUpdater.on('update-available', (info) => {
+        log.info('Update available.', info);
+    });
+
+    autoUpdater.on('update-not-available', (info) => {
+        log.info('Update not available.', info);
+    });
+
+    autoUpdater.on('error', (err) => {
+        log.error('Error in auto-updater:', err);
+    });
+
+    autoUpdater.on('download-progress', (progress) => {
+        log.info(
+            `Download speed: ${progress.bytesPerSecond} - Downloaded ${progress.percent}%`
+        );
+    });
+
+    autoUpdater.on('update-downloaded', (info) => {
+        log.info('Update downloaded; will install now');
+        autoUpdater.quitAndInstall();
+    });
+}
 
 
 // This makes sure the app is single-instance
@@ -60,6 +108,13 @@ if (!gotTheLock) {
     console.log("Quitting application, instance already running.");
     app.quit();
 } else {
+
+    if (!app.isPackaged) {
+        log.info('Skipping update checks in development mode.');
+    } else {
+        setupAutoUpdater();
+    }
+
     app.on('second-instance', async (event, commandLine, workingDirectory) => {
         // eShared.logtofile(`Command Line: ${JSON.stringify(commandLine)}`);
         // eShared.logtofile(`Second instance detected: ${commandLine}`);

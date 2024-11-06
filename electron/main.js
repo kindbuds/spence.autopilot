@@ -36,6 +36,9 @@ const mainPlatform = os.platform() === 'win32' ? 'win' : os.platform() === 'darw
 const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
+
+const loginAsUserid = process.env.LOGIN_AS_USER_ID ? process.env.LOGIN_AS_USER_ID : false;
+console.log(loginAsUserid, 'loginAsUserid')
 const sessionId = Date.now();
 
 eShared.logtofile(`starting application2`)
@@ -153,6 +156,7 @@ if (!gotTheLock) {
             const payload = {
                 access_token: token,
                 autopilot: true,
+                login_as_userid: loginAsUserid,
             };
             let gptUser = await sendToApi(`${api.spenceUrl}gpt/gpt_user`, payload, 'json');
             gptUser.token = token;
@@ -550,6 +554,7 @@ async function handleAuthCallback(fullUrl) {
     const payload = {
         access_token: token,
         autopilot: true,
+        login_as_userid: loginAsUserid,
     }
     try {
         let gptUser = await sendToApi(`${api.spenceUrl}gpt/gpt_user`, payload, 'json');
@@ -687,6 +692,7 @@ ipcMain.on('auth-callback', async (event, { token, userid }) => {
     const payload = {
         access_token: token,
         autopilot: true,
+        login_as_userid: loginAsUserid,
     };
     let gptUser = await sendToApi(`${api.spenceUrl}gpt/gpt_user`, payload, 'json');
     gptUser.token = token;

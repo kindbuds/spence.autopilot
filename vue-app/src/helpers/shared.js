@@ -12,7 +12,7 @@ module.exports.delay = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 module.exports.sendGA4ScreenView = (context) => {
-    console.log(context.user, 'sendGA4ScreenView.user')
+    // console.log(context.user, 'sendGA4ScreenView.user')
     let screen_name = context.$route.path.replace("/", "");
     if (!screen_name) screen_name = "home";
     context.$ga4Event(`screen_view`, {

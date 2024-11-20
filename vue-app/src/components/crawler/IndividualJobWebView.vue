@@ -137,8 +137,6 @@
 </template>
 
 <script>
-import { useDisplay } from "vuetify";
-import { computed } from "vue";
 import * as shared from "@/helpers/shared.js";
 import { selectors } from "@/helpers/selectors.js";
 
@@ -159,14 +157,14 @@ export default {
   },
   components: { ComposerTray },
   emits: ["jobDetailClosed", "auth-required"],
-  setup() {
-    const display = useDisplay();
-    const isMdAndUp = computed(() => display.mdAndUp.value);
+  // setup() {
+  //   const display = useDisplay();
+  //   const isMdAndUp = computed(() => display.mdAndUp.value);
 
-    return {
-      isMdAndUp,
-    };
-  },
+  //   return {
+  //     isMdAndUp,
+  //   };
+  // },
   data() {
     return {
       contentType: null,

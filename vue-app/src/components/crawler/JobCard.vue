@@ -78,7 +78,7 @@ export default {
     getJobStatusClass: Function,
     context: String,
   },
-  emits: ["newCompanyFilter"],
+  emits: ["newCompanyFilter", "jobSelected", "jobVoted", "jobSaved"],
   components: {
     JobVote,
     JobOptions,

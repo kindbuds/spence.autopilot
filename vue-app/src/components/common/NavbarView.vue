@@ -46,7 +46,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.user2, "this.user2");
+    // console.log(this.user2, "this.user2");
     const disabled =
       this.user2 &&
       this.user2.existing_jobs &&

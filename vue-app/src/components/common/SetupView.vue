@@ -421,6 +421,28 @@
                   </v-container>
                 </v-col>
               </v-row>
+              <v-row
+                v-if="context !== 'setup' && user && user.version_number"
+                class="pb-8"
+              >
+                <v-col cols="12" md="4">
+                  <div>
+                    <h2>Developer Tools</h2>
+                    <p class="text-subtitle-1 text-grey-lighten-1 pt-2">
+                      To help in debugging any issues.
+                    </p>
+                  </div>
+                </v-col>
+                <v-col cols="12" md="8">
+                  <v-btn
+                    @click="openDevTools"
+                    color="pink darken-4"
+                    size="small"
+                    prepend-icon="mdi-xml"
+                    >Open Tools</v-btn
+                  >
+                </v-col>
+              </v-row>
               <v-row>
                 <v-col cols="12" class="text-right mb-12">
                   <v-btn
@@ -508,8 +530,8 @@ export default {
   },
   mounted() {
     this.isFormValid = false;
-    console.log(this.isFormValid, "this.isFormValid");
-    console.log(this.config, "this.config");
+    // console.log(this.isFormValid, "this.isFormValid");
+    // console.log(this.config, "this.config");
     //  this.user.autopilot =
   },
   computed: {
@@ -606,6 +628,9 @@ export default {
     },
   },
   methods: {
+    openDevTools() {
+      window.electron.openDevTools();
+    },
     removeCompanyFilter(index) {
       const globalIndex =
         (this.company.currentPage - 1) * this.company.perPage + index;
@@ -712,7 +737,7 @@ export default {
 <style>
 /* .negative-keyword-container
 {
-  
+
 } */
 
 .negative-keyword-container .v-radio-group {

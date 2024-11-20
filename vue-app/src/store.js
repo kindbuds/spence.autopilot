@@ -20,11 +20,11 @@ export default createStore({
     },
     actions: {
         loadUser({ commit }) {
-            console.log('store.loadUser')
+            // console.log('store.loadUser')
             // alert('in store.loadUser')
             window.electron.loadUser();
             window.electron.onUserData((event, userData) => {
-                console.log("Received user data:", userData);
+                // console.log("Received user data:", userData);
                 commit('setUser', userData);
             });
         },

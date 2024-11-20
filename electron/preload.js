@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer, shell } = require('electron');
 const auth0 = require('auth0-js');
 const spenceDomain = process.env.SPENCE_DOMAIN
 const redirectUri = `${spenceDomain}oauth_token/?autopilot=true&state=none`
-console.log("Preload script is running");
+// console.log("Preload script is running");
 
 contextBridge.exposeInMainWorld(
     'electron',
@@ -59,7 +59,7 @@ contextBridge.exposeInMainWorld(
         sendSetupSaved: (setupData) => ipcRenderer.send('setup-saved', setupData),
         onSetupCompleted: (callback) => {
             ipcRenderer.on('setup-completed', (event, setupData) => {
-                console.log('preload.js.setup-completed', setupData);
+                // console.log('preload.js.setup-completed', setupData);
                 callback(setupData);
             });
         },
@@ -82,7 +82,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.removeAllListeners('new-job');
         },
         loadUser: () => {
-            console.log('preload.js.loadUser')
+            // console.log('preload.js.loadUser')
             ipcRenderer.send('load-user')
         },
         onAuthComplete: (callback) => ipcRenderer.on('auth-complete', callback),
@@ -93,7 +93,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.send('auth-callback', { token, userid });
         },
         searchCycleCompleted: (dte) => {
-            console.log('preload.js.searchCycleCompleted', dte);
+            // console.log('preload.js.searchCycleCompleted', dte);
             ipcRenderer.send('search-cycle-completed', dte);
         },
         reloadUser: (token) => {
@@ -105,8 +105,12 @@ contextBridge.exposeInMainWorld(
         isLoggedIn: () => ipcRenderer.invoke('is-logged-in'),
         isLoggedInAndSetup: () => ipcRenderer.invoke('is-logged-in-setup'),
         saveJob: (jobData) => {
-            // console.log('preload.js.saveJob', jobData)
+            console.log('preload.js.saveJob', jobData)
             ipcRenderer.send('save-job', jobData)
+        },
+        openDevTools: () => {
+            // console.log('preload.js.saveJob', jobData)
+            ipcRenderer.send('open-dev-tools')
         },
         userSaveJob: (jobData) => {
             // console.log('preload.js.saveJob', jobData)
@@ -165,7 +169,7 @@ contextBridge.exposeInMainWorld(
 // });
 
 document.addEventListener('sendJobDetails', (event) => {
-    console.log('in document.addEventListener(sendJobDetails)')
+    // console.log('in document.addEventListener(sendJobDetails)')
     ipcRenderer.send('job-details', event.detail);
 });
 
@@ -173,5 +177,5 @@ document.addEventListener('sendJobDetails', (event) => {
 ipcRenderer.send('variable-request', ['somevar', 'anothervar']);
 
 ipcRenderer.on('variable-reply', function (event, args) {
-    console.log(args, 'args');
+    // console.log(args, 'args');
 });

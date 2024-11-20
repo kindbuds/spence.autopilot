@@ -179,14 +179,14 @@ router.beforeEach(async (to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const requiresSetup = to.matched.some(record => record.meta.requiresSetup);
     // const user = store.state.user;
-    console.log(requiresAuth, 'requiresAuth')
-    console.log(requiresSetup, 'requiresSetup')
+    // console.log(requiresAuth, 'requiresAuth')
+    // console.log(requiresSetup, 'requiresSetup')
     store.commit('setAuthRequired', requiresAuth);
 
     if (requiresAuth) {
         if (requiresSetup) {
             const setup = window?.electron ? await window.electron.isLoggedInAndSetup() : false;
-            console.log(setup, 'window.electron.isLoggedInAndSetup');
+            // console.log(setup, 'window.electron.isLoggedInAndSetup');
             setup ? next() : next('/setup');
         } else {
             const loggedIn = window?.electron ? await window.electron.isLoggedIn() : false;
@@ -201,7 +201,7 @@ router.beforeEach(async (to, from, next) => {
 
 
 // Create the Vue application and use the router
-console.log('Vue app is starting...');
+// console.log('Vue app is starting...');
 try {
     const app = createApp(App);
     app.use(store);

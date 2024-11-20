@@ -8,7 +8,9 @@
             <v-card-text class="pa-0">
               <SetupView
                 :config="settings"
-                :about_search="settings.about_search"
+                :about_search="
+                  settings.about_search ? settings.about_search : ''
+                "
                 context="settings"
                 @submit="submitSettings"
               />
@@ -54,7 +56,7 @@ export default {
       window.electron.reloadUser(this.user.token);
       window.electron.onUserReloaded(async (event, userdata) => {
         this.user_loaded = true;
-        console.log(userdata, "userdata");
+        // console.log(userdata, "userdata");
         this.settings = userdata.autopilot;
       });
     }

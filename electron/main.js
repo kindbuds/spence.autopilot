@@ -38,7 +38,7 @@ const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
 
 const loginAsUserid = process.env.LOGIN_AS_USER_ID ? process.env.LOGIN_AS_USER_ID : false;
-console.log(loginAsUserid, 'loginAsUserid')
+// console.log(loginAsUserid, 'loginAsUserid')
 const sessionId = Date.now();
 
 eShared.logtofile(`starting application2`)
@@ -88,7 +88,7 @@ function setupAutoUpdater() {
 
 // This makes sure the app is single-instance
 const gotTheLock = app.requestSingleInstanceLock();
-console.log(gotTheLock, 'gotTheLock')
+// console.log(gotTheLock, 'gotTheLock')
 // eShared.logtofile(`gotTheLock: ${gotTheLock}`)
 
 versionNumber = app.getVersion();
@@ -120,7 +120,7 @@ if (!gotTheLock) {
 
 
     app.whenReady().then(async () => {
-        console.log('running app.whenReady()')
+        // console.log('running app.whenReady()')
 
         if (process.defaultApp) {
             if (process.argv.length >= 2) {
@@ -143,16 +143,16 @@ if (!gotTheLock) {
                 sessionid: -1
             }, 'json');
             const existing_jobs = checkObj.jobs;
-            console.log(existing_jobs.length, 'existing_jobs')
+            //  console.log(existing_jobs.length, 'existing_jobs')
             const usage = checkObj.usage;
-            console.log(usage, 'usage')
+            //  console.log(usage, 'usage')
 
             return { existing_jobs, usage };
         }
 
         ipcMain.on('reload-user', async (event, token) => {
             //  eShared.logtofile(`reload-user`)
-            console.log('reload-user')
+            // console.log('reload-user')
             const payload = {
                 access_token: token,
                 autopilot: true,
@@ -166,6 +166,8 @@ if (!gotTheLock) {
             const userData = await loadUserData(gptUser.userid);
             gptUser.existing_jobs = userData.existing_jobs;
             gptUser.autopilot.usage = userData.usage;
+            gptUser.version_number = versionNumber;
+            gptUser.os = mainPlatform;
 
             //  eShared.logtofile(`gptUser: ${JSON.stringify(gptUser)}`);
 
@@ -183,6 +185,8 @@ if (!gotTheLock) {
             if (user) {
                 const userData = await loadUserData(user.userid);
                 user.existing_jobs = userData.existing_jobs;
+                user.version_number = versionNumber;
+                user.os = mainPlatform;
                 // console.log(userData, 'load-user.userData')
                 event.reply('userDataResponse', user);
             }
@@ -197,9 +201,9 @@ if (!gotTheLock) {
         });
         ipcMain.on('setup-saved', async (event, setupData) => {
             // eShared.logtofile(`setup-saved`)
-            console.log(setupData, 'Received setup-saved data');
+            //    console.log(setupData, 'Received setup-saved data');
             const newSetup = await sendToApi(`${api.api2Url}autopilot/setup`, setupData, 'json');
-            console.log(newSetup, 'newSetup')
+            //    console.log(newSetup, 'newSetup')
 
             if (typeof newSetup.is_remote === 'undefined'
                 && typeof newSetup.is_hybrid === 'undefined'
@@ -220,7 +224,7 @@ if (!gotTheLock) {
                 // console.log(usageData, 'usageData')
                 user.usage = usageData.usage;
             }
-            console.log(user, 'user')
+            //    console.log(user, 'user')
             newSetup.usage = user.usage
             user.autopilot = newSetup
             await eShared.setAuth(user, eShared.logtofile);
@@ -229,7 +233,7 @@ if (!gotTheLock) {
 
         ipcMain.on('save-settings', async (event, config) => {
             // eShared.logtofile(`main.save-settings`)
-            console.log('main.save-settings', config);
+            //     console.log('main.save-settings', config);
             // let settingsSaved =
             await sendToApi(`${api.api2Url}autopilot/save_config`, config);
             // console.log(settingsSaved, 'settingsSaved');
@@ -266,7 +270,7 @@ function addEventListeners() {
     //     addScroll();
     // });
     mainWindow.webContents.on('did-finish-load', () => {
-        console.log('did-finish-load-1')
+        //  console.log('did-finish-load-1')
         //  eShared.logtofile(`did-finish-load`)
         if (!mainWindow) return;
 
@@ -275,13 +279,13 @@ function addEventListeners() {
     });
     mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
         // eShared.logtofile(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`)
-        console.log(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`);
+        // console.log(`Failed to load content. Error: ${errorDescription}, URL: ${validatedURL}`);
     });
     mainWindow.webContents.on('dom-ready', () => {
         // eShared.logtofile(`dom-ready`)
-        console.log("DOM is ready");
-        if (mainWindow)
-            mainWindow.webContents.executeJavaScript(`console.log('DOM is ready')`);
+        // console.log("DOM is ready");
+        // if (mainWindow)
+        //     mainWindow.webContents.executeJavaScript(`console.log('DOM is ready')`);
         addScroll();
     });
     mainWindow.webContents.on('did-navigate', (event, url) => {
@@ -312,7 +316,7 @@ function addEventListeners() {
     });
     mainWindow.webContents.on('new-window', async (event, url, frameName, disposition, options, additionalFeatures) => {
         // eShared.logtofile(`mainWindow.webContents.on('new-window'`)
-        console.log(` mainWindow.webContents.on('new-window'`)
+        // console.log(` mainWindow.webContents.on('new-window'`)
         if (!mainWindow) return;
 
         event.preventDefault();
@@ -334,7 +338,7 @@ function addEventListeners() {
     });
     mainWindow.on('closed', function () {
         // eShared.logtofile('mainWindow has been closed');
-        console.log('mainWindow has been closed');
+        //  console.log('mainWindow has been closed');
         mainWindow = null;
     });
     mainWindow.once('ready-to-show', () => {
@@ -346,7 +350,7 @@ function addEventListeners() {
                 setTimeout(() => {
 
                     if (mainWindow) {
-                        console.log('openDevTools');
+                        // console.log('openDevTools');
                         mainWindow.openDevTools();
                         mainWindow.webContents.openDevTools();
                     }
@@ -404,10 +408,10 @@ function addEventListeners() {
         delete user.existing_jobs;
         delete user.subscription;
 
-        console.log(content_type, job, user, 'get-job-content')
+        //  console.log(content_type, job, user, 'get-job-content')
         try {
             let jobContent = await sendToApi(`${api.api2Url}autopilot/composer/fetch`, { content_type, job, user }, 'json');
-            console.log(jobContent, 'jobContent')
+            //  console.log(jobContent, 'jobContent')
 
             return jobContent;
         } catch (error) {
@@ -416,7 +420,7 @@ function addEventListeners() {
         }
     });
     ipcMain.on('add-negative-keyword', async (event, keyword) => {
-        console.log('in ipcMain.add-negative-keyword')
+        //   console.log('in ipcMain.add-negative-keyword')
         const user = await eShared.loadUserData();
         const payload = {
             userid: user.userid,
@@ -425,7 +429,7 @@ function addEventListeners() {
         await sendToApi(`${api.api2Url}autopilot/negative_kw`, payload);
     });
     ipcMain.on('add-company-filter', async (event, companyFilter) => {
-        console.log('in ipcMain.add-company-filter')
+        //  console.log('in ipcMain.add-company-filter')
         const user = await eShared.loadUserData();
         const payload = {
             userid: user.userid,
@@ -446,17 +450,17 @@ function addEventListeners() {
 const addScroll = () => {
     if (!mainWindow) return;
 
-    mainWindow.webContents.executeJavaScript(`console.log('addScroll');`);
+    //  mainWindow.webContents.executeJavaScript(`console.log('addScroll');`);
 
     const currentURL = mainWindow.webContents.getURL();
-    console.log("Web content loaded", currentURL);
-    mainWindow.webContents.executeJavaScript(`console.log('Web content loaded ${currentURL}');`);
+    //    console.log("Web content loaded", currentURL);
+    //   mainWindow.webContents.executeJavaScript(`console.log('Web content loaded ${currentURL}');`);
     eShared.logtofile(`Web content loaded ${currentURL}`)
     const scrolls = ['auth0', 'get-started']
     if (scrolls.some(sc => currentURL.includes(sc))) {
         // Inject CSS to enforce scrolling
 
-        let element = mainPlatform === 'mac' ? 'body' : 'html';
+        let element = mainPlatform === 'mac' ? 'html, body' : 'html';
 
         if (currentURL.includes('auth0')) {
             element = 'body';
@@ -469,7 +473,7 @@ const addScroll = () => {
             }
         `);
 
-            console.log("Injected CSS for scrolling.");
+            //   console.log("Injected CSS for scrolling.");
             eShared.logtofile(`Injected CSS for scrolling.`)
         }, 1000);
     }
@@ -478,7 +482,7 @@ const addScroll = () => {
 
 async function createWindow(loggedin = null) {
     // eShared.logtofile(`running createWindow`)
-    console.log('start createWindow')
+    //  console.log('start createWindow')
     if (!loggedin) {
         try {
             const userData = await eShared.loadUserData();
@@ -517,13 +521,13 @@ async function createWindow(loggedin = null) {
     });
     addEventListeners();
 
-    console.log("Window created");
+    // console.log("Window created");
     mainWindow.webContents.executeJavaScript(`console.log('Window created: version ${versionNumber} on ${mainPlatform}')`);
 
-    console.log(isDev, process.env.NODE_ENV, 'isDev')
+    // console.log(isDev, process.env.NODE_ENV, 'isDev')
     mainWindow.maximize();
 
-    console.log(amplifyUri, 'amplifyUri')
+    //  console.log(amplifyUri, 'amplifyUri')
     userIp = await getUserIpAddress();
 
     mainWindow.loadURL(amplifyUri);
@@ -593,7 +597,7 @@ app.on('will-finish-launching', () => {
 
 app.on('window-all-closed', () => {
     // eShared.logtofile(`in window-all-closed`)
-    console.log('in window-all-closed')
+    // console.log('in window-all-closed')
     if (process.platform !== 'darwin') app.quit();
 });
 
@@ -619,9 +623,7 @@ async function sendEventToGA4(eventName, params, userAgent) {
         delete params.userId;
 
     params.app_name = 'Spence AI Career Autopilot';
-    params.app_version = versionNumber,
-
-        console.log(params, 'params')
+    params.app_version = versionNumber;
 
     const eventData = {
         client_id: clientId,
@@ -633,15 +635,15 @@ async function sendEventToGA4(eventName, params, userAgent) {
         ]
     };
 
-    console.log(JSON.stringify(eventData), 'sendEventToGA4')
+    // console.log(JSON.stringify(eventData), 'sendEventToGA4')
     const MEASUREMENT_ID = process.env.GA_MEASUREMENT_ID;
     const API_SECRET = process.env.GA_API_SECRET;
     const ipOverride = userIp ? `&ip_override=${userIp}` : ``;
     const url = `https://www.google-analytics.com/mp/collect?measurement_id=${MEASUREMENT_ID}&api_secret=${API_SECRET}`;
-    console.log(url, 'url')
+    //  console.log(url, 'url')
     try {
         const response = await sendToApi(url, eventData, 'text', { 'User-Agent': userAgent });
-        console.log('Event sent to GA4:', response);
+        //     console.log('Event sent to GA4:', response);
     } catch (error) {
         console.error('Error sending event to GA4:', error);
     }
@@ -677,9 +679,9 @@ ipcMain.on('variable-request', function (event, arg) {
 ipcMain.on('logout', async (event) => {
     storage.remove('auth', async (error) => {
         if (error) throw error;
-        console.log('User logged out, auth data removed.');
+        // console.log('User logged out, auth data removed.');
 
-        console.log('LOGGED OUT!')
+        // console.log('LOGGED OUT!')
         // mainWindow.loadURL(amplifyUri);
         // createLoaderWindow();
     });
@@ -710,14 +712,14 @@ ipcMain.on('auth-callback', async (event, { token, userid }) => {
 });
 
 ipcMain.handle('create-checkout', async (event, payload) => {
-    console.log(JSON.stringify(payload), 'create-checkout.args')
+    //   console.log(JSON.stringify(payload), 'create-checkout.args')
     let checkoutResponse = await sendToApi(`${api.api2Url}autopilot/create_checkout`,
         payload, 'json');
 
     if (checkoutResponse && checkoutResponse.body) {
         checkoutResponse = JSON.parse(checkoutResponse.body)
     }
-    console.log(checkoutResponse, `checkoutResponse`)
+    //    console.log(checkoutResponse, `checkoutResponse`)
     return checkoutResponse;
 });
 
@@ -734,7 +736,7 @@ ipcMain.handle('check-job-completion', async (event, args) => {
         let autoJobs = checkResponse.jobs;
         const usage = checkResponse.usage;
 
-        console.log(usage, 'usage')
+        //   console.log(usage, 'usage')
 
         // Check if any job has limit_reached status
         // if (autoJobs.some(job => job.
@@ -751,32 +753,37 @@ ipcMain.handle('check-job-completion', async (event, args) => {
 
 ipcMain.on('save-coverletter', async (event, coverletter) => {
     // Implement your job saving logic here
-    console.log('Saving coverletter:', coverletter);
+    // console.log('Saving coverletter:', coverletter);
     coverletter.shape = 'coverletter';
     // For example, write to a file or database
     let coverLetterSaved = await sendToApi(`${api.api2Url}autopilot/shape_job`, coverletter);
-    console.log(coverLetterSaved, 'coverLetterSaved');
+    //  console.log(coverLetterSaved, 'coverLetterSaved');
 });
 
 ipcMain.on('user-save-job', async (event, jobData) => {
     // Implement your job saving logic here
-    console.log('Saving job:', jobData);
+    //  console.log('Saving job:', jobData);
     jobData.shape = 'save';
     // For example, write to a file or database
     let jobVoted = await sendToApi(`${api.api2Url}autopilot/shape_job`, jobData);
-    console.log(jobVoted, 'jobVoted');
+    //  console.log(jobVoted, 'jobVoted');
 });
 
+ipcMain.on('open-dev-tools', async (event) => {
+    mainWindow.openDevTools();
+    mainWindow.webContents.openDevTools();
+});
 
 ipcMain.on('save-job', async (event, jobData) => {
     // Implement your job saving logic here
-    console.log('Saving job:', jobData);
     // For example, write to a file or database
 
     if (jobData.dupe) {
-        console.log('skipping saving dupe job')
+        console.log('skipping saving dupe job', jobData)
         return;
     }
+
+    console.log('Saving job:', jobData);
 
     jobData.siteid = jobData.siteId;
     delete jobData.siteId;
@@ -798,10 +805,10 @@ ipcMain.on('save-job', async (event, jobData) => {
 
 
 ipcMain.on('vote-job', async (event, voteData) => {
-    console.log('Voting job:', voteData);
+    //  console.log('Voting job:', voteData);
     voteData.shape = 'vote';
     let jobVoted = await sendToApi(`${api.api2Url}autopilot/shape_job`, voteData);
-    console.log(jobVoted, 'jobVoted');
+    //  console.log(jobVoted, 'jobVoted');
 });
 
 

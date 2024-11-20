@@ -3,7 +3,7 @@ const path = require('path');
 const storage = require('electron-json-storage');
 
 module.exports.logtofile = (message) => {
-    console.log(message);
+    // console.log(message);
     // const logFile = path.join(__dirname, 'log.txt');
     // const logFile = path.join(require('os').homedir(), 'log.txt');
     // const timestamp = new Date().toISOString();

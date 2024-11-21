@@ -362,7 +362,7 @@ export default {
         this.user_loaded = true;
         this.working_job_count = userdata.autopilot.usage.daily_job_count;
         this.companyFilters = userdata.autopilot.company_filters;
-        console.log(this.companyFilters, "onUserReloaded.companyFilters");
+        // console.log(this.companyFilters, "onUserReloaded.companyFilters");
 
         await this.fetchPreloadPath();
         let guid = shared.getGuid();
@@ -371,7 +371,7 @@ export default {
         setTimeout(async () => {
           const webview = document.querySelector("webview");
           if (!webview) {
-            console.error("onUserReloaded.Webview is not initialized.");
+            // console.error("onUserReloaded.Webview is not initialized.");
             return;
           }
           webview.preload = this.preload;
@@ -434,40 +434,32 @@ export default {
     },
     async adjustLayout() {
       // Call the Electron API to get work area size
-      const { windowSize, workAreaSize, screenSize } =
-        await window.electron.getWorkAreaSize();
-      console.log(windowSize, workAreaSize, screenSize, "adjustLayout");
-
+      // const { windowSize, workAreaSize, screenSize } =
+      //   await window.electron.getWorkAreaSize();
+      // console.log(windowSize, workAreaSize, screenSize, "adjustLayout");
       // Adjust layout elements based on height
       // const jobMaster = document.querySelector(".job-master");
       // const overlayContainer = document.querySelector(".overlay-container");
       // const footerControls = document.querySelector(".footer-controls");
-
       // // Calculate the difference between screen size and work area size
       // const taskbarHeight = screenSize.height - workAreaSize.height;
       // const isTaskbarVisible = taskbarHeight > 0; // Only consider significant differences as taskbar presence
-
       // // console.log(
       // //   `Taskbar height: ${taskbarHeight}, Taskbar visible: ${isTaskbarVisible}`
       // // );
-
       // let footerHeight = 60; // Default footer height
-
       // if (isTaskbarVisible) {
       //   // Add a buffer if the taskbar is visible (e.g., padding)
       //   footerHeight += taskbarHeight; // Use actual taskbar height
       // }
-
       // if (jobMaster) {
       //   jobMaster.style.height = `${windowSize.height - 64}px`; // Adjust for header height
       // }
-
       // if (overlayContainer) {
       //   overlayContainer.style.height = `${
       //     windowSize.height - (64 + footerHeight)
       //   }px`; // Adjust for header + footer + taskbar buffer
       // }
-
       // if (footerControls) {
       //   footerControls.style.height = `${footerHeight}px`; // Adjust footer height
       // }
@@ -831,7 +823,7 @@ export default {
       }
 
       if (this.jobQueue.length > 0) {
-        console.log(this.jobQueue, "this.jobQueue");
+        //  console.log(this.jobQueue, "this.jobQueue");
         this.processingQueue = true;
         const jobData = this.jobQueue.shift();
 
@@ -842,7 +834,7 @@ export default {
         // console.log(delay, "delay");
         setTimeout(async () => {
           this.jobs.push(jobData);
-          console.log(this.jobs, "this.jobs");
+          // console.log(this.jobs, "this.jobs");
           if (!jobData.dupe) {
             console.log(jobData, " > sending job to db");
             window.electron.saveJob(JSON.parse(JSON.stringify(jobData)));

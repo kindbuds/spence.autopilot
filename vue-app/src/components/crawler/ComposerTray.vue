@@ -103,7 +103,6 @@ export default {
     job: Object,
     title: String,
     contentType: String,
-    isMdAndUp: Boolean,
   },
   data() {
     return {

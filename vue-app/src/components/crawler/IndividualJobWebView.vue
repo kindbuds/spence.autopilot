@@ -88,7 +88,7 @@
           <v-btn
             color="transparent"
             size="x-small"
-            class="text-grey"
+            class="text-grey ml-4"
             @click="copyUrlToClipboard"
             icon="mdi-content-copy"
           >
@@ -101,8 +101,6 @@
             icon="mdi-open-in-new"
           >
           </v-btn>
-        </v-col>
-        <v-col cols="2" class="text-left" v-if="isMdAndUp">
           <v-btn
             elevation="0"
             @click="closeIndividualJobDetail"
@@ -111,8 +109,9 @@
             class="mr-4 mt-1"
             size="small"
             color="transparent"
-          ></v-btn> </v-col
-      ></v-row>
+          ></v-btn>
+        </v-col>
+      </v-row>
     </v-container>
     <webview
       ref="jobWebView"
@@ -131,7 +130,6 @@
       :contentType="contentType"
       :title="composerTitle"
       :job="job"
-      :isMdAndUp="isMdAndUp"
     />
   </div>
 </template>
@@ -320,7 +318,7 @@ export default {
                 this.addButtonListeners();
               }, 5000);
             } else {
-              console.error("No data found with the specified value.");
+              //  console.error("No data found with the specified value.");
             }
           });
       }

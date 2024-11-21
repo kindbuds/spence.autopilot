@@ -436,7 +436,7 @@
                 <v-col cols="12" md="8">
                   <v-btn
                     @click="openDevTools"
-                    color="pink darken-4"
+                    color="purple darken-4"
                     size="small"
                     prepend-icon="mdi-xml"
                     >Open Tools</v-btn

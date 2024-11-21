@@ -77,7 +77,7 @@ export default {
       window.electron.reloadUser(this.user.token);
       window.electron.onUserReloaded(async (event, userdata) => {
         this.user_reloaded = userdata;
-        console.log(this.user_reloaded, "this.user_reloaded");
+        // console.log(this.user_reloaded, "this.user_reloaded");
       });
     }
 
@@ -157,7 +157,7 @@ export default {
     translateSalary() {
       if (!this.user) return;
 
-      console.log(this.user.autopilot, "this.user.autopilot");
+      //   console.log(this.user.autopilot, "this.user.autopilot");
       if (this.user.autopilot.disable_salary) {
         // jeff chiarelli
         // alert("chia2");

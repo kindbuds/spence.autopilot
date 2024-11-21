@@ -106,11 +106,11 @@ export default {
         this.feedback = "";
       } else {
         this.currentVote = vote;
-        this.dialog = true;
+        //  this.dialog = true;
       }
-      //     console.log(this.currentVote, "this.currentVote");
+      //     console. log(this.currentVote, "this.currentVote");
 
-      if (this.currentVote != null) {
+      if (this.currentVote === false) {
         this.dialog = true;
       }
       this.submitFeedback(false);

@@ -1,8 +1,8 @@
-export const selectors = {
+export const linkedInSelectors = {
     bprGuid: 'code[id^="bpr-guid-"]',
     applyButton: "button.jobs-apply-button",
     scaffoldToolbar: ".scaffold-layout-toolbar",
-    scaffoldList: ".scaffold-layout__list .jobs-search-results-list .jobs-search-results__list-item .job-card-container",
+    scaffoldList: ".scaffold-layout__list-container .jobs-search-results__list-item .job-card-container",
     scaffoldList2: ".scaffold-layout__list",
     scaffoldDetailBackButton: ".scaffold-layout__detail-back-button",
     msgOverlay: "#msg-overlay",
@@ -25,9 +25,9 @@ export const selectors = {
     jobViewLayout: '.job-view-layout.jobs-details',
     salary: '#SALARY',
     jobCardListTitle: 'a.job-card-list__title > span > strong',
-    jobCardPrimaryDescription: '.job-card-container__primary-description',
+    jobCardPrimaryDescription: '.artdeco-entity-lockup__subtitle > span',
     applicationOverlayContainer: '.application-outlet__overlay-container',
-    jobSearchResultsList: '.jobs-search-results-list',
+    jobSearchResultsList: '.scaffold-layout__list-container',
     noResultsBannerImage: '.jobs-search-no-results-banner__image',
     nextPageButton: 'button[aria-label="View next page"]'
 };

@@ -136,7 +136,7 @@
 
 <script>
 import * as shared from "@/helpers/shared.js";
-import { selectors } from "@/helpers/selectors.js";
+import { linkedInSelectors } from "@/helpers/linkedin.selectors.js";
 
 import ComposerTray from "@/components/crawler/ComposerTray.vue";
 
@@ -173,7 +173,7 @@ export default {
       stopLoadingTimeout: null,
       isLoading: false, // New flag to track loading state
       currentUrl: this.url,
-      selectors,
+      linkedInSelectors,
     };
   },
   mounted() {
@@ -287,7 +287,7 @@ export default {
           .executeJavaScript(
             `
       (function() {
-        const elements = document.querySelectorAll('${this.selectors.bprGuid}');
+        const elements = document.querySelectorAll('${this.linkedInSelectors.bprGuid}');
         const parsedDataArray = [];
 
         elements.forEach(element => {
@@ -326,11 +326,11 @@ export default {
 
     addButtonListeners() {
       const script = `
-      const buttons = document.querySelectorAll("${this.selectors.applyButton}");
+      const buttons = document.querySelectorAll("${this.linkedInSelectors.applyButton}");
     //  console.log(buttons,'buttons')
       buttons.forEach((button) => {
         const ariaLabel = button.getAttribute("aria-label");
-        if (!ariaLabel || !ariaLabel.startsWith("${this.selectors.easyApplyButtonAriaLabel}")) {
+        if (!ariaLabel || !ariaLabel.startsWith("${this.linkedInSelectors.easyApplyButtonAriaLabel}")) {
           button.addEventListener("click", () => {
             // alert('${this.applyUrl}');
             window.location.href = '${this.applyUrl}';
@@ -368,12 +368,12 @@ export default {
         const webview = this.$refs.jobWebView;
         if (!webview) return;
         const removeElementsScript = `
-            document.querySelector('${this.selectors.scaffoldToolbar}')?.remove();
-            document.querySelector('${this.selectors.scaffoldList}')?.remove();
-            document.querySelector('${this.selectors.scaffoldList2}')?.remove();
-            document.querySelector('${this.selectors.scaffoldDetailBackButton}')?.remove();
-            document.querySelector('${this.selectors.msgOverlay}')?.remove();
-            document.querySelector('button${this.selectors.scaffoldDetailBackButton}')?.remove();
+            document.querySelector('${this.linkedInSelectors.scaffoldToolbar}')?.remove();
+            document.querySelector('${this.linkedInSelectors.scaffoldList}')?.remove();
+            document.querySelector('${this.linkedInSelectors.scaffoldList2}')?.remove();
+            document.querySelector('${this.linkedInSelectors.scaffoldDetailBackButton}')?.remove();
+            document.querySelector('${this.linkedInSelectors.msgOverlay}')?.remove();
+            document.querySelector('button${this.linkedInSelectors.scaffoldDetailBackButton}')?.remove();
       `;
         webview.executeJavaScript(removeElementsScript);
       }, 1000);
@@ -403,7 +403,7 @@ export default {
             if (webview) {
               const loggedIn = await shared.checkSignInButton(
                 webview,
-                this.selectors.signInSignals
+                this.linkedInSelectors.signInSignals
               );
               //     console.log(loggedIn, "onDomReady.loggedIn");
               if (!loggedIn) {
@@ -435,7 +435,7 @@ export default {
       if (!webview) return;
       await this.waitForElementToDisappear(
         webview,
-        this.selectors.initialLoadAnimation
+        this.linkedInSelectors.initialLoadAnimation
       );
     },
   },

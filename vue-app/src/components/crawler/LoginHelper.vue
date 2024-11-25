@@ -33,7 +33,7 @@
 
 <script>
 import * as shared from "@/helpers/shared.js";
-import { selectors } from "@/helpers/selectors.js";
+import { linkedInSelectors } from "@/helpers/linkedin.selectors.js";
 export default {
   name: "LoginHelper",
   props: {
@@ -46,7 +46,7 @@ export default {
     return {
       webview: null,
       loading: false,
-      selectors,
+      linkedInSelectors,
     };
   },
   mounted() {
@@ -106,7 +106,7 @@ export default {
         //let is2FA = false;
         const isSignedIn = await shared.checkSignInButton(
           this.webview,
-          this.selectors.signInSignals
+          this.linkedInSelectors.signInSignals
         );
         //   console.log(isSignedIn, "isSignedIn");
         // if (isSignedIn) is2FA = await shared.check2FAButton(this.webview);

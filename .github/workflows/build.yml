@@ -47,17 +47,26 @@ jobs:
         run: |
           cd electron
           npm install
-          npm run make
+          npm run build
 
       - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
         run: |
           move electron\out\make\squirrel.windows\x64\Spence-Setup.exe electron\out\make\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
 
-      - name: Upload Windows Installer
+      # - name: Upload Windows Installer
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Spence-AI-Career-Autopilot.exe
+      #     path: electron/out/make/squirrel.windows/x64/Spence-AI-Career-Autopilot.exe
+      #     if-no-files-found: warn
+
+      - name: Upload Windows Installer and Metadata
         uses: actions/upload-artifact@v4
         with:
-          name: Spence-AI-Career-Autopilot.exe
-          path: electron/out/make/squirrel.windows/x64/Spence-AI-Career-Autopilot.exe
+          name: Windows-Update-Files
+          path: |
+            electron/out/Spence-AI-Career-Autopilot.exe
+            electron/out/latest.yml
           if-no-files-found: warn
 
   build-macos:
@@ -121,7 +130,7 @@ jobs:
       - name: Build the App for macOS
         run: |
           cd electron
-          npm run package
+          npm run build
 
       - name: List contents of out directory
         run: |
@@ -184,11 +193,21 @@ jobs:
         run: |
           xcrun stapler validate electron/out/Spence-AI-Career-Autopilot.dmg
 
-      - name: Upload macOS DMG
+      # - name: Upload macOS DMG
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Spence-AI-Career-Autopilot.dmg
+      #     path: electron/out/Spence-AI-Career-Autopilot.dmg
+
+      - name: Upload macOS DMG and Metadata
         uses: actions/upload-artifact@v4
         with:
-          name: Spence-AI-Career-Autopilot.dmg
-          path: electron/out/Spence-AI-Career-Autopilot.dmg
+          name: MacOS-Update-Files
+          path: |
+            electron/out/Spence-AI-Career-Autopilot.dmg
+            electron/out/latest-mac.yml
+          if-no-files-found: warn
+
 
   create-release:
     runs-on: ubuntu-latest
@@ -220,7 +239,9 @@ jobs:
         with:
           files: |
             dist/Spence-AI-Career-Autopilot.exe
+            dist/latest.yml
             dist/Spence-AI-Career-Autopilot.dmg
+            dist/latest-mac.yml
           draft: false
           prerelease: false
 

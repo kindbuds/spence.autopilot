@@ -1,7 +1,7 @@
 {
   "name": "spence-ai-career-autopilot",
   "productName": "Spence-AI-Career-Autopilot",
-  "version": "0.1.14",
+  "version": "0.1.13",
   "repository": {
     "type": "git",
     "url": "https://github.com/kindbuds/spence.autopilot.git"
@@ -80,10 +80,6 @@
           "target": "dmg"
         }
       ],
-      "notarize": {
-        "appleId": "jeff.borden@kindbuds.us",
-        "appleIdPassword": "arss-lgut-shmy-ipjl"
-      },
       "icon": "assets/spence-face.icns"
     },
     "files": [

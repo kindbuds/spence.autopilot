@@ -18,7 +18,7 @@ jobs:
       CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
       APPLE_ID: ${{ secrets.APPLE_ID }}
       APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-      TEAM_ID: ${{ secrets.TEAM_ID }}
+      TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
       GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
       GA_API_SECRET: ${{ secrets.GA_API_SECRET }}
@@ -83,8 +83,8 @@ jobs:
       CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
       APPLE_ID: ${{ secrets.APPLE_ID }}
       APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-      APPLE_TEAM_ID: ${{ secrets.TEAM_ID }}
-      TEAM_ID: ${{ secrets.TEAM_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
       GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
       GA_API_SECRET: ${{ secrets.GA_API_SECRET }}
@@ -125,7 +125,9 @@ jobs:
           echo "API_BASE=${{ secrets.API_BASE }}" >> electron/.env
           echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> electron/.env
           echo "API_API2=${{ secrets.API_API2 }}" >> electron/.env
-          echo "APPLE_TEAM_ID=${{ secrets.TEAM_ID }}" >> electron/.env
+          echo "APPLE_ID=${{ secrets.APPLE_ID  }}" >> electron/.env
+          echo "APPLE_APP_SPECIFIC_PASSWORD=${{ secrets.APPLE_APP_SPECIFIC_PASSWORD  }}" >> electron/.env
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> electron/.env
 
       - name: Install dependencies
         run: |

@@ -134,6 +134,18 @@ jobs:
           cd electron
           npm install
 
+      - name: Debug Apple Credentials
+        run: |
+          echo "APPLE_ID: $APPLE_ID"
+          if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then
+            echo "App-Specific Password is NOT set!"
+            exit 1
+          else
+            echo "App-Specific Password is set."
+          fi
+          echo "APPLE_TEAM_ID: $APPLE_TEAM_ID"
+        shell: bash
+
       - name: Build the App for macOS
         run: |
           cd electron

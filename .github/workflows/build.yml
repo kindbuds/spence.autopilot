@@ -51,7 +51,7 @@ jobs:
 
       - name: List Output Directory
         run: |
-          ls -la electron/out/make/squirrel.windows/x64
+          dir electron\out\make\squirrel.windows\x64
 
       - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
         run: |

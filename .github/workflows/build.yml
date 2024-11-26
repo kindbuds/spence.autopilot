@@ -125,7 +125,7 @@ jobs:
           echo "API_BASE=${{ secrets.API_BASE }}" >> electron/.env
           echo "API_SPENCE=${{ secrets.API_SPENCE }}" >> electron/.env
           echo "API_API2=${{ secrets.API_API2 }}" >> electron/.env
-
+          echo "APPLE_TEAM_ID=${{ secrets.TEAM_ID }}" >> electron/.env
 
       - name: Install dependencies
         run: |

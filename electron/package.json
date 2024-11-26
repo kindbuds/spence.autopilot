@@ -81,7 +81,8 @@
         }
       ],
       "notarize": {
-        "teamId": "SRJJDF6WDH"
+        "appleId": "jeff.borden@kindbuds.us",
+        "appleIdPassword": "arss-lgut-shmy-ipjl"
       },
       "icon": "assets/spence-face.icns"
     },

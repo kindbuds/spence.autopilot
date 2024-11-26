@@ -49,6 +49,10 @@ jobs:
           npm install
           npm run build
 
+      - name: List Output Directory
+        run: |
+          ls -la electron/out/make/squirrel.windows/x64
+
       - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
         run: |
           move electron\out\make\squirrel.windows\x64\Spence-Setup.exe electron\out\make\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
@@ -79,6 +83,7 @@ jobs:
       CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
       APPLE_ID: ${{ secrets.APPLE_ID }}
       APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.TEAM_ID }}
       TEAM_ID: ${{ secrets.TEAM_ID }}
       AMPLIFY_DOMAIN: ${{ secrets.AMPLIFY_DOMAIN }}
       GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}

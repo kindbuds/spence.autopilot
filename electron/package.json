@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/kindbuds/spence.autopilot.git"
   },
-  "description": "",
+  "description": "Spence AI Career Autopilot application",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -68,7 +68,8 @@
     "appdmg": "^0.6.0"
   },
   "build": {
-    "appId": "your.app.id",
+    "appId": "ai.spence.autopilot",
+    "icon": "assets/spence-face",
     "productName": "Spence",
     "directories": {
       "output": "build"

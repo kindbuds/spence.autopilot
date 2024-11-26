@@ -74,6 +74,17 @@
     "directories": {
       "output": "build"
     },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg"
+        }
+      ],
+      "notarize": {
+        "teamId": "SRJJDF6WDH"
+      },
+      "icon": "assets/spence-face.icns"
+    },
     "files": [
       "**/*",
       "vue-app/dist/**/*"

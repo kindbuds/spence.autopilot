@@ -202,7 +202,7 @@ jobs:
 
       - name: Notarize the DMG
         run: |
-          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.dmg --apple-id "jeff.borden@kindbuds.us" --password "$APPLE_APP_SPECIFIC_PASSWORD" --team-id "SRJJDF6WDH" --wait
+          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.dmg --apple-id "jeff.borden@kindbuds.us" --password "arss-lgut-shmy-ipjl" --team-id "SRJJDF6WDH" --wait
 
       - name: Staple the Notarization Ticket
         run: |

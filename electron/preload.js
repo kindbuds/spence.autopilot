@@ -47,6 +47,9 @@ contextBridge.exposeInMainWorld(
         restartApp: () => {
             ipcRenderer.send('restart-app');
         },
+        doLog: (log) => {
+            ipcRenderer.send('do-log', log);
+        },
         toggleFullScreen: () => ipcRenderer.send('toggle-fullscreen'),
         toggleNarrowWidth: () => ipcRenderer.send('toggle-narrow-width'),
         sendJobDetails: (jobDetails) => ipcRenderer.send('job-details', jobDetails),
@@ -105,7 +108,7 @@ contextBridge.exposeInMainWorld(
         isLoggedIn: () => ipcRenderer.invoke('is-logged-in'),
         isLoggedInAndSetup: () => ipcRenderer.invoke('is-logged-in-setup'),
         saveJob: (jobData) => {
-            console.log('preload.js.saveJob', jobData)
+            // console.log('preload.js.saveJob', jobData)
             ipcRenderer.send('save-job', jobData)
         },
         openDevTools: () => {

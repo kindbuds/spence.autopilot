@@ -261,6 +261,7 @@
             : "paused"
         }}</span
       >
+
       <v-btn
         icon="mdi-eye"
         elevation="0"
@@ -269,11 +270,64 @@
         class="mb-1 mr-1 float-right"
         @click="toggleWebviewOpacity"
       ></v-btn>
+      <v-btn
+        v-if="devToolsOpen && domReadyListenerAdded && initialized"
+        icon="mdi-bug"
+        elevation="0"
+        color="transparent"
+        size="x-small"
+        class="mb-1 mr-1 float-right text-teal-accent-1"
+        @click="enableDebug"
+      ></v-btn>
     </h3>
 
     <!-- <div v-if="!isPremiumUser">
       <propeller-ad :shouldShowAd="true" />
     </div> -->
+
+    <v-dialog v-model="debug.show" max-width="500px">
+      <v-card>
+        <v-card-title
+          ><v-icon class="mr-2" color="teal-accent-1">mdi-bug</v-icon
+          >Debug</v-card-title
+        >
+        <v-card-text>
+          <v-text-field v-model="debug.url" label="URL" readonly>
+            <template v-slot:append>
+              <v-btn
+                size="small"
+                icon="mdi-content-copy"
+                elevation="0"
+                color="transparent"
+                @click="copy(debug.url)"
+              >
+              </v-btn>
+            </template>
+          </v-text-field>
+          <v-textarea
+            v-if="debug.html"
+            v-model="debug.html"
+            rows="10"
+            label="Page Source"
+            readonly
+          >
+            <template v-slot:append>
+              <v-btn
+                size="small"
+                icon="mdi-content-copy"
+                elevation="0"
+                color="transparent"
+                @click="copy(debug.html)"
+              >
+              </v-btn>
+            </template>
+          </v-textarea>
+          <v-container v-else class="text-center">
+            <v-progress-circular indeterminate> </v-progress-circular>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -306,6 +360,11 @@ export default {
   },
   data() {
     return {
+      debug: {
+        show: false,
+        url: null,
+        html: null,
+      },
       isPremiumUser: false,
       companyFilters: [],
       getJobStatusClass: shared.getJobStatusClass,
@@ -423,6 +482,29 @@ export default {
     },
   },
   methods: {
+    async copy(text) {
+      await navigator.clipboard.writeText(text);
+    },
+    enableDebug() {
+      this.debug.url = null;
+      this.debug.html = null;
+
+      const webview = this.$refs.jobsiteWebView;
+      if (webview) {
+        this.togglePause(true);
+        this.debug.url = webview.src; // URL of the current webview content
+        this.debug.show = true;
+
+        webview
+          .executeJavaScript("document.documentElement.outerHTML")
+          .then((html) => {
+            this.debug.html = html; // Full HTML source of the page
+          })
+          .catch((err) => {
+            console.error("Error retrieving page source:", err);
+          });
+      }
+    },
     handleDismiss() {
       this.limit_reached_alert_dismissed = true;
     },

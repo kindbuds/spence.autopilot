@@ -204,6 +204,7 @@ router.beforeEach(async (to, from, next) => {
 // console.log('Vue app is starting...');
 try {
     const app = createApp(App);
+    store.dispatch('monitorDevTools');
     app.use(store);
     app.use(router);
     app.use(vuetify);

@@ -10,6 +10,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     showAlert: (message) => {
         alert(`Preload says: ${message}`);
     },
+
+    doLog: (log) => {
+        ipcRenderer.send('do-log', log);
+    },
     // logMessage: (message) => {
     //     console.log(`Preload log: ${message}`);
     // },

@@ -31,7 +31,7 @@ if (fs.existsSync(envPath)) {
 }
 
 
-let loaderWindow, mainWindow, authWindow, userIp, userId, versionNumber;
+let devToolsOpened = false, mainWindow, authWindow, userIp, userId, versionNumber;
 const mainPlatform = os.platform() === 'win32' ? 'win' : os.platform() === 'darwin' ? 'mac' : 'other';
 const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
@@ -290,16 +290,16 @@ function addEventListeners() {
     });
     mainWindow.webContents.on('did-navigate', (event, url) => {
         // eShared.logtofile(`Navigated to: ${url}`)
-        console.log('Navigated to:', url);
-        if (mainWindow)
-            mainWindow.webContents.executeJavaScript(`console.log('Navigated to:', '${url}');`);
+        // console.log('Navigated to:', url);
+        // if (mainWindow)
+        //     mainWindow.webContents.executeJavaScript(`console.log('Navigated to:', '${url}');`);
 
     });
     mainWindow.webContents.on('did-navigate-in-page', (event, url) => {
         // eShared.logtofile(`Navigated within page to: ${url}`)
-        console.log('Navigated within page to:', url);
-        if (mainWindow)
-            mainWindow.webContents.executeJavaScript(`console.log('Navigated within page to:', '${url}');`);
+        // console.log('Navigated within page to:', url);
+        // if (mainWindow)
+        //     mainWindow.webContents.executeJavaScript(`console.log('Navigated within page to:', '${url}');`);
         addScroll();
     });
     mainWindow.on('page-title-updated', (event) => {
@@ -353,6 +353,7 @@ function addEventListeners() {
                         // console.log('openDevTools');
                         mainWindow.openDevTools();
                         mainWindow.webContents.openDevTools();
+                        devToolsOpened = true;
                     }
                 }, 1000);
             }
@@ -371,6 +372,11 @@ function addEventListeners() {
         } else {
             mainWindow.maximize();
         }
+    });
+    ipcMain.on('do-log', (event, log) => {
+        // console.log('in do-log')
+        if (!mainWindow || !mainWindow.webContents) return;
+        mainWindow.webContents.executeJavaScript(`console.log('log: ${log}');`);
     });
     ipcMain.on('toggle-narrow-width', () => {
         const newWidth = 450;
@@ -770,8 +776,14 @@ ipcMain.on('user-save-job', async (event, jobData) => {
 });
 
 ipcMain.on('open-dev-tools', async (event) => {
-    mainWindow.openDevTools();
-    mainWindow.webContents.openDevTools();
+    devToolsOpened = !devToolsOpened;
+    if (devToolsOpened) {
+        mainWindow.openDevTools();
+        mainWindow.webContents.openDevTools();
+    } else {
+        mainWindow.closeDevTools();
+        mainWindow.webContents.closeDevTools();
+    }
 });
 
 ipcMain.on('save-job', async (event, jobData) => {
@@ -783,7 +795,7 @@ ipcMain.on('save-job', async (event, jobData) => {
         return;
     }
 
-    console.log('Saving job:', jobData);
+    // console.log('Saving job:', jobData);
 
     jobData.siteid = jobData.siteId;
     delete jobData.siteId;

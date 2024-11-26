@@ -117,7 +117,7 @@ module.exports.loadUserData = async () => {
 
             try {
                 const lastSearchCycle = await module.exports.getLastSearchCycleCompleted();
-                console.log(lastSearchCycle, 'lastSearchCycle')
+                // console.log(lastSearchCycle, 'lastSearchCycle')
                 data.last_search_cycle = lastSearchCycle;
             } catch (e) {
                 console.log('Error retrieving last search cycle:', e);

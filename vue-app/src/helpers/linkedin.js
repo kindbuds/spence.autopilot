@@ -19,7 +19,7 @@ export async function doSearch(context, webview, term) {
 
 
 const scrollToBottomAndLogLinks = async (context, webview, term) => {
-    console.log('scrollToBottomAndLogLinks')
+    // console.log('scrollToBottomAndLogLinks')
     try {
         if (!webview) {
             console.error("Webview is not initialized.");
@@ -121,7 +121,7 @@ const scrollToBottomAndLogLinks = async (context, webview, term) => {
             }, .job-details-jobs-unified-top-card__job-insight.job-details-jobs-unified-top-card__job-insight--highlight, .job-details-jobs-unified-top-card__job-insight, .coach-mark-list__container, .mt5');
       elementsToRemove.forEach(el => el.parentNode.removeChild(el));
       description = clone.innerText + '\\n\\n' + description;
-
+    
       const salaryElement = document.querySelector('${context.linkedInSelectors.salary
             }');
       if (salaryElement) {
@@ -131,7 +131,7 @@ const scrollToBottomAndLogLinks = async (context, webview, term) => {
           }
       }
 
-    return description.replace(/\\s+/g, ' ').trim();
+    return description.replace(/\\s+/g, ' ').replace('Share Show more options', ' - ').trim();
   }
 
   function stopFilteredCompany(jobData) {
@@ -203,12 +203,14 @@ const scrollToBottomAndLogLinks = async (context, webview, term) => {
  }
 
 async function clickLinksSequentially(jobCards) {
-  console.log(jobCards, 'clickLinksSequentially');
+ // console.log(jobCards, 'clickLinksSequentially');
+ // window.electronAPI.doLog('clickLinksSequentially ' + jobCards.length);
 return new Promise(async (resolve) => {
   let jobIndex = 0;
   for (let jobCard of jobCards) {
 //      console.log(jobIndex + 1, 'processing job card of: ' + jobCards.length);
     jobIndex++;
+//    window.electronAPI.doLog('processing job: ' + jobIndex);
 
     if (window.isPaused) {
       await new Promise((resume) => {
@@ -219,6 +221,8 @@ return new Promise(async (resolve) => {
  //    console.log(jobCard, 'jobCard')
     const siteId = jobCard.getAttribute('${context.linkedInSelectors.siteIdSelector
             }');
+   // window.electronAPI.doLog('siteId: ' + siteId);
+
     // alert(siteId);
     const linkElement = jobCard.querySelector('${context.linkedInSelectors.jobCardListTitle
             }');
@@ -228,11 +232,14 @@ return new Promise(async (resolve) => {
     const linkText = linkElement ? linkElement.textContent.trim() : 'No title found';
 
     if (linkText === 'No title found') {
+     window.electronAPI.doLog('No title found, taking a very long nap.');
+     alert('You have encountered a critical error: Not job title found.');
     //  alert('No title found');
     //   console.log(document.body, 'delaying for 10 minutes so you can inspect');
       await delay(600000);
     }
-    // alert(linkText)
+
+   // window.electronAPI.doLog('linkText: ' + linkText);
 
     const employerElement = jobCard.querySelector('${context.linkedInSelectors.jobCardPrimaryDescription
             }');
@@ -325,7 +332,7 @@ return new Promise(async (resolve) => {
 }
 
 async function processJobPages(container) {
-// alert('processJobPages ${context.linkedInSelectors.scaffoldList}')
+//  alert('processJobPages ${context.linkedInSelectors.scaffoldList}')
 const maxPages = 3;
 let currentPage = 1;
 
@@ -340,6 +347,7 @@ while (currentPage <= maxPages) {
 
     const jobCards = document.querySelectorAll('${context.linkedInSelectors.scaffoldList
             }');
+    //        window.electronAPI.doLog('Jobs found: ' + jobCards.length);
     const shouldStop = await clickLinksSequentially(jobCards);
      console.log(shouldStop, 'shouldStop');
 
@@ -403,9 +411,10 @@ try {
   container = container?.parentElement;
 
   if (!container) {
- 
+    // alert('No container!')
+    window.electronAPI.doLog('No container!');
     console.error('Container for job listings not found.');
-    window.electron.authenticateLinkedIn();
+    // window.electron.authenticateLinkedIn();
     return false;
   }
 
@@ -413,12 +422,12 @@ try {
             }');
           
   if (h1NoJobs && h1NoJobs.offsetParent !== null) {
-   // alert('No Jobs Found for Search!')
+    window.electronAPI.doLog('No Jobs Found for Search!')
      console.log('No Jobs Found for Search!');
     return false;
   } else {
-  //  alert('We have jobs!');
-     console.log('We have jobs!');
+     window.electronAPI.doLog('We have jobs!');
+   //  console.log('We have jobs!');
   }
 
   await processJobPages(container);

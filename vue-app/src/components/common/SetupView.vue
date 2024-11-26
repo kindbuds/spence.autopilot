@@ -435,12 +435,13 @@
                 </v-col>
                 <v-col cols="12" md="8">
                   <v-btn
-                    @click="openDevTools"
-                    color="purple darken-4"
+                    @click="toggleDevTools"
+                    :color="devToolsOpen ? 'grey-darken-3' : 'white'"
                     size="small"
-                    prepend-icon="mdi-xml"
-                    >Open Tools</v-btn
+                    :prepend-icon="'mdi-xml'"
                   >
+                    {{ devToolsOpen ? "Close Tools" : "Open Tools" }}
+                  </v-btn>
                 </v-col>
               </v-row>
               <v-row>
@@ -628,9 +629,9 @@ export default {
     },
   },
   methods: {
-    openDevTools() {
-      window.electron.openDevTools();
-    },
+    // openDevTools() {
+    //   window.electron.openDevTools();
+    // },
     removeCompanyFilter(index) {
       const globalIndex =
         (this.company.currentPage - 1) * this.company.perPage + index;

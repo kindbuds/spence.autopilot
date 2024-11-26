@@ -232,7 +232,9 @@ return new Promise(async (resolve) => {
     const linkText = linkElement ? linkElement.textContent.trim() : 'No title found';
 
     if (linkText === 'No title found') {
-     window.electronAPI.doLog('No title found, taking a very long nap.');
+
+    if(window.electronAPI.doLog)
+        window.electronAPI.doLog('No title found, taking a very long nap.');
      alert('You have encountered a critical error: Not job title found.');
     //  alert('No title found');
     //   console.log(document.body, 'delaying for 10 minutes so you can inspect');
@@ -412,7 +414,8 @@ try {
 
   if (!container) {
     // alert('No container!')
-    window.electronAPI.doLog('No container!');
+    if(window.electronAPI.doLog)
+        window.electronAPI.doLog('No container!');
     console.error('Container for job listings not found.');
     // window.electron.authenticateLinkedIn();
     return false;
@@ -422,11 +425,13 @@ try {
             }');
           
   if (h1NoJobs && h1NoJobs.offsetParent !== null) {
-    window.electronAPI.doLog('No Jobs Found for Search!')
+    if(window.electronAPI.doLog)
+        window.electronAPI.doLog('No Jobs Found for Search!')
      console.log('No Jobs Found for Search!');
     return false;
   } else {
-     window.electronAPI.doLog('We have jobs!');
+     if(window.electronAPI.doLog)
+        window.electronAPI.doLog('We have jobs!');
    //  console.log('We have jobs!');
   }
 

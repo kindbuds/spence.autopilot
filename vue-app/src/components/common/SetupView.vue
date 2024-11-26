@@ -350,7 +350,10 @@
                   </v-container>
                 </v-col>
               </v-row>
-              <v-row v-if="context !== 'setup'" class="pb-8">
+              <v-row
+                v-if="context !== 'setup' && localCompanyFilters.length > 0"
+                class="pb-8"
+              >
                 <v-col cols="12" md="4">
                   <div>
                     <h2>Company Filters</h2>

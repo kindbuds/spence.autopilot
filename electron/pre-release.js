@@ -1,3 +1,5 @@
+// pre-release.js
+
 const { execSync } = require('child_process');
 const { version } = require('./package.json');
 const path = require('path');

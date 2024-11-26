@@ -11,7 +11,7 @@
   "scripts": {
     "start": "electron-forge start",
     "start:prod": "electron .",
-    "build": "electron-builder",
+    "build": "electron-builder --publish=always",
     "package": "electron-forge package --arch=universal",
     "make": "electron-forge make",
     "standard-version": "standard-version",

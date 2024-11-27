@@ -10,10 +10,10 @@ const { AuthenticationClient } = require('auth0');
 const os = require('os')
 
 // const { autoUpdater } = require('electron-updater');
-// const log = require('electron-log');
+const log = require('electron-log');
 // autoUpdater.logger = log;
 // autoUpdater.logger.transports.file.level = 'info';
-// log.info('App starting...');
+log.info('App starting...');
 
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')

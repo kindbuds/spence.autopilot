@@ -71,9 +71,6 @@
     "appId": "ai.spence.autopilot",
     "icon": "assets/spence-face",
     "productName": "Spence",
-    "directories": {
-      "output": "build"
-    },
     "mac": {
       "target": [
         {

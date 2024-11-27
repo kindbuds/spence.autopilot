@@ -49,9 +49,13 @@ jobs:
           npm install
           npm run build
 
-      - name: List Output Directory
-        run: |
-          dir electron\out\make\squirrel.windows\x64
+      - name: List Make Directory
+        run: dir electron\build\make
+        shell: cmd
+
+      - name: List Squirrel Directory
+        run: dir electron\build\make\squirrel.windows\x64
+        shell: cmd
 
       - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
         run: |

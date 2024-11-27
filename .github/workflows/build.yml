@@ -57,36 +57,13 @@ jobs:
         run: dir electron\dist\squirrel-windows
         shell: cmd
 
-      # - name: List make Directory
-      #   run: dir electron\dist\make
-      #   shell: cmd
-
-      # - name: List Make Directory
-      #   run: dir electron\out\make
-      #   shell: cmd
-
-      # - name: List Squirrel Directory
-      #   run: dir electron\out\make\squirrel.windows\x64
-      #   shell: cmd
-
-      # - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
-      #   run: |
-      #     move electron\dist\squirrel.windows\x64\Spence-Setup.exe electron\dist\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
-
-      # - name: Upload Windows Installer
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: Spence-AI-Career-Autopilot.exe
-      #     path: electron/out/make/squirrel.windows/x64/Spence-AI-Career-Autopilot.exe
-      #     if-no-files-found: warn
-
       - name: Upload Windows Installer and Metadata
         uses: actions/upload-artifact@v4
         with:
           name: Windows-Update-Files
           path: |
-            electron/dist/squirrel.windows/Spence-AI-Career-Autopilot.exe
-            electron/dist/squirrel.windows/latest.yml
+            electron/dist/squirrel-windows/Spence-AI-Career-Autopilot.exe
+            electron/dist/squirrel-windows/latest.yml
           if-no-files-found: warn
 
   build-macos:

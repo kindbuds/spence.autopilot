@@ -91,6 +91,7 @@
     },
     "win": {
       "target": "squirrel",
+      "authors": "getspence.ai",
       "artifactName": "Spence-AI-Career-Autopilot.exe"
     },
     "extraMetadata": {

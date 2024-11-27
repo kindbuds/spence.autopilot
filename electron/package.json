@@ -8,6 +8,7 @@
   },
   "description": "Spence AI Career Autopilot application",
   "main": "main.js",
+  "author": "getspence.ai",
   "scripts": {
     "start": "electron-forge start",
     "start:prod": "electron .",
@@ -21,7 +22,6 @@
     "prepublishOnly": "echo 'Skipping build during npm publish'"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
@@ -72,7 +72,6 @@
     "icon": "assets/spence-face",
     "productName": "Spence",
     "extraMetadata": {
-      "authors": "getspence.ai",
       "owners": "getspence.ai"
     },
     "mac": {

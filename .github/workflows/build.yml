@@ -156,7 +156,6 @@ jobs:
           echo "Electron App ID: $APP_ID"
           echo "Apple Team ID: $APPLE_TEAM_ID"
           echo "Apple Identity: $APPLE_ID"
-          ls -la dist/mac
           cat entitlements.plist
 
       - name: Build the App for macOS

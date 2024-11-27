@@ -90,6 +90,10 @@
       },
       "icon": "assets/spence-face.icns"
     },
+    "win": {
+      "target": "squirrel/windows",
+      "artifactName": "Spence-AI-Career-Autopilot.exe"
+    },
     "files": [
       "**/*",
       "vue-app/dist/**/*"
@@ -99,6 +103,8 @@
       "schemes": [
         "spence"
       ]
-    }
+    },
+    "extraResources": [],
+    "extraFiles": []
   }
 }

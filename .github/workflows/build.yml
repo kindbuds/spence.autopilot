@@ -65,11 +65,6 @@ jobs:
       #   run: dir electron\out\make\squirrel.windows\x64
       #   shell: cmd
 
-      - name: Rename Setup File
-        run: |
-          for /f "delims=" %f in ('dir /b "electron\dist\Spence Setup*.exe"') do ren "electron\dist\%f" "Spence-AI-Career-Autopilot.exe"
-        shell: cmd
-
       # - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
       #   run: |
       #     move electron\dist\squirrel.windows\x64\Spence-Setup.exe electron\dist\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe

@@ -49,8 +49,12 @@ jobs:
           npm install
           npm run build
 
-      - name: List Electron Directory
-        run: dir electron
+      - name: List dist Directory
+        run: dir electron\dist
+        shell: cmd
+
+      - name: List make Directory
+        run: dir electron\dist\make
         shell: cmd
 
       # - name: List Make Directory
@@ -63,7 +67,7 @@ jobs:
 
       - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
         run: |
-          move electron\out\make\squirrel.windows\x64\Spence-Setup.exe electron\out\make\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
+          move electron\dist\make\squirrel.windows\x64\Spence-Setup.exe electron\dist\make\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
 
       # - name: Upload Windows Installer
       #   uses: actions/upload-artifact@v4
@@ -142,21 +146,10 @@ jobs:
           cd electron
           npm install
 
-      - name: Debug Apple Credentials
-        run: |
-          echo "APPLE_ID: $APPLE_ID"
-          if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then
-            echo "App-Specific Password is NOT set!"
-            exit 1
-          else
-            echo "App-Specific Password is set."
-          fi
-          echo "APPLE_TEAM_ID: $APPLE_TEAM_ID"
-        shell: bash
-
       - name: Build the App for macOS
         run: |
           cd electron
+          export DEBUG=electron-notarize,electron-builder
           npm run build
 
       - name: List contents of out directory

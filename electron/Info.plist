@@ -16,5 +16,7 @@
     <string>APPL</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>ElectronTeamID</key>
+    <string>SRJJDF6WDH</string>
 </dict>
 </plist>

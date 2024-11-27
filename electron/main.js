@@ -99,11 +99,6 @@ if (!gotTheLock) {
     app.quit();
 } else {
 
-    if (!app.isPackaged) {
-        log.info('Skipping update checks in development mode.');
-    } else {
-        setupAutoUpdater();
-    }
 
     app.on('second-instance', async (event, commandLine, workingDirectory) => {
         // eShared.logtofile(`Command Line: ${JSON.stringify(commandLine)}`);
@@ -120,6 +115,11 @@ if (!gotTheLock) {
 
     app.whenReady().then(async () => {
         // console.log('running app.whenReady()')
+        if (!app.isPackaged) {
+            log.info('Skipping update checks in development mode.');
+        } else {
+            setupAutoUpdater();
+        }
 
         if (process.defaultApp) {
             if (process.argv.length >= 2) {

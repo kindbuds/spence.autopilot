@@ -81,13 +81,12 @@
           ]
         }
       ],
+      "notarize": false,
+      "sign": false,
       "hardenedRuntime": true,
       "entitlements": "entitlements.plist",
       "entitlementsInherit": "entitlements.plist",
       "identity": "Kind Buds, LLC (SRJJDF6WDH)",
-      "notarize": {
-        "teamId": "SRJJDF6WDH"
-      },
       "icon": "assets/spence-face.icns"
     },
     "win": {

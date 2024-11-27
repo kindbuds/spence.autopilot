@@ -149,11 +149,6 @@ jobs:
       - name: Build the App for macOS
         run: |
           cd electron
-          echo "Electron App ID: $APP_ID"
-          echo "Apple Team ID: $APPLE_TEAM_ID"
-          echo "Apple Identity: $APPLE_ID"
-          cat entitlements.plist
-          export DEBUG=electron-notarize,electron-builder
           npm run build
 
       - name: List contents of out directory

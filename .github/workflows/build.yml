@@ -207,11 +207,11 @@ jobs:
           path: electron/dist/Spence-AI-Career-Autopilot.dmg
           if-no-files-found: error
       
-      - name: Upload mac-latest.yml
+      - name: Upload latest-mac.yml
         uses: actions/upload-artifact@v4
         with:
-          name: mac-latest.yml
-          path: electron/dist/mac-latest.yml
+          name: latest-mac.yml
+          path: electron/dist/latest-mac.yml
           if-no-files-found: error
 
   create-release:
@@ -246,7 +246,7 @@ jobs:
       - name: Download macOS latest.yml
         uses: actions/download-artifact@v4
         with:
-          name: mac-latest.yml
+          name: latest-mac.yml
           path: ./dist
 
       - name: List contents of dist directory
@@ -261,7 +261,7 @@ jobs:
             dist/Spence-AI-Career-Autopilot.exe
             dist/latest.yml
             dist/Spence-AI-Career-Autopilot.dmg
-            dist/mac-latest.yml
+            dist/latest-mac.yml
           draft: false
           prerelease: false
 

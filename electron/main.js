@@ -32,7 +32,7 @@ if (fs.existsSync(envPath)) {
 
 let devToolsOpened = false, mainWindow, authWindow, userIp, userId, versionNumber;
 const mainPlatform = os.platform() === 'win32' ? 'win' : os.platform() === 'darwin' ? 'mac' : 'other';
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = true; // process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
 

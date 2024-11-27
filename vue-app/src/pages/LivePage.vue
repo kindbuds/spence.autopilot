@@ -204,7 +204,7 @@ export default {
       // await shared.delay(10000);
     },
     onAuthRequired() {
-      console.log("onAuthRequired");
+      // console.log("onAuthRequired");
       // alert("onAuthRequired");
       // this.$nextTick(() => {
       //   this.auth = true;

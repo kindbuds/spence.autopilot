@@ -149,7 +149,7 @@ jobs:
       - name: Build the App for macOS
         run: |
           cd electron
-          CSC_IDENTITY_AUTO_DISCOVERY=false npm run build
+          npm run build
 
       - name: List contents of dist directory
         run: |

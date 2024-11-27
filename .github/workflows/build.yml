@@ -250,9 +250,9 @@ jobs:
       - name: Upload .exe to S3
         run: |
           ls -la dist/Spence-AI-Career-Autopilot.exe
-          aws s3 cp dist/Spence-AI-Career-Autopilot.exe s3://spence.media/ --acl public-read
+          aws s3 cp dist/Spence-AI-Career-Autopilot.exe s3://spence.media/
 
       - name: Upload .dmg to S3
         run: |
           ls -la dist/Spence-AI-Career-Autopilot.dmg
-          aws s3 cp dist/Spence-AI-Career-Autopilot.dmg s3://spence.media/ --acl public-read
+          aws s3 cp dist/Spence-AI-Career-Autopilot.dmg s3://spence.media/

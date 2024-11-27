@@ -53,8 +53,8 @@ jobs:
 
       - name: Clean build artifacts
         run: |
-          rm -rf dist
-          rm -rf build
+          if exist dist rd /s /q dist
+          if exist build rd /s /q build
 
       - name: List dist Directory
         run: dir electron\dist

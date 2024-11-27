@@ -99,7 +99,10 @@
     ],
     "files": [
       "**/*",
-      "vue-app/dist/**/*"
+      "vue-app/dist/**/*",
+      "!node_modules/**/*",
+      "!dist/**/*",
+      "!*.log"
     ],
     "protocols": {
       "name": "Spence Protocol",

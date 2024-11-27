@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -48,6 +50,11 @@ jobs:
           cd electron
           npm install
           npm run build
+
+      - name: Clean build artifacts
+        run: |
+          rm -rf dist
+          rm -rf build
 
       - name: List dist Directory
         run: dir electron\dist
@@ -86,6 +93,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Select Xcode Version
         run: sudo xcode-select -switch /Applications/Xcode_15.0.app/Contents/Developer
@@ -127,6 +136,11 @@ jobs:
         run: |
           cd electron
           npm install
+
+      - name: Clean build artifacts
+        run: |
+          rm -rf dist
+          rm -rf build
 
       - name: Build the App for macOS
         run: |
@@ -178,6 +192,8 @@ jobs:
 
       - name: Checkout the code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Download Windows Installer
         uses: actions/download-artifact@v4

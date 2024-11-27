@@ -53,9 +53,9 @@ jobs:
         run: dir electron\dist
         shell: cmd
 
-      - name: List make Directory
-        run: dir electron\dist\make
-        shell: cmd
+      # - name: List make Directory
+      #   run: dir electron\dist\make
+      #   shell: cmd
 
       # - name: List Make Directory
       #   run: dir electron\out\make
@@ -67,7 +67,12 @@ jobs:
 
       - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
         run: |
-          move electron\dist\make\squirrel.windows\x64\Spence-Setup.exe electron\dist\make\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
+          for %f in ("electron\dist\Spence Setup *.exe") do move "%f" "electron\dist\Spence-AI-Career-Autopilot.exe"
+        shell: cmd
+
+      # - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
+      #   run: |
+      #     move electron\dist\squirrel.windows\x64\Spence-Setup.exe electron\dist\squirrel.windows\x64\Spence-AI-Career-Autopilot.exe
 
       # - name: Upload Windows Installer
       #   uses: actions/upload-artifact@v4

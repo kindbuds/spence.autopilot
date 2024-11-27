@@ -53,6 +53,10 @@ jobs:
         run: dir electron\dist
         shell: cmd
 
+      - name: List squirrel-windows Directory
+        run: dir electron\dist\squirrel-windows
+        shell: cmd
+
       # - name: List make Directory
       #   run: dir electron\dist\make
       #   shell: cmd
@@ -81,8 +85,8 @@ jobs:
         with:
           name: Windows-Update-Files
           path: |
-            electron/out/Spence-AI-Career-Autopilot.exe
-            electron/out/latest.yml
+            electron/squirrel.windows/Spence-AI-Career-Autopilot.exe
+            electron/squirrel.windows/latest.yml
           if-no-files-found: warn
 
   build-macos:

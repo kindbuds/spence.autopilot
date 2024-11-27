@@ -84,9 +84,7 @@
           ]
         }
       ],
-      "notarize": {
-        "teamId": "SRJJDF6WDH"
-      },
+      "notarize": true,
       "sign": false,
       "forceCodeSigning": false,
       "identity": "Kind Buds, LLC (SRJJDF6WDH)",

@@ -71,6 +71,10 @@
     "appId": "ai.spence.autopilot",
     "icon": "assets/spence-face",
     "productName": "Spence",
+    "extraMetadata": {
+      "authors": "getspence.ai",
+      "owners": "getspence.ai"
+    },
     "mac": {
       "target": [
         {
@@ -91,15 +95,7 @@
     },
     "win": {
       "target": "squirrel",
-      "artifactName": "Spence-AI-Career-Autopilot.exe",
-      "extraMetadata": {
-        "authors": "getspence.ai",
-        "owners": "getspence.ai"
-      }
-    },
-    "extraMetadata": {
-      "authors": "getspence.ai",
-      "owners": "getspence.ai"
+      "artifactName": "Spence-AI-Career-Autopilot.exe"
     },
     "files": [
       "**/*",

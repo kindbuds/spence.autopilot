@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-// const storage = require('electron-json-storage');
-const storage = {};
+const storage = require('electron-json-storage');
 
 module.exports.logtofile = (message) => {
     // console.log(message);

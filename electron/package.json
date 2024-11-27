@@ -81,11 +81,13 @@
           ]
         }
       ],
-      "hardenedRuntime": false,
-      "entitlements": null,
-      "entitlementsInherit": null,
-      "sign": false,
-      "notarize": null,
+      "hardenedRuntime": true,
+      "entitlements": "entitlements.plist",
+      "entitlementsInherit": "entitlements.plist",
+      "identity": "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)",
+      "notarize": {
+        "teamId": "SRJJDF6WDH"
+      },
       "icon": "assets/spence-face.icns"
     },
     "files": [

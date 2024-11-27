@@ -53,22 +53,22 @@ jobs:
         run: dir electron\dist
         shell: cmd
 
-      - name: List squirrel-windows Directory
-        run: dir electron\dist\squirrel-windows
+      - name: List nsis Directory
+        run: dir electron\dist\nsis
         shell: cmd
 
       - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
           name: Spence-AI-Career-Autopilot.exe
-          path: electron/dist/squirrel-windows/Spence-AI-Career-Autopilot.exe
+          path: electron/dist/nsis/Spence-AI-Career-Autopilot.exe
           if-no-files-found: error
 
       - name: Upload Windows latest.yml
         uses: actions/upload-artifact@v4
         with:
           name: latest.yml
-          path: electron/dist/squirrel-windows/latest.yml
+          path: electron/dist/nsis/latest.yml
           if-no-files-found: error
 
   build-macos:

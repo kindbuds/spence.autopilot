@@ -90,7 +90,7 @@
       "icon": "assets/spence-face.icns"
     },
     "win": {
-      "target": "squirrel",
+      "target": "nsis",
       "artifactName": "Spence-AI-Career-Autopilot.exe",
       "icon": "assets/spence-face.ico"
     },

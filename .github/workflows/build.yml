@@ -174,7 +174,11 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: us-east-2
 
-    steps:
+    steps:      
+
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
       - name: Download Windows Installer
         uses: actions/download-artifact@v4
         with:
@@ -215,9 +219,6 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
       - name: Remove source code assets from GitHub Release
         run: |
           ASSETS=$(gh release view ${{ github.ref_name }} --json assets --jq '.assets[] | select(.name | test("source_code")) | .id')
@@ -235,7 +236,7 @@ jobs:
       - name: Verify Current Directory
         run: pwd
 
-      - name: List contents of dist directory2
+      - name: List contents of dist directory
         run: |
           echo "Listing contents of dist:"
           ls -la dist

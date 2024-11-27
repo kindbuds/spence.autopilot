@@ -272,3 +272,11 @@ jobs:
         run: |
           ls -la dist/Spence-AI-Career-Autopilot.dmg
           aws s3 cp dist/Spence-AI-Career-Autopilot.dmg s3://spence.media/
+
+      - name: Invalidate CloudFront Cache
+        uses: awact/cloudfront-invalidate@v1.0.0
+        with:
+          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          paths: |
+            /Spence-AI-Career-Autopilot.exe
+            /Spence-AI-Career-Autopilot.dmg

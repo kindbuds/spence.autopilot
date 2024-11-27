@@ -48,7 +48,6 @@ eShared.logtofile(`process.env.SPENCE_DOMAIN: ${process.env.SPENCE_DOMAIN}`)
 Object.keys(process.env).forEach(key => {
     eShared.logtofile(`${key}: ${process.env[key]}`);
 });
-if (require('electron-squirrel-startup')) return;
 
 
 // Set up auto-updater

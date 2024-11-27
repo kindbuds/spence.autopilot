@@ -84,9 +84,7 @@
           ]
         }
       ],
-      "notarize": true,
-      "sign": false,
-      "forceCodeSigning": false,
+      "notarize": false,
       "identity": "Kind Buds, LLC (SRJJDF6WDH)",
       "icon": "assets/spence-face.icns"
     },

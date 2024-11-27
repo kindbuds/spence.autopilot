@@ -85,8 +85,8 @@ jobs:
         with:
           name: Windows-Update-Files
           path: |
-            electron/squirrel.windows/Spence-AI-Career-Autopilot.exe
-            electron/squirrel.windows/latest.yml
+            electron/dist/squirrel.windows/Spence-AI-Career-Autopilot.exe
+            electron/dist/squirrel.windows/latest.yml
           if-no-files-found: warn
 
   build-macos:
@@ -227,7 +227,7 @@ jobs:
         with:
           name: MacOS-Update-Files
           path: |
-            electron/out/Spence-AI-Career-Autopilot.dmg
+            electron/dist/Spence-AI-Career-Autopilot.dmg
             electron/out/latest-mac.yml
           if-no-files-found: warn
 

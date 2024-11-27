@@ -53,8 +53,8 @@ jobs:
 
       - name: Clean build artifacts
         run: |
-          if exist dist rd /s /q dist
-          if exist build rd /s /q build
+          if (Test-Path dist) { Remove-Item -Recurse -Force dist }
+          if (Test-Path build) { Remove-Item -Recurse -Force build }
 
       - name: List dist Directory
         run: dir electron\dist

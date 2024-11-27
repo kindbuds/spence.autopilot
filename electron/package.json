@@ -111,6 +111,7 @@
         "spence"
       ]
     },
+    "generateUpdatesFilesForAllChannels": true,
     "extraResources": [],
     "extraFiles": []
   }

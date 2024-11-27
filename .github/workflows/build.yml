@@ -151,10 +151,10 @@ jobs:
           cd electron
           CSC_IDENTITY_AUTO_DISCOVERY=false npm run build
 
-      - name: List contents of out directory
+      - name: List contents of dist directory
         run: |
-          echo "Listing contents of out:"
-          ls -la electron/out
+          echo "Listing contents of dist:"
+          ls -la electron/dist
 
       # - name: Sign the individual binaries
       #   run: |

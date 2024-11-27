@@ -74,12 +74,18 @@
     "mac": {
       "target": [
         {
-          "target": "dmg"
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
-      "notarize": {
-        "teamId": "SRJJDF6WDH"
-      },
+      "hardenedRuntime": false,
+      "entitlements": null,
+      "entitlementsInherit": null,
+      "sign": false,
+      "notarize": null,
       "icon": "assets/spence-face.icns"
     },
     "files": [

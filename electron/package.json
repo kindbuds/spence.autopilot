@@ -91,7 +91,7 @@
       "icon": "assets/spence-face.icns"
     },
     "win": {
-      "target": "squirrel/windows",
+      "target": "squirrel",
       "artifactName": "Spence-AI-Career-Autopilot.exe"
     },
     "files": [

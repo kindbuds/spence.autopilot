@@ -57,14 +57,19 @@ jobs:
         run: dir electron\dist\squirrel-windows
         shell: cmd
 
-      - name: Upload Windows Installer and Metadata
+      - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-Update-Files
-          path: |
-            electron/dist/squirrel-windows/Spence-AI-Career-Autopilot.exe
-            electron/dist/squirrel-windows/latest.yml
-          if-no-files-found: warn
+          name: Spence-AI-Career-Autopilot.exe
+          path: electron/dist/squirrel-windows/Spence-AI-Career-Autopilot.exe
+          if-no-files-found: error
+
+      - name: Upload Windows latest.yml
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest.yml
+          path: electron/dist/squirrel-windows/latest.yml
+          if-no-files-found: error
 
   build-macos:
     runs-on: macos-latest
@@ -199,15 +204,19 @@ jobs:
       #     name: Spence-AI-Career-Autopilot.dmg
       #     path: electron/out/Spence-AI-Career-Autopilot.dmg
 
-      - name: Upload macOS DMG and Metadata
+      - name: Upload macOS DMG
         uses: actions/upload-artifact@v4
         with:
-          name: MacOS-Update-Files
-          path: |
-            electron/dist/Spence-AI-Career-Autopilot.dmg
-            electron/dist/latest-mac.yml
-          if-no-files-found: warn
-
+          name: Spence-AI-Career-Autopilot.dmg
+          path: electron/dist/Spence-AI-Career-Autopilot.dmg
+          if-no-files-found: error
+      
+      - name: Upload mac-latest.yml
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-mac.yml
+          path: electron/dist/latest-mac.yml
+          if-no-files-found: error
 
   create-release:
     runs-on: ubuntu-latest

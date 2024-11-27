@@ -94,6 +94,13 @@
       "artifactName": "Spence-AI-Career-Autopilot.exe",
       "icon": "assets/spence-face.ico"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "kindbuds",
+        "repo": "spence.autopilot"
+      }
+    ],
     "files": [
       "**/*",
       "vue-app/dist/**/*"

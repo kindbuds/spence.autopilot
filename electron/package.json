@@ -86,11 +86,13 @@
       ],
       "notarize": false,
       "identity": "Kind Buds, LLC (SRJJDF6WDH)",
+      "artifactName": "Spence-AI-Career-Autopilot.dmg",
       "icon": "assets/spence-face.icns"
     },
     "win": {
       "target": "squirrel",
-      "artifactName": "Spence-AI-Career-Autopilot.exe"
+      "artifactName": "Spence-AI-Career-Autopilot.exe",
+      "icon": "assets/spence-face.ico"
     },
     "files": [
       "**/*",

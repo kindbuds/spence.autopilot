@@ -184,37 +184,37 @@ jobs:
       #     # codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
       #     codesign --deep --force --verbose --options runtime --timestamp --entitlements "$ENTITLEMENTS" --sign "$SIGN_ID" "$APP_PATH"
 
-      - name: Verify the Main App Signature
-        run: |
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
-          # codesign -vvv --deep --strict "$APP_PATH"
-          codesign -vvv --deep --strict "$APP_PATH"
+      # - name: Verify the Main App Signature
+      #   run: |
+      #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
+      #     # codesign -vvv --deep --strict "$APP_PATH"
+      #     codesign -vvv --deep --strict "$APP_PATH"
 
-      - name: Package the App as a DMG
-        run: |
-          APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
-          DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
+      # - name: Package the App as a DMG
+      #   run: |
+      #     APP_PATH="electron/out/Spence-AI-Career-Autopilot-darwin-universal/Spence-AI-Career-Autopilot.app"
+      #     DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
 
-          hdiutil create "$DMG_PATH" -volname "Spence-AI-Career-Autopilot" -srcfolder "$APP_PATH" -ov -format UDZO
+      #     hdiutil create "$DMG_PATH" -volname "Spence-AI-Career-Autopilot" -srcfolder "$APP_PATH" -ov -format UDZO
 
-      - name: Sign the DMG
-        run: |
-          SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
-          DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
+      # - name: Sign the DMG
+      #   run: |
+      #     SIGN_ID="Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)"
+      #     DMG_PATH="electron/out/Spence-AI-Career-Autopilot.dmg"
 
-          codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$DMG_PATH"
+      #     codesign --force --verbose --options runtime --timestamp --sign "$SIGN_ID" "$DMG_PATH"
 
       - name: Notarize the DMG
         run: |
-          xcrun notarytool submit electron/out/Spence-AI-Career-Autopilot.dmg --apple-id "jeff.borden@kindbuds.us" --password "arss-lgut-shmy-ipjl" --team-id "SRJJDF6WDH" --wait
+          xcrun notarytool submit electron/dist/Spence-AI-Career-Autopilot.dmg --apple-id "jeff.borden@kindbuds.us" --password "arss-lgut-shmy-ipjl" --team-id "SRJJDF6WDH" --wait
 
       - name: Staple the Notarization Ticket
         run: |
-          xcrun stapler staple electron/out/Spence-AI-Career-Autopilot.dmg
+          xcrun stapler staple electron/dist/Spence-AI-Career-Autopilot.dmg
 
       - name: Verify Stapling
         run: |
-          xcrun stapler validate electron/out/Spence-AI-Career-Autopilot.dmg
+          xcrun stapler validate electron/dist/Spence-AI-Career-Autopilot.dmg
 
       # - name: Upload macOS DMG
       #   uses: actions/upload-artifact@v4
@@ -228,7 +228,7 @@ jobs:
           name: MacOS-Update-Files
           path: |
             electron/dist/Spence-AI-Career-Autopilot.dmg
-            electron/out/latest-mac.yml
+            electron/dist/latest-mac.yml
           if-no-files-found: warn
 
 

@@ -210,8 +210,8 @@ jobs:
       - name: Upload mac-latest.yml
         uses: actions/upload-artifact@v4
         with:
-          name: latest-mac.yml
-          path: electron/dist/latest-mac.yml
+          name: mac-latest.yml
+          path: electron/dist/mac-latest.yml
           if-no-files-found: error
 
   create-release:
@@ -261,7 +261,7 @@ jobs:
             dist/Spence-AI-Career-Autopilot.exe
             dist/latest.yml
             dist/Spence-AI-Career-Autopilot.dmg
-            dist/latest-mac.yml
+            dist/mac-latest.yml
           draft: false
           prerelease: false
 

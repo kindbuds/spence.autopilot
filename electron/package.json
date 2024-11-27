@@ -84,7 +84,7 @@
       "hardenedRuntime": true,
       "entitlements": "entitlements.plist",
       "entitlementsInherit": "entitlements.plist",
-      "identity": "Developer ID Application: Kind Buds, LLC (SRJJDF6WDH)",
+      "identity": "Kind Buds, LLC (SRJJDF6WDH)",
       "notarize": {
         "teamId": "SRJJDF6WDH"
       },

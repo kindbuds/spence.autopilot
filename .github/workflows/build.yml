@@ -232,10 +232,13 @@ jobs:
           sudo ./aws/install -b /usr/local/bin --update > /dev/null 2>&1 || echo "AWS CLI installation failed!"
           aws --version || echo "AWS CLI not found after installation."
 
+      - name: Print Current Directory
+        run: pwd
+
       - name: Upload .exe to S3
         run: |
-          aws s3 cp dist/Spence-AI-Career-Autopilot.exe s3://spence.media/ --acl public-read
+          aws s3 cp $(pwd)/dist/Spence-AI-Career-Autopilot.exe s3://spence.media/ --acl public-read
 
       - name: Upload .dmg to S3
         run: |
-          aws s3 cp dist/Spence-AI-Career-Autopilot.dmg s3://spence.media/ --acl public-read
+          aws s3 cp $(pwd)/dist/Spence-AI-Career-Autopilot.dmg s3://spence.media/ --acl public-read

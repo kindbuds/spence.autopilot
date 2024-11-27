@@ -65,9 +65,9 @@ jobs:
       #   run: dir electron\out\make\squirrel.windows\x64
       #   shell: cmd
 
-      - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
+      - name: Rename Setup File
         run: |
-          for %f in ("electron\dist\Spence Setup *.exe") do move "%f" "electron\dist\Spence-AI-Career-Autopilot.exe"
+          for %f in ("electron\dist\Spence Setup*.exe") do ren "%f" "Spence-AI-Career-Autopilot.exe"
         shell: cmd
 
       # - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
@@ -150,6 +150,14 @@ jobs:
         run: |
           cd electron
           npm install
+
+      - name: Debug Electron Config
+        run: |
+          echo "Electron App ID: $APP_ID"
+          echo "Apple Team ID: $APPLE_TEAM_ID"
+          echo "Apple Identity: $APPLE_ID"
+          ls -la dist/mac
+          cat entitlements.plist
 
       - name: Build the App for macOS
         run: |

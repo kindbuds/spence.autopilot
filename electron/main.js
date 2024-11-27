@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog } = require('electron');
 // const { autoUpdater } = require('electron-updater');
-const { build } = require('./package.json');
+// const { build } = require('./package.json');
 const path = require('path');
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -18,7 +18,7 @@ log.info('App starting...');
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')
 // eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
-storage.setDataPath(path.join(appData, build.productName));
+storage.setDataPath(path.join(appData, "Spence-AI-Career-Autopilot"));
 const dotenv = require('dotenv');
 // eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
 

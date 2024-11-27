@@ -69,7 +69,7 @@
   "build": {
     "appId": "ai.spence.autopilot",
     "icon": "assets/spence-face",
-    "productName": "Spence",
+    "productName": "Spence-AI-Career-Autopilot",
     "extraMetadata": {
       "owners": "getspence.ai"
     },

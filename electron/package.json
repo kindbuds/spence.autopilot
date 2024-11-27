@@ -70,9 +70,6 @@
     "appId": "ai.spence.autopilot",
     "icon": "assets/spence-face",
     "productName": "Spence-AI-Career-Autopilot",
-    "extraMetadata": {
-      "owners": "getspence.ai"
-    },
     "mac": {
       "target": [
         {

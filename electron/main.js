@@ -4,21 +4,22 @@ const { app, BrowserWindow, Menu, ipcMain, protocol, screen, shell, dialog } = r
 const path = require('path');
 const { spawn } = require('child_process');
 const fs = require('fs');
-const storage = require('electron-json-storage');
+// const storage = require('electron-json-storage');
 const appData = app.getPath('appData');
 const { AuthenticationClient } = require('auth0');
 const os = require('os')
 
-const { autoUpdater } = require('electron-updater');
-const log = require('electron-log');
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
+// const { autoUpdater } = require('electron-updater');
+// const log = require('electron-log');
+// autoUpdater.logger = log;
+// autoUpdater.logger.transports.file.level = 'info';
+// log.info('App starting...');
 
 // const vShared = require('./vue-app/src/helpers/shared.js')
 const eShared = require('./helpers/shared.js')
 // eShared.logtofile(`storage located @: ${path.join(appData, build.productName)}`);
-storage.setDataPath(path.join(appData, "Spence-AI-Career-Autopilot"));
+// storage.setDataPath(path.join(appData, "Spence-AI-Career-Autopilot"));
+const storage = {};
 const dotenv = require('dotenv');
 // eShared.logtofile('Data will now be stored at:' + storage.getDataPath());
 
@@ -51,38 +52,38 @@ Object.keys(process.env).forEach(key => {
 
 
 // Set up auto-updater
-function setupAutoUpdater() {
-    // Check for updates immediately on startup
-    autoUpdater.checkForUpdatesAndNotify();
+// function setupAutoUpdater() {
+//     // Check for updates immediately on startup
+//     autoUpdater.checkForUpdatesAndNotify();
 
-    // Event listeners for update progress
-    autoUpdater.on('checking-for-update', () => {
-        log.info('Checking for update...');
-    });
+//     // Event listeners for update progress
+//     autoUpdater.on('checking-for-update', () => {
+//         log.info('Checking for update...');
+//     });
 
-    autoUpdater.on('update-available', (info) => {
-        log.info('Update available.', info);
-    });
+//     autoUpdater.on('update-available', (info) => {
+//         log.info('Update available.', info);
+//     });
 
-    autoUpdater.on('update-not-available', (info) => {
-        log.info('Update not available.', info);
-    });
+//     autoUpdater.on('update-not-available', (info) => {
+//         log.info('Update not available.', info);
+//     });
 
-    autoUpdater.on('error', (err) => {
-        log.error('Error in auto-updater:', err);
-    });
+//     autoUpdater.on('error', (err) => {
+//         log.error('Error in auto-updater:', err);
+//     });
 
-    autoUpdater.on('download-progress', (progress) => {
-        log.info(
-            `Download speed: ${progress.bytesPerSecond} - Downloaded ${progress.percent}%`
-        );
-    });
+//     autoUpdater.on('download-progress', (progress) => {
+//         log.info(
+//             `Download speed: ${progress.bytesPerSecond} - Downloaded ${progress.percent}%`
+//         );
+//     });
 
-    autoUpdater.on('update-downloaded', (info) => {
-        log.info('Update downloaded; will install now');
-        autoUpdater.quitAndInstall();
-    });
-}
+//     autoUpdater.on('update-downloaded', (info) => {
+//         log.info('Update downloaded; will install now');
+//         autoUpdater.quitAndInstall();
+//     });
+// }
 
 
 // This makes sure the app is single-instance
@@ -118,7 +119,7 @@ if (!gotTheLock) {
         if (!app.isPackaged) {
             log.info('Skipping update checks in development mode.');
         } else {
-            setupAutoUpdater();
+            // setupAutoUpdater();
         }
 
         if (process.defaultApp) {

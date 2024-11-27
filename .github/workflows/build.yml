@@ -67,7 +67,7 @@ jobs:
 
       - name: Rename Setup File
         run: |
-          for %f in ("electron\dist\Spence Setup*.exe") do ren "%f" "Spence-AI-Career-Autopilot.exe"
+          for /f "delims=" %f in ('dir /b "electron\dist\Spence Setup*.exe"') do ren "electron\dist\%f" "Spence-AI-Career-Autopilot.exe"
         shell: cmd
 
       # - name: Rename Setup.exe to Spence-AI-Career-Autopilot.exe
@@ -151,16 +151,13 @@ jobs:
           cd electron
           npm install
 
-      - name: Debug Electron Config
+      - name: Build the App for macOS
         run: |
+          cd electron
           echo "Electron App ID: $APP_ID"
           echo "Apple Team ID: $APPLE_TEAM_ID"
           echo "Apple Identity: $APPLE_ID"
           cat entitlements.plist
-
-      - name: Build the App for macOS
-        run: |
-          cd electron
           export DEBUG=electron-notarize,electron-builder
           npm run build
 

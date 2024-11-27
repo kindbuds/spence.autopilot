@@ -39,8 +39,9 @@
     <key>com.apple.security.files.full-disk-access</key>
     <true/>
     <key>com.apple.security.temporary-exception.files.home-relative-path.read-write</key>
-    <string>Library/Preferences/</string>
-    <key>com.apple.security.temporary-exception.files.home-relative-path.read-write</key>
-    <string>Library/Caches/</string>
+    <array>
+      <string>Library/Preferences/</string>
+      <string>Library/Caches/</string>
+    </array>
   </dict>
 </plist>

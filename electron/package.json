@@ -93,6 +93,10 @@
       "target": "squirrel",
       "artifactName": "Spence-AI-Career-Autopilot.exe"
     },
+    "metadata": {
+      "authors": "getspence.ai",
+      "owners": "getspence.ai"
+    },
     "files": [
       "**/*",
       "vue-app/dist/**/*"

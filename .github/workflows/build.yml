@@ -235,6 +235,11 @@ jobs:
       - name: Verify Current Directory
         run: pwd
 
+      - name: List contents of dist directory2
+        run: |
+          echo "Listing contents of dist:"
+          ls -la dist
+
       - name: Verify Contents of dist
         run: ls -la dist
 

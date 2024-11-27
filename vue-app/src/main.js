@@ -190,7 +190,7 @@ router.beforeEach(async (to, from, next) => {
             setup ? next() : next('/setup');
         } else {
             const loggedIn = window?.electron ? await window.electron.isLoggedIn() : false;
-            console.log(loggedIn, 'window.electron.isLoggedIn');
+            // console.log(loggedIn, 'window.electron.isLoggedIn');
             loggedIn ? next() : next('/login');
         }
     } else {

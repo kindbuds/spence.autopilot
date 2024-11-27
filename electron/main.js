@@ -32,7 +32,7 @@ if (fs.existsSync(envPath)) {
 
 let devToolsOpened = false, mainWindow, authWindow, userIp, userId, versionNumber;
 const mainPlatform = os.platform() === 'win32' ? 'win' : os.platform() === 'darwin' ? 'mac' : 'other';
-const isDev = true; // process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development';
 const amplifyUri = process.env.AMPLIFY_DOMAIN
 const spenceDomain = process.env.SPENCE_DOMAIN
 
@@ -101,7 +101,12 @@ if (!gotTheLock) {
     if (!app.isPackaged) {
         log.info('Skipping update checks in development mode.');
     } else {
-        setupAutoUpdater();
+        if (mainPlatform === 'win') {
+            // auto update install causes the windows app to close/uninstall
+            log.info('Skipping WINDOWS update checks due to lack of signing.');
+        } else {
+            setupAutoUpdater();
+        }
     }
 
     app.on('second-instance', async (event, commandLine, workingDirectory) => {
